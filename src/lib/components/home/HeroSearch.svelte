@@ -55,6 +55,55 @@
       keywords: tool.keywords,
       status: 'COMING SOON',
     })),
+    // Extra tool pages (not in CHAIN_CONFIGS)
+    {
+      id: 'tool-layerzero-stats',
+      name: 'LayerZero Stats',
+      description: 'Track LayerZero cross-chain activity for second airdrop eligibility',
+      path: '/layerzero-stats',
+      type: 'tool' as SuggestionType,
+      gradient: 'from-sky-500 to-blue-600',
+      icon: Globe,
+      keywords: ['layerzero', 'lz', 'bridge', 'cross-chain', 'airdrop', 'stats', 'zro', 'relayer'],
+      category: 'DApp',
+      status: 'LIVE',
+    },
+    {
+      id: 'tool-binance-wotd-solver',
+      name: 'Binance WOTD Solver',
+      description: 'Solve the Binance Word of the Day puzzle instantly',
+      path: '/binance-wotd-solver',
+      type: 'tool' as SuggestionType,
+      gradient: 'from-emerald-500 to-green-600',
+      icon: Globe,
+      keywords: ['binance', 'wotd', 'word', 'solver', 'puzzle', 'wordle', 'answer', 'daily'],
+      category: 'DApp',
+      status: 'LIVE',
+    },
+    {
+      id: 'tool-soneium',
+      name: 'Soneium Stats',
+      description: 'Soneium mainnet wallet analytics — Sony blockchain',
+      path: '/soneium',
+      type: 'tool' as SuggestionType,
+      gradient: 'from-purple-500 to-indigo-600',
+      icon: Globe,
+      keywords: ['soneium', 'sony', 'mainnet', 'wallet', 'stats', 'analytics', 'eth'],
+      category: 'Mainnet',
+      status: 'LIVE',
+    },
+    {
+      id: 'tool-soneium-badge-checker',
+      name: 'Soneium Badge Checker',
+      description: 'Check Soneium OG and ecosystem badges ownership',
+      path: '/soneium-badge-checker',
+      type: 'tool' as SuggestionType,
+      gradient: 'from-violet-500 to-purple-600',
+      icon: Globe,
+      keywords: ['soneium', 'badge', 'og', 'ecosystem', 'nft', 'checker', 'soulbound'],
+      category: 'DApp',
+      status: 'LIVE',
+    },
   ];
 
   // ── Filtered suggestions ──
@@ -114,6 +163,10 @@
       dachain: 'from-red-500 to-rose-600',
       doma: 'from-amber-500 to-yellow-600',
       robinhood: 'from-green-500 to-emerald-600',
+      'layerzero-stats': 'from-sky-500 to-blue-600',
+      'binance-wotd-solver': 'from-emerald-500 to-green-600',
+      soneium: 'from-purple-500 to-indigo-600',
+      'soneium-badge-checker': 'from-violet-500 to-purple-600',
     };
     return map[id] || 'from-cyan-500 to-teal-600';
   }

@@ -156,6 +156,50 @@
       category: 'Testnet',
       keywords: ['doma', 'testnet', 'l2', 'bridge', 'wallet', 'stats', 'eth'],
     },
+    {
+      name: 'LayerZero Stats',
+      path: '/layerzero-stats',
+      status: 'LIVE',
+      icon: ArrowLeftRight,
+      gradient: 'from-sky-500 to-blue-600',
+      glowColor: 'sky',
+      description: 'Track LayerZero cross-chain activity for the second airdrop eligibility since May 1, 2024',
+      category: 'Dapp',
+      keywords: ['layerzero', 'lz', 'bridge', 'cross-chain', 'airdrop', 'stats', 'zro', 'relayer'],
+    },
+    {
+      name: 'Binance WOTD Solver',
+      path: '/binance-wotd-solver',
+      status: 'LIVE',
+      icon: Search,
+      gradient: 'from-emerald-500 to-green-600',
+      glowColor: 'emerald',
+      description: 'Instantly solve the Binance Word of the Day puzzle with optimal word suggestions',
+      category: 'Dapp',
+      keywords: ['binance', 'wotd', 'word', 'solver', 'puzzle', 'wordle', 'answer', 'daily'],
+    },
+    {
+      name: 'Soneium Stats',
+      path: '/soneium',
+      status: 'LIVE',
+      icon: Shield,
+      gradient: 'from-purple-500 to-indigo-600',
+      glowColor: 'purple',
+      description: 'Soneium mainnet wallet analytics — Sony blockchain with comprehensive on-chain insights',
+      category: 'Mainnet',
+      keywords: ['soneium', 'sony', 'mainnet', 'wallet', 'stats', 'analytics', 'score', 'eth'],
+    },
+    {
+      name: 'Soneium Badge Checker',
+      path: '/soneium-badge-checker',
+      status: 'LIVE',
+      icon: Shield,
+      gradient: 'from-violet-500 to-purple-600',
+      glowColor: 'violet',
+      description: 'Check Soneium OG badges and 30 ecosystem badges ownership in your wallet',
+      category: 'Dapp',
+      keywords: ['soneium', 'badge', 'og', 'ecosystem', 'nft', 'checker', 'soulbound'],
+    },
   ];
 
   let searchQuery = $state('');
@@ -233,6 +277,8 @@
     green: 'hover:shadow-green-500/20 dark:hover:shadow-green-500/10',
     red: 'hover:shadow-red-500/20 dark:hover:shadow-red-500/10',
     amber: 'hover:shadow-amber-500/20 dark:hover:shadow-amber-500/10',
+    sky: 'hover:shadow-sky-500/20 dark:hover:shadow-sky-500/10',
+    violet: 'hover:shadow-violet-500/20 dark:hover:shadow-violet-500/10',
   };
 
   const iconBgStyles: Record<string, string> = {
@@ -247,6 +293,8 @@
     green: 'shadow-green-500/25',
     red: 'shadow-red-500/25',
     amber: 'shadow-amber-500/25',
+    sky: 'shadow-sky-500/25',
+    violet: 'shadow-violet-500/25',
   };
 
   $effect(() => {

@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { Shield, Droplets, GitBranch, UserSearch, Coins, Activity, ArrowRight, ExternalLink, Globe } from 'lucide-svelte';
+  import { Shield, Droplets, GitBranch, UserSearch, Coins, Activity, ArrowRight, ExternalLink, Globe, ArrowLeftRight, BookOpen, Award } from 'lucide-svelte';
   import Badge from '$lib/components/ui/Badge.svelte';
   import Card from '$lib/components/ui/Card.svelte';
   import { tools } from '$lib/utils/constants';
 
-  const iconMap: Record<string, any> = { Shield, Droplets, GitBranch, UserSearch, Coins, Activity, Globe };
+  const iconMap: Record<string, any> = { Shield, Droplets, GitBranch, UserSearch, Coins, Activity, Globe, ArrowLeftRight, BookOpen, Award };
 
   const statusStyles: Record<string, string> = {
     LIVE: 'bg-emerald-500/15 text-emerald-500 border-emerald-500/30',
@@ -57,6 +57,14 @@
                 DAC Quantum Chain quantum-resistant testnet wallet analytics
               {:else if tool.name === 'Doma Testnet Stats'}
                 Doma L2 testnet wallet analytics with cross-chain bridge data
+              {:else if tool.name === 'LayerZero Stats'}
+                Track your LayerZero cross-chain activity for second airdrop eligibility
+              {:else if tool.name === 'Binance WOTD Solver'}
+                Instantly solve Binance Word of the Day puzzle with optimal suggestions
+              {:else if tool.name === 'Soneium Stats'}
+                Soneium mainnet wallet analytics on Sony blockchain with on-chain insights
+              {:else if tool.name === 'Soneium Badge Checker'}
+                Check OG and 30 ecosystem badges ownership on Soneium network
               {:else if tool.name === 'Airdrop Tracker'}
                 Track upcoming and active airdrops across chains
               {:else if tool.name === 'Bridge Analytics'}
