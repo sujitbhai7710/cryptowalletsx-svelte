@@ -1,0 +1,441 @@
+import type { ChainConfig } from '$lib/types';
+
+export const ARC_CONFIG: ChainConfig = {
+  id: 'arc',
+  name: 'Arc Testnet',
+  nativeCurrency: 'USDC',
+  nativeDecimals: 18,
+  chainId: '5042002',
+  apiBase: 'https://testnet.arcscan.app/api/v2',
+  blockExplorer: 'https://testnet.arcscan.app',
+  blockExplorerTxUrl: 'https://testnet.arcscan.app/tx/',
+  blockExplorerAddressUrl: 'https://testnet.arcscan.app/address/',
+  rpcEndpoints: [
+    'https://rpc.testnet.arc.network',
+    'https://rpc.quicknode.testnet.arc.network',
+    'https://rpc.blockdaemon.testnet.arc.network',
+    'https://rpc.drpc.testnet.arc.network',
+  ],
+  faucet: 'https://faucet.circle.com',
+  walletType: 'EVM',
+  usdcTokenAddress: '0x3600000000000000000000000000000000000000',
+  features: [
+    { name: 'GM', description: 'Daily GM streak builder', url: '#' },
+    { name: 'Deployer', description: 'Smart contract deployer', url: '#' },
+    { name: 'Counter', description: 'On-chain counter interaction', url: '#' },
+    { name: 'MemorialNFT', description: 'Memorial NFT minter', url: '#' },
+    { name: 'FactoryDeployer', description: 'Factory contract deployer', url: '#' },
+  ],
+  sampleAddresses: [
+    '0xAacE19c5Bd54c3d40f4cB172F8F040645f17Ad5D',
+    '0x2Bc9a32E48A61ED9e3fd65529AfB3bAb41DDbC33',
+    '0xcEA08045B019258B895D69AFaBb223D2f4aF7185',
+    '0x5b5899d59aBFfE6Ea007FEA1EE0ae41F70a024C0',
+  ],
+  apiType: 'blockscout',
+  isTestnet: true,
+  corsEnabled: true,
+  description: 'Arc Testnet — USDC-native testnet powered by Circle',
+};
+
+export const SIMPLECHAIN_CONFIG: ChainConfig = {
+  id: 'simplechain',
+  name: 'SimpleChain',
+  nativeCurrency: 'SRW',
+  nativeDecimals: 18,
+  chainId: '1913',
+  apiBase: 'https://testnet-explorer.simplechain.com/api/v2',
+  blockExplorer: 'https://testnet-explorer.simplechain.com',
+  blockExplorerTxUrl: 'https://testnet-explorer.simplechain.com/tx/',
+  blockExplorerAddressUrl: 'https://testnet-explorer.simplechain.com/address/',
+  rpcEndpoints: [
+    'https://rpc-c.simplechain.com',
+  ],
+  walletType: 'EVM',
+  features: [
+    { name: 'Transfer', description: 'Send & receive SRW', url: '#' },
+    { name: 'Deploy', description: 'Smart contract deployer', url: '#' },
+  ],
+  sampleAddresses: [
+    '0xc02D33ACAf90CcC6fd58bA45A00138E9fdf11713',
+    '0x384Cdd0FD78E7f2A4948aafA3d302040ABB52c03',
+  ],
+  apiType: 'blockscout',
+  isTestnet: true,
+  corsEnabled: true,
+  description: 'SimpleChain — Lightweight blockchain for testing',
+};
+
+export const BASE_CONFIG: ChainConfig = {
+  id: 'base',
+  name: 'Base',
+  nativeCurrency: 'ETH',
+  nativeDecimals: 18,
+  chainId: '8453',
+  apiBase: 'https://base.blockscout.com/api/v2',
+  blockExplorer: 'https://basescan.org',
+  blockExplorerTxUrl: 'https://basescan.org/tx/',
+  blockExplorerAddressUrl: 'https://basescan.org/address/',
+  rpcEndpoints: [
+    'https://mainnet.base.org',
+    'https://base-rpc.publicnode.com',
+    'https://lb.drpc.org/base',
+  ],
+  walletType: 'EVM',
+  features: [
+    { name: 'GM', description: 'Daily GM streak builder', url: '#' },
+    { name: 'Deployer', description: 'Smart contract deployer', url: '#' },
+    { name: 'Counter', description: 'On-chain counter interaction', url: '#' },
+    { name: 'MemorialNFT', description: 'Memorial NFT minter', url: '#' },
+    { name: 'FactoryDeployer', description: 'Factory contract deployer', url: '#' },
+    { name: 'Farcaster', description: 'Farcaster mini-apps', url: '#' },
+  ],
+  sampleAddresses: [
+    '0x5739430639B19433Acd98ccb188Ea8582e514768',
+    '0x3eB0e6376A3A4D588D4c8423E94050a6E59288B1',
+    '0x8B238F7e4f1d6Ae3F4d9e3f8b5f1c5D7a4E6B2C3',
+  ],
+  apiType: 'blockscout',
+  isTestnet: false,
+  corsEnabled: true,
+  description: 'Base — Ethereum L2 built by Coinbase',
+};
+
+export const INK_CONFIG: ChainConfig = {
+  id: 'ink',
+  name: 'Ink',
+  nativeCurrency: 'ETH',
+  nativeDecimals: 18,
+  chainId: '57073',
+  apiBase: 'https://explorer.inkonchain.com/api/v2',
+  blockExplorer: 'https://explorer.inkonchain.com',
+  blockExplorerTxUrl: 'https://explorer.inkonchain.com/tx/',
+  blockExplorerAddressUrl: 'https://explorer.inkonchain.com/address/',
+  rpcEndpoints: [
+    'https://rpc-gel.inkonchain.com',
+    'https://ink-mainnet.g.alchemy.com/v2/',  // Add your Alchemy API key as ALCHEMY_API_KEY env var
+  ],
+  walletType: 'EVM',
+  features: [
+    { name: 'GM', description: 'Daily GM streak builder', url: '#' },
+    { name: 'Deployer', description: 'Smart contract deployer', url: '#' },
+    { name: 'Counter', description: 'On-chain counter interaction', url: '#' },
+    { name: 'MemorialNFT', description: 'Memorial NFT minter', url: '#' },
+    { name: 'FactoryDeployer', description: 'Factory contract deployer', url: '#' },
+  ],
+  sampleAddresses: [
+    '0x5739430639B19433Acd98ccb188Ea8582e514768',
+    '0x3eB0e6376A3A4D588D4c8423E94050a6E59288B1',
+    '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
+  ],
+  apiType: 'blockscout',
+  isTestnet: false,
+  corsEnabled: true,
+  description: 'Ink — Ethereum L2 by Kraken',
+};
+
+export const RELAY_CONFIG: ChainConfig = {
+  id: 'relay',
+  name: 'Relay',
+  nativeCurrency: 'Multi',
+  nativeDecimals: 18,
+  chainId: '0',
+  apiBase: 'https://api.relay.link',
+  blockExplorer: 'https://relay.link',
+  blockExplorerTxUrl: 'https://relay.link/tx/',
+  blockExplorerAddressUrl: 'https://relay.link/address/',
+  rpcEndpoints: [],
+  walletType: 'EVM',
+  features: [
+    { name: 'Bridge', description: 'Cross-chain bridge transfers across 82+ networks', url: 'https://relay.link' },
+    { name: 'Swap', description: 'Cross-chain and same-chain token swaps', url: 'https://relay.link' },
+  ],
+  sampleAddresses: [
+    '0xA012B32d3568CC93713A5e63DF7a772Af034af9A',
+    '0x5739430639B19433Acd98ccb188Ea8582e514768',
+  ],
+  apiType: 'relay-dapp',
+  isTestnet: false,
+  corsEnabled: true,
+  description: 'Relay — Cross-chain bridge and swap dapp analytics',
+};
+
+export const LITVM_CONFIG: ChainConfig = {
+  id: 'litvm',
+  name: 'LitVM',
+  nativeCurrency: 'zkLTC',
+  nativeDecimals: 18,
+  chainId: '4441',
+  apiBase: 'https://liteforge.explorer.caldera.xyz/api/v2',
+  blockExplorer: 'https://liteforge.explorer.caldera.xyz',
+  blockExplorerTxUrl: 'https://liteforge.explorer.caldera.xyz/tx/',
+  blockExplorerAddressUrl: 'https://liteforge.explorer.caldera.xyz/address/',
+  rpcEndpoints: [
+    'https://liteforge.rpc.caldera.xyz/http',
+  ],
+  walletType: 'EVM',
+  features: [
+    { name: 'Transfer', description: 'Send & receive zkLTC', url: '#' },
+    { name: 'Deploy', description: 'Smart contract deployer', url: '#' },
+    { name: 'Swap', description: 'Token swaps on LitVM', url: '#' },
+  ],
+  sampleAddresses: [
+    '0x5739430639B19433Acd98ccb188Ea8582e514768',
+    '0x3eB0e6376A3A4D588D4c8423E94050a6E59288B1',
+  ],
+  apiType: 'blockscout',
+  isTestnet: true,
+  corsEnabled: true,
+  description: 'LitVM — Arbitrum Nitro L2 on Sepolia with zkLTC',
+};
+
+export const SEISMIC_CONFIG: ChainConfig = {
+  id: 'seismic',
+  name: 'Seismic Testnet',
+  nativeCurrency: 'ETH',
+  nativeDecimals: 18,
+  chainId: '912559',
+  apiBase: 'https://api.socialscan.io/seismic-testnet/v1/explorer',
+  blockExplorer: 'https://seismic-testnet.socialscan.io',
+  blockExplorerTxUrl: 'https://seismic-testnet.socialscan.io/tx/',
+  blockExplorerAddressUrl: 'https://seismic-testnet.socialscan.io/address/',
+  rpcEndpoints: [
+    'https://rpc.seismic.dev',
+  ],
+  walletType: 'EVM',
+  features: [
+    { name: 'Transfer', description: 'Send & receive ETH', url: '#' },
+    { name: 'Swap', description: 'Token swaps on Seismic', url: '#' },
+    { name: 'Explore', description: 'Browse the Seismic testnet', url: '#' },
+  ],
+  sampleAddresses: [
+    '0x5739430639B19433Acd98ccb188Ea8582e514768',
+    '0x3eB0e6376A3A4D588D4c8423E94050a6E59288B1',
+  ],
+  apiType: 'socialscan',
+  isTestnet: true,
+  corsEnabled: true,
+  description: 'Seismic Testnet — ETH-based encrypted computation chain',
+};
+
+export const GENLAYER_CONFIG: ChainConfig = {
+  id: 'genlayer',
+  name: 'GenLayer Bradbury',
+  nativeCurrency: 'GEN',
+  nativeDecimals: 18,
+  chainId: '4221',
+  apiBase: 'https://explorer-bradbury.genlayer.com/api/v1',
+  blockExplorer: 'https://explorer-bradbury.genlayer.com',
+  blockExplorerTxUrl: 'https://explorer-bradbury.genlayer.com/transactions/',
+  blockExplorerAddressUrl: 'https://explorer-bradbury.genlayer.com/address/',
+  rpcEndpoints: [
+    'https://rpc-bradbury.genlayer.com',
+  ],
+  walletType: 'EVM',
+  features: [
+    { name: 'Intelligent Contracts', description: 'Python-based AI contracts', url: '#' },
+    { name: 'Validators', description: 'AI validator network', url: '#' },
+    { name: 'Deploy', description: 'Deploy intelligent contracts', url: '#' },
+  ],
+  sampleAddresses: [
+    '0x5739430639B19433Acd98ccb188Ea8582e514768',
+    '0x3eB0e6376A3A4D588D4c8423E94050a6E59288B1',
+  ],
+  apiType: 'genlayer',
+  isTestnet: true,
+  corsEnabled: false,
+  description: 'GenLayer Bradbury — AI-powered consensus with intelligent contracts',
+};
+
+export const JUMPER_CONFIG: ChainConfig = {
+  id: 'jumper',
+  name: 'Jumper',
+  nativeCurrency: 'Multi',
+  nativeDecimals: 18,
+  chainId: '0',
+  apiBase: 'https://li.quest/v1',
+  blockExplorer: 'https://jumper.exchange',
+  blockExplorerTxUrl: 'https://jumper.exchange/tx/',
+  blockExplorerAddressUrl: 'https://jumper.exchange/address/',
+  rpcEndpoints: [],
+  walletType: 'EVM',
+  features: [
+    { name: 'Bridge', description: 'Cross-chain bridge aggregator', url: 'https://jumper.exchange' },
+    { name: 'Swap', description: 'Cross-chain and same-chain swaps', url: 'https://jumper.exchange' },
+  ],
+  sampleAddresses: [
+    '0xA012B32d3568CC93713A5e63DF7a772Af034af9A',
+    '0x5739430639B19433Acd98ccb188Ea8582e514768',
+  ],
+  apiType: 'jumper-dapp',
+  isTestnet: false,
+  corsEnabled: true,
+  description: 'Jumper — Cross-chain bridge and swap aggregator by Li.Fi',
+};
+
+export const DACHAIN_CONFIG: ChainConfig = {
+  id: 'dachain',
+  name: 'DAC Quantum Chain',
+  nativeCurrency: 'DAC',
+  nativeDecimals: 18,
+  chainId: '21894',
+  apiBase: 'https://exptest.dachain.tech/api/v2',
+  blockExplorer: 'https://exptest.dachain.tech',
+  blockExplorerTxUrl: 'https://exptest.dachain.tech/tx/',
+  blockExplorerAddressUrl: 'https://exptest.dachain.tech/address/',
+  rpcEndpoints: [
+    'https://rpctest.dachain.tech',
+  ],
+  faucet: 'https://inception.dachain.io',
+  walletType: 'EVM',
+  features: [
+    { name: 'Transfer', description: 'Send & receive DAC', url: '#' },
+    { name: 'Deploy', description: 'Smart contract deployer', url: '#' },
+    { name: 'Quantum Badge', description: 'Claim quantum-resistant badge', url: 'https://inception.dachain.io' },
+  ],
+  sampleAddresses: [
+    '0xDDdA78Bb7Ed612BDDeF4C0172111541D06252b89',
+    '0x28A5FE274d192eE665738fF076fc70175C506Ec9',
+    '0x3bd6d52F15Bac55c9BDC8bd52717a2A1ED96847C',
+  ],
+  apiType: 'blockscout',
+  isTestnet: true,
+  corsEnabled: true,
+  description: 'DAC Quantum Chain — Quantum-resistant blockchain testnet with post-quantum cryptographic resilience',
+};
+
+export const DOMA_CONFIG: ChainConfig = {
+  id: 'doma',
+  name: 'Doma Testnet',
+  nativeCurrency: 'ETH',
+  nativeDecimals: 18,
+  chainId: '97476',
+  apiBase: 'https://explorer-testnet.doma.xyz/api/v2',
+  blockExplorer: 'https://explorer-testnet.doma.xyz',
+  blockExplorerTxUrl: 'https://explorer-testnet.doma.xyz/tx/',
+  blockExplorerAddressUrl: 'https://explorer-testnet.doma.xyz/address/',
+  rpcEndpoints: [
+    'https://rpc-testnet.doma.xyz',
+  ],
+  faucet: 'https://bridge-testnet.doma.xyz',
+  walletType: 'EVM',
+  features: [
+    { name: 'Transfer', description: 'Send & receive ETH', url: '#' },
+    { name: 'Deploy', description: 'Smart contract deployer', url: '#' },
+    { name: 'Bridge', description: 'Cross-chain bridge', url: 'https://bridge-testnet.doma.xyz' },
+  ],
+  sampleAddresses: [
+    '0x86f79e6B64E26814dFb4f3657EF455a9C6CA4354',
+    '0x7BD025f880C4D00AD009C70792Cbd0418556D667',
+    '0xD5BFc18855B45717219C1120e352C3CC919706d9',
+  ],
+  apiType: 'blockscout',
+  isTestnet: true,
+  corsEnabled: false,
+  description: 'Doma Testnet — L2 blockchain with cross-chain bridge capabilities',
+};
+
+export const ROBINHOOD_CONFIG: ChainConfig = {
+  id: 'robinhood',
+  name: 'Robinhood Testnet',
+  nativeCurrency: 'ETH',
+  nativeDecimals: 18,
+  chainId: '46630',
+  apiBase: 'https://explorer.testnet.chain.robinhood.com/api/v2',
+  blockExplorer: 'https://explorer.testnet.chain.robinhood.com',
+  blockExplorerTxUrl: 'https://explorer.testnet.chain.robinhood.com/tx/',
+  blockExplorerAddressUrl: 'https://explorer.testnet.chain.robinhood.com/address/',
+  rpcEndpoints: [
+    'https://explorer.testnet.chain.robinhood.com/api/eth-rpc',
+  ],
+  walletType: 'EVM',
+  features: [
+    { name: 'Transfer', description: 'Send & receive ETH', url: '#' },
+    { name: 'Deploy', description: 'Smart contract deployer', url: '#' },
+  ],
+  sampleAddresses: [
+    '0x5739430639B19433Acd98ccb188Ea8582e514768',
+  ],
+  apiType: 'blockscout',
+  isTestnet: true,
+  corsEnabled: true,
+  description: 'Robinhood Chain Testnet — Arbitrum Orbit L2 by Robinhood',
+};
+
+export const CHAIN_CONFIGS: Record<string, ChainConfig> = {
+  arc: ARC_CONFIG,
+  simplechain: SIMPLECHAIN_CONFIG,
+  base: BASE_CONFIG,
+  ink: INK_CONFIG,
+  relay: RELAY_CONFIG,
+  litvm: LITVM_CONFIG,
+  seismic: SEISMIC_CONFIG,
+  genlayer: GENLAYER_CONFIG,
+  jumper: JUMPER_CONFIG,
+  dachain: DACHAIN_CONFIG,
+  doma: DOMA_CONFIG,
+  robinhood: ROBINHOOD_CONFIG,
+};
+
+export const tools = [
+  { name: 'Arc Testnet Stats', path: '/arc', status: 'LIVE' as const, icon: 'Shield', gradient: 'from-cyan-500 to-teal-600', keywords: ['arc', 'testnet', 'wallet', 'stats', 'analytics', 'score', 'usdc'] },
+  { name: 'SimpleChain Stats', path: '/simplechain', status: 'LIVE' as const, icon: 'Shield', gradient: 'from-cyan-500 to-teal-600', keywords: ['simplechain', 'srw', 'testnet', 'wallet', 'stats', 'analytics'] },
+  { name: 'Base Stats', path: '/base', status: 'LIVE' as const, icon: 'Shield', gradient: 'from-blue-500 to-indigo-600', keywords: ['base', 'mainnet', 'wallet', 'stats', 'analytics', 'score', 'eth', 'coinbase'] },
+  { name: 'Ink Stats', path: '/ink', status: 'LIVE' as const, icon: 'Shield', gradient: 'from-purple-500 to-violet-600', keywords: ['ink', 'kraken', 'mainnet', 'wallet', 'stats', 'analytics', 'score', 'eth'] },
+  { name: 'Relay Bridge Analytics', path: '/relay', status: 'LIVE' as const, icon: 'GitBranch', gradient: 'from-orange-500 to-amber-600', keywords: ['relay', 'bridge', 'cross-chain', 'swap', 'wallet', 'stats', 'analytics', 'dapp'] },
+  { name: 'LitVM Stats', path: '/litvm', status: 'LIVE' as const, icon: 'Shield', gradient: 'from-pink-500 to-rose-600', keywords: ['litvm', 'zkltc', 'arbitrum', 'testnet', 'wallet', 'stats', 'analytics', 'score'] },
+  { name: 'Seismic Stats', path: '/seismic', status: 'LIVE' as const, icon: 'Shield', gradient: 'from-emerald-500 to-green-600', keywords: ['seismic', 'testnet', 'encrypted', 'wallet', 'stats', 'analytics', 'score', 'eth'] },
+  { name: 'GenLayer Stats', path: '/genlayer', status: 'LIVE' as const, icon: 'Shield', gradient: 'from-yellow-500 to-orange-600', keywords: ['genlayer', 'bradbury', 'ai', 'consensus', 'wallet', 'stats', 'analytics', 'score'] },
+  { name: 'Jumper Analytics', path: '/jumper', status: 'LIVE' as const, icon: 'Globe', gradient: 'from-indigo-500 to-purple-600', keywords: ['jumper', 'li.fi', 'lifi', 'bridge', 'swap', 'cross-chain', 'aggregator', 'wallet', 'stats', 'analytics', 'dapp'] },
+  { name: 'DAC Quantum Chain Stats', path: '/dachain', status: 'LIVE' as const, icon: 'Shield', gradient: 'from-red-500 to-rose-600', keywords: ['dachain', 'dac', 'quantum', 'testnet', 'wallet', 'stats', 'analytics', 'score', 'quantum-resistant'] },
+  { name: 'Doma Testnet Stats', path: '/doma', status: 'LIVE' as const, icon: 'Shield', gradient: 'from-amber-500 to-yellow-600', keywords: ['doma', 'testnet', 'l2', 'bridge', 'wallet', 'stats', 'analytics', 'score', 'eth'] },
+  { name: 'Robinhood Testnet Stats', path: '/robinhood', status: 'LIVE' as const, icon: 'Shield', gradient: 'from-green-500 to-emerald-600', keywords: ['robinhood', 'testnet', 'arbitrum', 'orbit', 'wallet', 'stats', 'analytics', 'score', 'eth'] },
+  { name: 'Airdrop Tracker', path: '#', status: 'COMING SOON' as const, icon: 'Droplets', gradient: 'from-rose-500 to-pink-600', keywords: ['airdrop', 'claim', 'token', 'free', 'reward'] },
+  { name: 'Bridge Analytics', path: '#', status: 'COMING SOON' as const, icon: 'GitBranch', gradient: 'from-violet-500 to-purple-600', keywords: ['bridge', 'cross-chain', 'transfer', 'l2'] },
+  { name: 'Wallet Profiler', path: '#', status: 'COMING SOON' as const, icon: 'UserSearch', gradient: 'from-amber-500 to-orange-600', keywords: ['wallet', 'profile', 'risk', 'analysis', 'score'] },
+];
+
+export const airdrops = [
+  { name: 'Meteora', chain: 'SOL', token: 'MET', status: 'ACTIVE' as const, description: 'Meteora TGE Airdrop - Dynamic Liquidity Pools on Solana' },
+  { name: 'LINEA', chain: 'EVM', token: 'LINEA', status: 'CONCLUDED' as const, description: 'LINEA blockchain airdrop - Token launched 2025' },
+  { name: 'Zora', chain: 'EVM', token: 'ZORA', status: 'CONCLUDED' as const, description: 'Zora token airdrop - Token launched 2025' },
+  { name: 'Optimism #5', chain: 'OP', token: 'OP', status: 'CONCLUDED' as const, description: 'Optimism 5th airdrop round - Distributed late 2024' },
+  { name: 'LayerZero', chain: 'Multi', token: 'ZRO', status: 'CONCLUDED' as const, description: 'LayerZero protocol airdrop - June 2024' },
+  { name: 'Grass', chain: 'SOL', token: 'GRASS', status: 'CONCLUDED' as const, description: 'Grass network airdrop - September 2024' },
+];
+
+export const testnets = [
+  { name: 'Arc Testnet', chainId: '5042002', status: 'LIVE' as const },
+  { name: 'SimpleChain', chainId: '1913', status: 'LIVE' as const },
+  { name: 'Base', chainId: '8453', status: 'LIVE' as const },
+  { name: 'Ink', chainId: '57073', status: 'LIVE' as const },
+  { name: 'Relay', chainId: '0', status: 'LIVE' as const },
+  { name: 'LitVM', chainId: '4441', status: 'LIVE' as const },
+  { name: 'Seismic Testnet', chainId: '912559', status: 'LIVE' as const },
+  { name: 'GenLayer Bradbury', chainId: '4221', status: 'LIVE' as const },
+  { name: 'Jumper', chainId: '0', status: 'LIVE' as const },
+  { name: 'DAC Quantum Chain', chainId: '21894', status: 'LIVE' as const },
+  { name: 'Doma Testnet', chainId: '97476', status: 'LIVE' as const },
+  { name: 'Robinhood Testnet', chainId: '46630', status: 'LIVE' as const },
+  { name: 'Base Sepolia', chainId: '84532', status: 'LIVE' as const },
+  { name: 'OP Sepolia', chainId: '11155420', status: 'LIVE' as const },
+  { name: 'Monad', chainId: '10143', status: 'COMING SOON' as const },
+];
+
+export const heroSearchTools = [
+  { name: 'Arc Testnet Stats', path: '/arc', keywords: ['arc', 'testnet', 'wallet', 'stats', 'analytics', 'score', 'usdc'] },
+  { name: 'SimpleChain Stats', path: '/simplechain', keywords: ['simplechain', 'srw', 'testnet', 'wallet', 'stats', 'analytics'] },
+  { name: 'Base Stats', path: '/base', keywords: ['base', 'mainnet', 'wallet', 'stats', 'analytics', 'score', 'eth', 'coinbase'] },
+  { name: 'Ink Stats', path: '/ink', keywords: ['ink', 'kraken', 'mainnet', 'wallet', 'stats', 'analytics', 'score', 'eth'] },
+  { name: 'Relay Bridge Analytics', path: '/relay', keywords: ['relay', 'bridge', 'cross-chain', 'swap', 'wallet', 'stats', 'analytics', 'dapp'] },
+  { name: 'LitVM Stats', path: '/litvm', keywords: ['litvm', 'zkltc', 'arbitrum', 'testnet', 'wallet', 'stats', 'analytics', 'score'] },
+  { name: 'Seismic Stats', path: '/seismic', keywords: ['seismic', 'testnet', 'encrypted', 'wallet', 'stats', 'analytics', 'score', 'eth'] },
+  { name: 'GenLayer Stats', path: '/genlayer', keywords: ['genlayer', 'bradbury', 'ai', 'consensus', 'wallet', 'stats', 'analytics', 'score'] },
+  { name: 'Jumper Analytics', path: '/jumper', keywords: ['jumper', 'li.fi', 'lifi', 'bridge', 'swap', 'cross-chain', 'aggregator', 'wallet', 'stats', 'analytics', 'dapp'] },
+  { name: 'DAC Quantum Chain Stats', path: '/dachain', keywords: ['dachain', 'dac', 'quantum', 'testnet', 'wallet', 'stats', 'analytics', 'score', 'quantum-resistant'] },
+  { name: 'Doma Testnet Stats', path: '/doma', keywords: ['doma', 'testnet', 'l2', 'bridge', 'wallet', 'stats', 'analytics', 'score', 'eth'] },
+  { name: 'Robinhood Testnet Stats', path: '/robinhood', keywords: ['robinhood', 'testnet', 'arbitrum', 'orbit', 'wallet', 'stats', 'analytics', 'score', 'eth'] },
+  { name: 'Airdrop Tracker', path: '#', keywords: ['airdrop', 'claim', 'token', 'free', 'reward'] },
+  { name: 'Bridge Analytics', path: '#', keywords: ['bridge', 'cross-chain', 'transfer', 'l2'] },
+  { name: 'Wallet Profiler', path: '#', keywords: ['wallet', 'profile', 'risk', 'analysis', 'score'] },
+];

@@ -1,0 +1,17 @@
+node_modules/
+.next/
+.svelte-kit/
+build/
+.cloudflare/
+.wrangler/
+*.log
+.env
+.env.local
+.DS_Store
+download/
+agent-ctx/
+.zscripts/
+worklog.md
+graphify-out/
+venv/
+bun.lock

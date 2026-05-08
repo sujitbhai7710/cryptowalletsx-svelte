@@ -1,0 +1,20 @@
+<script lang="ts">
+  import '../app.css';
+  import type { Snippet } from 'svelte';
+
+  interface Props {
+    children: Snippet;
+  }
+
+  let { children }: Props = $props();
+</script>
+
+<svelte:head>
+  <meta name="theme-color" content="#06b6d4" />
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+</svelte:head>
+
+{@render children()}

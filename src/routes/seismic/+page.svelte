@@ -1,0 +1,88 @@
+<script lang="ts">
+  import { seismicWalletStore } from '$lib/stores/wallet.svelte';
+  import { fetchBlockscoutData } from '$lib/utils/api';
+  import HomeScreen from '$lib/components/seismic/HomeScreen.svelte';
+  import WalletScreen from '$lib/components/seismic/WalletScreen.svelte';
+  import { SEISMIC_CONFIG } from '$lib/utils/constants';
+  import SEO from '$lib/components/SEO.svelte';
+  import type { AddressDetails, Transaction, TokenTransfer, TokenBalance, NFTItem, AllToken } from '$lib/types';
+
+  // Data state managed at the route page level
+  let isLoading = $state(false);
+  let fetchError = $state<string | null>(null);
+  let isRefreshing = $state(false);
+  let addressDetails = $state<AddressDetails | null>(null);
+  let transactions = $state<Transaction[]>([]);
+  let tokenTransfers = $state<TokenTransfer[]>([]);
+  let tokenBalances = $state<TokenBalance[]>([]);
+  let nfts = $state<NFTItem[]>([]);
+  let allTokens = $state<AllToken[]>([]);
+
+  async function fetchAllData() {
+    if (!seismicWalletStore.address) return;
+    isLoading = true;
+    fetchError = null;
+    try {
+      const result = await fetchBlockscoutData(seismicWalletStore.address, SEISMIC_CONFIG);
+      addressDetails = result.addressDetails;
+      transactions = result.transactions;
+      tokenTransfers = result.tokenTransfers;
+      tokenBalances = result.tokenBalances;
+      nfts = result.nfts;
+      allTokens = result.allTokens;
+    } catch (err: any) {
+      if (err?.name === 'AbortError') {
+        fetchError = `Request timed out. The ${SEISMIC_CONFIG.name} API is taking too long to respond. Please try again.`;
+      } else {
+        fetchError = err?.message || `Failed to load wallet data from ${SEISMIC_CONFIG.name}. Please check the address and try again.`;
+      }
+    } finally {
+      isLoading = false;
+    }
+  }
+
+  async function handleRetry() {
+    await fetchAllData();
+  }
+
+  async function handleRefresh() {
+    isRefreshing = true;
+    await fetchAllData();
+    isRefreshing = false;
+  }
+
+  $effect(() => {
+    if (seismicWalletStore.address) {
+      fetchAllData();
+    }
+  });
+</script>
+
+<SEO
+  title="Seismic Testnet Complete Guide"
+  description="Check Seismic testnet wallet stats, scores, transaction history, and ETH balance analytics. Seismic is an encrypted computation chain."
+  keywords={["seismic testnet", "encrypted blockchain", "seismic wallet"]}
+  canonicalUrl="https://cryptowalletsx.com/seismic"
+/>
+
+{#if seismicWalletStore.address}
+  <WalletScreen
+    address={seismicWalletStore.address}
+    activeTab={seismicWalletStore.activeTab}
+    onTabChange={(tab) => seismicWalletStore.setActiveTab(tab)}
+    onReset={() => seismicWalletStore.reset()}
+    {addressDetails}
+    {transactions}
+    {tokenTransfers}
+    {tokenBalances}
+    {nfts}
+    {allTokens}
+    {isLoading}
+    {fetchError}
+    onRetry={handleRetry}
+    {isRefreshing}
+    onRefresh={handleRefresh}
+  />
+{:else}
+  <HomeScreen onAddressSubmit={(addr) => seismicWalletStore.setAddress(addr)} />
+{/if}
