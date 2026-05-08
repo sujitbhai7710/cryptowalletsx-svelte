@@ -9,7 +9,8 @@ export function calculateWalletStats(
   nfts: NFTItem[],
   allTokens: AllToken[],
   nativeCurrency: string = 'USDC',
-  nativeDecimals: number = 18
+  nativeDecimals: number = 18,
+  exchangeRate: number = 0
 ): WalletStats {
   const address = addressDetails?.hash?.toLowerCase() || '';
 
@@ -39,13 +40,13 @@ export function calculateWalletStats(
 
   const balance = addressDetails?.coin_balance || '0';
   const balanceNative = weiToNative(balance, nativeDecimals);
-  const balanceUSD = formatUSD(balanceNative);
+  const balanceUSD = nativeToUSD(balanceNative, exchangeRate);
 
   const volumeNative = weiToNative(totalVolume.toString(), nativeDecimals);
-  const volumeUSD = formatUSD(volumeNative);
+  const volumeUSD = nativeToUSD(volumeNative, exchangeRate);
 
   const feesNative = weiToNative(totalFees.toString(), nativeDecimals);
-  const feesUSD = formatUSD(feesNative);
+  const feesUSD = nativeToUSD(feesNative, exchangeRate);
 
   const nftCollections = new Set<string>();
   nfts.forEach(nft => {
@@ -189,8 +190,8 @@ export function calculateWalletStats(
   const monthlyAvg = walletAge > 0 ? (transactions.length / Math.max(walletAge / 30, 1)).toFixed(2) : transactions.length.toFixed(2);
 
   const highestVolumeTx = transactions.length > 0
-    ? formatUSD(weiToNative(String(transactions.reduce((max, tx) =>
-        BigInt(String(tx.value)) > BigInt(String(max.value)) ? tx : max, transactions[0]).value), nativeDecimals))
+    ? nativeToUSD(weiToNative(String(transactions.reduce((max, tx) =>
+        BigInt(String(tx.value)) > BigInt(String(max.value)) ? tx : max, transactions[0]).value), nativeDecimals), exchangeRate)
     : '$0.00';
 
   const approvalRate = totalTxs > 0 ? ((approveTx.length / totalTxs) * 100).toFixed(1) : '0.0';
@@ -219,8 +220,8 @@ export function calculateWalletStats(
 
   const recentVolume = recentTxs.reduce((sum, tx) => sum + BigInt(String(tx.value || '0')), BigInt(0));
   const recentFees = recentTxs.reduce((sum, tx) => sum + BigInt(tx.fee?.value || '0'), BigInt(0));
-  const recentVolumeUSD = formatUSD(weiToNative(recentVolume.toString(), nativeDecimals));
-  const recentFeesUSD = formatUSD(weiToNative(recentFees.toString(), nativeDecimals));
+  const recentVolumeUSD = nativeToUSD(weiToNative(recentVolume.toString(), nativeDecimals), exchangeRate);
+  const recentFeesUSD = nativeToUSD(weiToNative(recentFees.toString(), nativeDecimals), exchangeRate);
 
   return {
     score,
@@ -273,8 +274,8 @@ export function calculateWalletStats(
       staking: staking.activities,
       tokens: recentTokenTransfers.length,
     },
-    feePerTransaction: `${weiToNative(feePerTx.toString(), nativeDecimals)} ${nativeCurrency} / ${formatUSD(weiToNative(feePerTx.toString(), nativeDecimals))}`,
-    volumePerTransaction: `${weiToNative(volumePerTx.toString(), nativeDecimals)} ${nativeCurrency} / ${formatUSD(weiToNative(volumePerTx.toString(), nativeDecimals))}`,
+    feePerTransaction: `${weiToNative(feePerTx.toString(), nativeDecimals)} ${nativeCurrency} / ${nativeToUSD(weiToNative(feePerTx.toString(), nativeDecimals), exchangeRate)}`,
+    volumePerTransaction: `${weiToNative(volumePerTx.toString(), nativeDecimals)} ${nativeCurrency} / ${nativeToUSD(weiToNative(volumePerTx.toString(), nativeDecimals), exchangeRate)}`,
     contractNftRatio,
     dailyTxAverage: dailyAvg,
     monthlyTxAverage: monthlyAvg,
@@ -286,6 +287,21 @@ export function calculateWalletStats(
     mostUsedToken,
     mostUsedTokenCount,
   };
+}
+
+/**
+ * Convert native token value (ETH, USDC, etc.) to USD string.
+ * If exchangeRate is provided (> 0), multiply native amount by rate.
+ * If exchangeRate is 0 or not provided, format as-is (for USDC-native chains
+ * where 1 token = 1 USD, or when price data is unavailable).
+ */
+function nativeToUSD(nativeValue: string, exchangeRate: number): string {
+  const num = parseFloat(nativeValue) || 0;
+  if (exchangeRate > 0) {
+    return formatUSD(num * exchangeRate);
+  }
+  // No exchange rate — assume native value IS the USD value (e.g., USDC)
+  return formatUSD(num);
 }
 
 export function getTransactionCalendarData(transactions: Transaction[]): Map<string, number> {

@@ -174,9 +174,9 @@ export interface WalletStats {
   sevenDayChange: {
     interactions: number;
     contracts: number;
-    volume: number;
+    volume: string;
     nfts: number;
-    fees: number;
+    fees: string;
     staking: number;
     tokens: number;
   };

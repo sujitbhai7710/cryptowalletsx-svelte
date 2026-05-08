@@ -1,7 +1,8 @@
 <script lang="ts">
   import {
     Search, Shield, Award, Check, X, Loader2, AlertCircle,
-    Share2, Info, ChevronDown, ChevronUp, Copy as CopyIcon, CheckCircle2, XCircle
+    Share2, Info, ChevronDown, ChevronUp, Copy as CopyIcon, CheckCircle2, XCircle,
+    Crown, Star, Sparkles, Trophy, Gem, Flame
   } from 'lucide-svelte';
   import HomeHeader from '$lib/components/home/HomeHeader.svelte';
   import Footer from '$lib/components/home/Footer.svelte';
@@ -51,6 +52,24 @@
 
   type FilterTab = 'All' | 'Owned' | 'Not Owned';
 
+  interface RarityTier {
+    name: string;
+    icon: any;
+    color: string;
+    bgGradient: string;
+    borderColor: string;
+    textColor: string;
+    glowColor: string;
+  }
+
+  const RARITY_TIERS: { min: number; max: number; tier: RarityTier }[] = [
+    { min: 0, max: 0, tier: { name: 'Newcomer', icon: Star, color: 'zinc', bgGradient: 'from-zinc-500/10 to-zinc-600/10', borderColor: 'border-zinc-500/30', textColor: 'text-zinc-400', glowColor: 'shadow-zinc-500/10' } },
+    { min: 1, max: 25, tier: { name: 'Explorer', icon: Flame, color: 'amber', bgGradient: 'from-amber-500/10 to-orange-500/10', borderColor: 'border-amber-500/30', textColor: 'text-amber-400', glowColor: 'shadow-amber-500/10' } },
+    { min: 26, max: 50, tier: { name: 'Collector', icon: Gem, color: 'blue', bgGradient: 'from-blue-500/10 to-cyan-500/10', borderColor: 'border-blue-500/30', textColor: 'text-blue-400', glowColor: 'shadow-blue-500/10' } },
+    { min: 51, max: 75, tier: { name: 'Champion', icon: Trophy, color: 'yellow', bgGradient: 'from-yellow-500/10 to-amber-500/10', borderColor: 'border-yellow-500/30', textColor: 'text-yellow-400', glowColor: 'shadow-yellow-500/10' } },
+    { min: 76, max: 100, tier: { name: 'Legend', icon: Crown, color: 'purple', bgGradient: 'from-purple-500/10 to-emerald-500/10', borderColor: 'border-purple-500/30', textColor: 'text-purple-400', glowColor: 'shadow-purple-500/20' } },
+  ];
+
   // State
   let inputAddress = $state('');
   let address = $state('');
@@ -61,6 +80,7 @@
   let isLoaded = $state(false);
   let copiedAddress = $state(false);
   let infoExpanded = $state(false);
+  let isAnimated = $state(false);
 
   // Badge ownership data
   let ownedOGBadges = $state<{ name: string; tokenId: string; image?: string; owned: boolean }[]>([]);
@@ -76,6 +96,28 @@
   let totalOwned = $derived(ogOwnedCount + ecoOwnedCount);
   let totalBadges = $derived(ogTotalCount + ecoTotalCount);
   let ownershipPercent = $derived(totalBadges > 0 ? Math.round((totalOwned / totalBadges) * 100) : 0);
+
+  let currentTier = $derived.by(() => {
+    const pct = ownershipPercent;
+    for (const t of RARITY_TIERS) {
+      if (pct >= t.min && pct <= t.max) return t.tier;
+    }
+    return RARITY_TIERS[0].tier;
+  });
+
+  let svgProgressOffset = $derived(() => {
+    const circumference = 2 * Math.PI * 54;
+    return circumference - (circumference * ownershipPercent) / 100;
+  });
+
+  let svgProgressColor = $derived.by(() => {
+    const pct = ownershipPercent;
+    if (pct === 0) return '#71717a';
+    if (pct <= 25) return '#f59e0b';
+    if (pct <= 50) return '#3b82f6';
+    if (pct <= 75) return '#eab308';
+    return '#a855f7';
+  });
 
   let filteredEcosystemBadges = $derived.by(() => {
     let badges = [...ownedEcosystemBadges, ...notOwnedEcosystemBadges];
@@ -109,7 +151,13 @@
 
   let shareText = $derived(() => {
     if (!address) return '';
-    return `🟣 Soneium Badge Checker\n\n🏆 Badges Owned: ${totalOwned}/${totalBadges} (${ownershipPercent}%)\n🎖️ OG Badges: ${ogOwnedCount}/${ogTotalCount}\n🌟 Ecosystem Badges: ${ecoOwnedCount}/${ecoTotalCount}\n\nCheck yours at cryptowalletsx.com/soneium-badge-checker`;
+    return `🟣 Soneium Badge Checker\n\n🏆 Badges Owned: ${totalOwned}/${totalBadges} (${ownershipPercent}%)\n🎖️ OG Badges: ${ogOwnedCount}/${ogTotalCount}\n🌟 Ecosystem Badges: ${ecoOwnedCount}/${ecoTotalCount}\n⭐ Rarity Tier: ${currentTier.name}\n\nCheck yours at cryptowalletsx.com/soneium-badge-checker`;
+  });
+
+  // Animate on load
+  $effect(() => {
+    const timer = setTimeout(() => { isAnimated = true; }, 100);
+    return () => clearTimeout(timer);
   });
 
   // Fetch
@@ -119,7 +167,6 @@
     isLoaded = false;
 
     try {
-      // Build Alchemy URL with all contract addresses
       const allContracts = [OG_BADGE_CONTRACT, ...ECOSYSTEM_BADGES.map(b => b.contract)];
       const contractParams = allContracts.map(c => `contractAddresses[]=${c}`).join('&');
       const url = `${ALCHEMY_BASE}/getNFTsForOwner?owner=${addr}&withMetadata=true&${contractParams}`;
@@ -129,7 +176,6 @@
       const data = await res.json();
       const ownedNfts: any[] = data?.ownedNfts || [];
 
-      // Group by contract address
       const byContract = new Map<string, any[]>();
       for (const nft of ownedNfts) {
         const contractAddr = (nft?.contract?.address || '').toLowerCase();
@@ -247,56 +293,84 @@
   <HomeHeader />
 
   <main class="flex-1">
-    <!-- Hero Section -->
+    <!-- Premium Hero Section -->
     <section class="relative overflow-hidden">
-      <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-indigo-500/5 to-violet-500/5"></div>
-      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-r from-purple-500/8 via-indigo-500/5 to-violet-500/8 rounded-full blur-3xl"></div>
+      <!-- Animated gradient background -->
+      <div class="absolute inset-0 bg-gradient-to-br from-purple-600/8 via-violet-500/5 to-fuchsia-500/8"></div>
+      <div class="absolute inset-0 soneium-hero-gradient animated-gradient-bg"></div>
+
+      <!-- Large blurred orbs -->
+      <div class="absolute top-0 left-1/4 w-[600px] h-[600px] bg-gradient-to-r from-purple-500/12 to-violet-500/8 rounded-full blur-[120px]"></div>
+      <div class="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-gradient-to-r from-fuchsia-500/8 to-purple-500/12 rounded-full blur-[100px]"></div>
+
+      <!-- Floating decorative shapes -->
       <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute top-16 left-[10%] w-12 h-12 border border-purple-500/15 rounded-lg float-animation rotate-45"></div>
-        <div class="absolute top-28 right-[15%] w-8 h-8 border border-indigo-500/15 rounded-full float-slow-animation"></div>
-        <div class="absolute bottom-16 left-[30%] w-5 h-5 bg-violet-500/8 rounded-md float-animation" style="animation-delay:2s"></div>
-        <div class="absolute top-48 left-[60%] w-6 h-6 bg-purple-500/6 rounded-full float-slow-animation" style="animation-delay:1s"></div>
+        <div class="absolute top-12 left-[8%] w-16 h-16 border border-purple-500/20 rounded-2xl float-animation rotate-12"></div>
+        <div class="absolute top-20 right-[10%] w-12 h-12 border border-violet-500/20 rounded-full float-slow-animation"></div>
+        <div class="absolute bottom-24 left-[20%] w-8 h-8 bg-purple-500/10 rounded-lg float-animation" style="animation-delay:2s"></div>
+        <div class="absolute top-40 left-[65%] w-10 h-10 bg-fuchsia-500/8 rounded-full float-slow-animation" style="animation-delay:1s"></div>
+        <div class="absolute top-60 left-[40%] w-6 h-6 border border-violet-400/15 rounded-md float-animation" style="animation-delay:3s"></div>
+        <div class="absolute bottom-16 right-[30%] w-14 h-14 border border-purple-400/10 rounded-xl float-slow-animation rotate-45" style="animation-delay:1.5s"></div>
+        <!-- Sparkle dots -->
+        <div class="absolute top-16 left-[50%] w-2 h-2 bg-purple-400/30 rounded-full float-animation" style="animation-delay:0.5s"></div>
+        <div class="absolute top-32 left-[75%] w-1.5 h-1.5 bg-violet-400/25 rounded-full float-slow-animation" style="animation-delay:2.5s"></div>
+        <div class="absolute bottom-32 left-[55%] w-2 h-2 bg-fuchsia-400/20 rounded-full float-animation" style="animation-delay:1.2s"></div>
       </div>
 
-      <div class="relative max-w-5xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 pb-12 text-center">
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 mb-6">
-          <Award class="w-4 h-4 text-purple-400" />
-          <span class="text-sm font-medium bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent">Badge Checker</span>
-        </div>
+      <div class="relative max-w-5xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 pb-16 text-center">
+        <div
+          class="transition-all duration-700 ease-out"
+          class:opacity-0={!isAnimated}
+          class:translate-y-8={!isAnimated}
+          class:opacity-100={isAnimated}
+          class:translate-y-0={isAnimated}
+        >
+          <!-- Badge pill -->
+          <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-purple-500/10 border border-purple-500/25 mb-8 backdrop-blur-sm">
+            <Sparkles class="w-4 h-4 text-purple-400" />
+            <span class="text-sm font-semibold bg-gradient-to-r from-purple-300 to-violet-300 bg-clip-text text-transparent">Badge Collection Showcase</span>
+          </div>
 
-        <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4">
-          <span class="bg-gradient-to-r from-purple-400 via-indigo-400 to-violet-400 bg-clip-text text-transparent">Soneium Badge Checker</span>
-        </h1>
-        <p class="text-muted-foreground text-lg sm:text-xl max-w-2xl mx-auto mb-10">
-          Check which Soneium OG badges and ecosystem badges your wallet holds. Verify your on-chain achievements.
-        </p>
+          <!-- Main heading -->
+          <h1 class="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight mb-6">
+            <span class="bg-gradient-to-r from-purple-300 via-violet-300 to-fuchsia-300 bg-clip-text text-transparent">Soneium</span>
+            <br class="sm:hidden" />
+            <span class="bg-gradient-to-r from-violet-300 via-purple-300 to-fuchsia-400 bg-clip-text text-transparent"> Badge Checker</span>
+          </h1>
 
-        <!-- Address Input -->
-        <div class="max-w-2xl mx-auto">
-          <div class="flex flex-col sm:flex-row gap-3">
-            <div class="relative flex-1">
-              <Search class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-              <input
-                type="text"
-                bind:value={inputAddress}
-                onkeydown={(e) => { if (e.key === 'Enter') handleSubmit(); }}
-                placeholder="Enter wallet address (0x...)"
-                class="w-full pl-11 pr-4 h-12 bg-card/60 border border-border/40 backdrop-blur-xl rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all"
-              />
+          <p class="text-muted-foreground text-lg sm:text-xl max-w-2xl mx-auto mb-12 leading-relaxed">
+            Discover your on-chain achievements. Check which Soneium OG and ecosystem badges your wallet holds and unlock your rarity tier.
+          </p>
+
+          <!-- Address Input - Premium style -->
+          <div class="max-w-2xl mx-auto">
+            <div class="relative p-1 rounded-2xl bg-gradient-to-r from-purple-500/30 via-violet-500/30 to-fuchsia-500/30">
+              <div class="flex flex-col sm:flex-row gap-3 p-2 rounded-xl bg-background/90 backdrop-blur-xl">
+                <div class="relative flex-1">
+                  <Search class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-400 pointer-events-none" />
+                  <input
+                    type="text"
+                    bind:value={inputAddress}
+                    onkeydown={(e) => { if (e.key === 'Enter') handleSubmit(); }}
+                    placeholder="Enter wallet address (0x...)"
+                    class="w-full pl-11 pr-4 h-12 bg-card/60 border border-purple-500/20 backdrop-blur-xl rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/40 focus:border-purple-500/40 transition-all"
+                  />
+                </div>
+                <button
+                  onclick={handleSubmit}
+                  disabled={isLoading}
+                  class="h-12 px-8 rounded-xl bg-gradient-to-r from-purple-500 to-violet-600 text-white font-bold text-sm flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-purple-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                >
+                  {#if isLoading}
+                    <Loader2 class="w-4 h-4 animate-spin" />
+                    Checking...
+                  {:else}
+                    <Shield class="w-4 h-4" />
+                    Check Badges
+                  {/if}
+                </button>
+              </div>
             </div>
-            <button
-              onclick={handleSubmit}
-              disabled={isLoading}
-              class="h-12 px-6 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold text-sm flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-purple-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
-            >
-              {#if isLoading}
-                <Loader2 class="w-4 h-4 animate-spin" />
-                Checking...
-              {:else}
-                <Shield class="w-4 h-4" />
-                Check Badges
-              {/if}
-            </button>
           </div>
         </div>
       </div>
@@ -305,7 +379,7 @@
     <!-- Error -->
     {#if error && !isLoading}
       <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-8">
-        <div class="rounded-2xl border border-red-500/30 bg-red-500/5 p-6 text-center">
+        <div class="rounded-2xl border border-red-500/30 bg-red-500/5 p-6 text-center backdrop-blur-xl">
           <AlertCircle class="w-8 h-8 text-red-500 mx-auto mb-3" />
           <p class="text-sm text-red-400">{error}</p>
           <button
@@ -321,11 +395,14 @@
     <!-- Loading -->
     {#if isLoading}
       <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-20">
-        <div class="flex flex-col items-center justify-center py-20">
-          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center mb-4 animate-pulse">
-            <Loader2 class="w-8 h-8 text-white animate-spin" />
+        <div class="flex flex-col items-center justify-center py-24">
+          <div class="relative mb-6">
+            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center animate-pulse">
+              <Loader2 class="w-10 h-10 text-white animate-spin" />
+            </div>
+            <div class="absolute -inset-2 rounded-3xl bg-gradient-to-r from-purple-500/20 to-violet-500/20 blur-lg animate-pulse"></div>
           </div>
-          <p class="text-lg font-semibold mb-2">Checking Badges...</p>
+          <p class="text-xl font-bold mb-2">Scanning Badges...</p>
           <p class="text-sm text-muted-foreground">Querying Alchemy NFT API for {ECOSYSTEM_BADGES.length + OG_BADGES.length} badges</p>
         </div>
       </div>
@@ -334,16 +411,16 @@
     <!-- Results -->
     {#if isLoaded && !isLoading}
       <!-- Address Bar -->
-      <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-6">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-2xl bg-card/60 border border-border/40 backdrop-blur-xl">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center">
-              <Shield class="w-5 h-5 text-white" />
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-8">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 rounded-2xl bg-card/60 border border-purple-500/20 backdrop-blur-xl">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center shadow-lg shadow-purple-500/20">
+              <Shield class="w-6 h-6 text-white" />
             </div>
             <div>
-              <p class="text-xs text-muted-foreground">Soneium Address</p>
+              <p class="text-xs text-muted-foreground font-medium">Soneium Address</p>
               <div class="flex items-center gap-2">
-                <p class="text-sm font-mono font-medium">{truncateAddress(address)}</p>
+                <p class="text-sm font-mono font-semibold">{truncateAddress(address)}</p>
                 <button onclick={copyAddr} class="text-muted-foreground hover:text-foreground transition-colors">
                   {#if copiedAddress}
                     <Check class="w-3.5 h-3.5 text-emerald-500" />
@@ -356,50 +433,133 @@
           </div>
           <button
             onclick={shareOnTwitter}
-            class="h-9 px-4 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 text-white text-sm font-medium flex items-center gap-2 hover:shadow-lg hover:shadow-purple-500/25 transition-all"
+            class="h-10 px-5 rounded-xl bg-gradient-to-r from-purple-500 to-violet-600 text-white text-sm font-semibold flex items-center gap-2 hover:shadow-lg hover:shadow-purple-500/25 transition-all"
           >
-            <Share2 class="w-3.5 h-3.5" />
+            <Share2 class="w-4 h-4" />
             Share on Twitter
           </button>
         </div>
       </div>
 
-      <!-- Badge Collection Summary -->
-      <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-6">
-        <div class="p-6 rounded-2xl bg-gradient-to-r from-purple-500/5 via-indigo-500/5 to-violet-500/5 border border-purple-500/20">
-          <h2 class="text-lg font-bold mb-4 text-center">Badge Collection Summary</h2>
-          <div class="grid grid-cols-3 gap-4 mb-4">
-            <!-- Total -->
-            <div class="p-4 rounded-xl bg-background/50 border border-purple-500/20 text-center">
-              <p class="text-3xl font-bold bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent">{totalOwned}</p>
-              <p class="text-xs text-muted-foreground mt-1">of {totalBadges} Owned</p>
-              <div class="mt-2 h-2 rounded-full bg-secondary/60 overflow-hidden">
-                <div class="h-full rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 transition-all duration-700" style="width: {ownershipPercent}%"></div>
-              </div>
-              <p class="text-xs text-muted-foreground mt-1">{ownershipPercent}%</p>
+      <!-- Rarity Tier + Circular Progress + Stats Row -->
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-8">
+        <div class="p-6 sm:p-8 rounded-2xl bg-gradient-to-br {currentTier.bgGradient} border {currentTier.borderColor} backdrop-blur-xl">
+          <!-- Rarity Tier Header -->
+          <div class="text-center mb-8">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-background/40 border {currentTier.borderColor} mb-4">
+              <!-- svelte-ignore element_invalid_self_closing_tag -->
+              {#if currentTier.name === 'Newcomer'}
+                <Star class="w-4 h-4 {currentTier.textColor}" />
+              {:else if currentTier.name === 'Explorer'}
+                <Flame class="w-4 h-4 {currentTier.textColor}" />
+              {:else if currentTier.name === 'Collector'}
+                <Gem class="w-4 h-4 {currentTier.textColor}" />
+              {:else if currentTier.name === 'Champion'}
+                <Trophy class="w-4 h-4 {currentTier.textColor}" />
+              {:else}
+                <Crown class="w-4 h-4 {currentTier.textColor}" />
+              {/if}
+              <span class="text-sm font-bold {currentTier.textColor} uppercase tracking-wider">{currentTier.name} Tier</span>
             </div>
-            <!-- OG -->
-            <div class="p-4 rounded-xl bg-background/50 border border-amber-500/20 text-center">
-              <p class="text-3xl font-bold text-amber-400">{ogOwnedCount}</p>
-              <p class="text-xs text-muted-foreground mt-1">of {ogTotalCount} OG Badges</p>
-              <div class="mt-2 h-2 rounded-full bg-secondary/60 overflow-hidden">
-                <div class="h-full rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 transition-all duration-700" style="width: {ogTotalCount > 0 ? (ogOwnedCount / ogTotalCount * 100) : 0}%"></div>
+            <h2 class="text-2xl sm:text-3xl font-black mb-1">Badge Collection</h2>
+            <p class="text-sm text-muted-foreground">Your on-chain achievement rank</p>
+          </div>
+
+          <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+            <!-- Circular Progress Indicator -->
+            <div class="relative flex-shrink-0">
+              <svg width="160" height="160" viewBox="0 0 120 120" class="transform -rotate-90">
+                <!-- Background circle -->
+                <circle cx="60" cy="60" r="54" fill="none" stroke="currentColor" stroke-width="8" class="text-secondary/30" />
+                <!-- Progress circle -->
+                <circle
+                  cx="60" cy="60" r="54"
+                  fill="none"
+                  stroke={svgProgressColor}
+                  stroke-width="8"
+                  stroke-linecap="round"
+                  stroke-dasharray={2 * Math.PI * 54}
+                  stroke-dashoffset={svgProgressOffset()}
+                  class="score-circle-animated transition-all duration-1000"
+                />
+              </svg>
+              <!-- Center text -->
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span class="text-4xl font-black {currentTier.textColor}">{ownershipPercent}%</span>
+                <span class="text-xs text-muted-foreground font-medium">Owned</span>
               </div>
             </div>
-            <!-- Ecosystem -->
-            <div class="p-4 rounded-xl bg-background/50 border border-emerald-500/20 text-center">
-              <p class="text-3xl font-bold text-emerald-400">{ecoOwnedCount}</p>
-              <p class="text-xs text-muted-foreground mt-1">of {ecoTotalCount} Eco Badges</p>
-              <div class="mt-2 h-2 rounded-full bg-secondary/60 overflow-hidden">
-                <div class="h-full rounded-full bg-gradient-to-r from-emerald-500 to-green-500 transition-all duration-700" style="width: {ecoTotalCount > 0 ? (ecoOwnedCount / ecoTotalCount * 100) : 0}%"></div>
+
+            <!-- Stats Cards -->
+            <div class="flex-1 grid grid-cols-3 gap-4 w-full">
+              <!-- Total Owned -->
+              <div class="p-4 sm:p-5 rounded-2xl bg-background/50 border {currentTier.borderColor} text-center backdrop-blur-sm">
+                <div class="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center mx-auto mb-3">
+                  <Award class="w-5 h-5 text-purple-400" />
+                </div>
+                <p class="text-3xl sm:text-4xl font-black bg-gradient-to-r from-purple-400 to-violet-400 bg-clip-text text-transparent">{totalOwned}</p>
+                <p class="text-xs text-muted-foreground mt-1 font-medium">of {totalBadges} Total</p>
+                <div class="mt-3 h-2 rounded-full bg-secondary/60 overflow-hidden">
+                  <div class="h-full rounded-full bg-gradient-to-r from-purple-500 to-violet-500 transition-all duration-1000" style="width: {ownershipPercent}%"></div>
+                </div>
               </div>
+
+              <!-- OG Badges -->
+              <div class="p-4 sm:p-5 rounded-2xl bg-background/50 border border-amber-500/20 text-center backdrop-blur-sm">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center mx-auto mb-3">
+                  <Crown class="w-5 h-5 text-amber-400" />
+                </div>
+                <p class="text-3xl sm:text-4xl font-black text-amber-400">{ogOwnedCount}</p>
+                <p class="text-xs text-muted-foreground mt-1 font-medium">of {ogTotalCount} OG</p>
+                <div class="mt-3 h-2 rounded-full bg-secondary/60 overflow-hidden">
+                  <div class="h-full rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 transition-all duration-1000" style="width: {ogTotalCount > 0 ? (ogOwnedCount / ogTotalCount * 100) : 0}%"></div>
+                </div>
+              </div>
+
+              <!-- Ecosystem Badges -->
+              <div class="p-4 sm:p-5 rounded-2xl bg-background/50 border border-emerald-500/20 text-center backdrop-blur-sm">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center mx-auto mb-3">
+                  <Star class="w-5 h-5 text-emerald-400" />
+                </div>
+                <p class="text-3xl sm:text-4xl font-black text-emerald-400">{ecoOwnedCount}</p>
+                <p class="text-xs text-muted-foreground mt-1 font-medium">of {ecoTotalCount} Eco</p>
+                <div class="mt-3 h-2 rounded-full bg-secondary/60 overflow-hidden">
+                  <div class="h-full rounded-full bg-gradient-to-r from-emerald-500 to-green-500 transition-all duration-1000" style="width: {ecoTotalCount > 0 ? (ecoOwnedCount / ecoTotalCount * 100) : 0}%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rarity Tier Breakdown -->
+          <div class="mt-6 pt-6 border-t border-border/20">
+            <div class="flex flex-wrap justify-center gap-2">
+              {#each RARITY_TIERS as tierInfo}
+                {@const isCurrent = currentTier.name === tierInfo.tier.name}
+                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all {
+                  isCurrent ? tierInfo.tier.borderColor + ' ' + tierInfo.tier.bgGradient + ' ring-1 ring-current' : 'bg-background/30 border border-border/20 text-muted-foreground'
+                }" style={isCurrent ? `color: var(--tw-${tierInfo.tier.color}-400, currentColor)` : ''}>
+                  {#if tierInfo.tier.name === 'Newcomer'}
+                    <Star class="w-3 h-3" />
+                  {:else if tierInfo.tier.name === 'Explorer'}
+                    <Flame class="w-3 h-3" />
+                  {:else if tierInfo.tier.name === 'Collector'}
+                    <Gem class="w-3 h-3" />
+                  {:else if tierInfo.tier.name === 'Champion'}
+                    <Trophy class="w-3 h-3" />
+                  {:else}
+                    <Crown class="w-3 h-3" />
+                  {/if}
+                  <span>{tierInfo.tier.name}</span>
+                  <span class="text-muted-foreground/50">{tierInfo.min === 0 && tierInfo.max === 0 ? '0%' : tierInfo.min + '-' + tierInfo.max + '%'}</span>
+                </div>
+              {/each}
             </div>
           </div>
         </div>
       </div>
 
       <!-- Filter Tabs + Search -->
-      <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-4">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-6">
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <!-- Tabs -->
           <div class="flex gap-2">
@@ -408,78 +568,86 @@
               {@const count = tab === 'All' ? totalBadges : tab === 'Owned' ? totalOwned : totalBadges - totalOwned}
               <button
                 onclick={() => activeFilter = tab as FilterTab}
-                class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 {
+                class="px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 {
                   isActive
-                    ? 'bg-gradient-to-r from-purple-500 to-indigo-600 text-white shadow-lg shadow-purple-500/25'
+                    ? 'bg-gradient-to-r from-purple-500 to-violet-600 text-white shadow-lg shadow-purple-500/25'
                     : 'bg-card/60 border border-border/40 text-muted-foreground hover:text-foreground hover:bg-card/80 backdrop-blur-sm'
                 }"
               >
                 {tab}
-                <span class="ml-1 text-xs {isActive ? 'text-white/70' : 'text-muted-foreground'}">({count})</span>
+                <span class="ml-1.5 text-xs {isActive ? 'text-white/70' : 'text-muted-foreground'}">({count})</span>
               </button>
             {/each}
           </div>
 
           <!-- Search -->
           <div class="relative w-full sm:w-64">
-            <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
+            <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-purple-400 pointer-events-none" />
             <input
               type="text"
               bind:value={searchQuery}
               placeholder="Search badges..."
-              class="w-full pl-9 pr-3 h-9 bg-card/60 border border-border/40 backdrop-blur-xl rounded-lg text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all"
+              class="w-full pl-9 pr-3 h-10 bg-card/60 border border-purple-500/20 backdrop-blur-xl rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/40 focus:border-purple-500/40 transition-all"
             />
           </div>
         </div>
       </div>
 
-      <!-- OG Badges Section (Amber Theme) -->
+      <!-- OG Badges Section - LARGE cards -->
       {#if filteredOGBadges.length > 0}
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-6">
-          <div class="rounded-2xl border border-amber-500/20 bg-card/40 backdrop-blur-xl overflow-hidden">
-            <div class="px-5 py-4 border-b border-amber-500/15 bg-gradient-to-r from-amber-500/5 to-yellow-500/5">
-              <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-lg bg-amber-500/15 flex items-center justify-center">
-                  <Award class="w-4 h-4 text-amber-400" />
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-8">
+          <div class="rounded-2xl border border-amber-500/25 bg-card/40 backdrop-blur-xl overflow-hidden">
+            <div class="px-6 py-5 border-b border-amber-500/15 bg-gradient-to-r from-amber-500/5 via-yellow-500/5 to-orange-500/5">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/15 flex items-center justify-center">
+                  <Crown class="w-5 h-5 text-amber-400" />
                 </div>
                 <div>
-                  <h2 class="text-base font-bold text-amber-300">OG Badges</h2>
+                  <h2 class="text-lg font-bold text-amber-300">OG Badges</h2>
                   <p class="text-xs text-muted-foreground">ERC-1155 · Original Soneium achievements</p>
                 </div>
-                <span class="ml-auto text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-medium">
+                <span class="ml-auto text-sm px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold">
                   {ogOwnedCount}/{ogTotalCount}
                 </span>
               </div>
             </div>
-            <div class="p-4">
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="p-6">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 {#each filteredOGBadges as badge}
-                  <div class="flex items-center gap-4 p-4 rounded-xl bg-background/50 border {badge.owned ? 'border-amber-500/30 bg-amber-500/5' : 'border-border/30'}">
-                    <!-- Badge Image -->
-                    <div class="w-14 h-14 rounded-xl bg-secondary/30 flex items-center justify-center overflow-hidden shrink-0">
-                      {#if badge.image}
-                        <img src={badge.image} alt={badge.name} class="w-full h-full object-cover" loading="lazy" />
-                      {:else}
-                        <Award class="w-7 h-7 text-amber-400/40" />
-                      {/if}
-                    </div>
-                    <!-- Info -->
-                    <div class="flex-1 min-w-0">
-                      <p class="text-sm font-semibold">{badge.name}</p>
-                      <p class="text-xs text-muted-foreground">Token ID: {badge.tokenId}</p>
-                    </div>
-                    <!-- Status -->
-                    <div class="shrink-0">
+                  <div class="relative group">
+                    <!-- Gradient border wrapper for owned badges -->
+                    {#if badge.owned}
+                      <div class="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-amber-500/40 via-yellow-500/40 to-orange-500/40 opacity-100 transition-opacity"></div>
+                    {/if}
+                    <div class="relative flex items-center gap-5 p-5 rounded-2xl bg-background/80 backdrop-blur-xl border {badge.owned ? 'border-amber-500/20' : 'border-border/30'} transition-all duration-300 {badge.owned ? 'shadow-lg shadow-amber-500/10' : ''}">
+                      <!-- Badge Image - LARGE -->
+                      <div class="w-20 h-20 rounded-xl bg-secondary/30 flex items-center justify-center overflow-hidden shrink-0 {badge.owned ? 'ring-2 ring-amber-500/30' : ''}">
+                        {#if badge.image}
+                          <img src={badge.image} alt={badge.name} class="w-full h-full object-cover" loading="lazy" />
+                        {:else}
+                          <Award class="w-10 h-10 text-amber-400/40" />
+                        {/if}
+                      </div>
+                      <!-- Info -->
+                      <div class="flex-1 min-w-0">
+                        <p class="text-base font-bold mb-1">{badge.name}</p>
+                        <p class="text-xs text-muted-foreground mb-3">Token ID: {badge.tokenId}</p>
+                        <!-- Status badge -->
+                        {#if badge.owned}
+                          <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/25">
+                            <CheckCircle2 class="w-3.5 h-3.5" />
+                            <span class="text-xs font-bold">Owned</span>
+                          </div>
+                        {:else}
+                          <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20">
+                            <XCircle class="w-3.5 h-3.5" />
+                            <span class="text-xs font-bold">Missing</span>
+                          </div>
+                        {/if}
+                      </div>
+                      <!-- Glow for owned -->
                       {#if badge.owned}
-                        <div class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">
-                          <CheckCircle2 class="w-3.5 h-3.5" />
-                          <span class="text-xs font-semibold">Owned</span>
-                        </div>
-                      {:else}
-                        <div class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20">
-                          <XCircle class="w-3.5 h-3.5" />
-                          <span class="text-xs font-semibold">Missing</span>
-                        </div>
+                        <div class="absolute -inset-1 rounded-2xl bg-amber-500/5 blur-xl group-hover:bg-amber-500/10 transition-all pointer-events-none"></div>
                       {/if}
                     </div>
                   </div>
@@ -490,26 +658,26 @@
         </div>
       {/if}
 
-      <!-- Ecosystem Badges Section (Green Theme) -->
-      <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-6">
-        <div class="rounded-2xl border border-emerald-500/20 bg-card/40 backdrop-blur-xl overflow-hidden">
-          <div class="px-5 py-4 border-b border-emerald-500/15 bg-gradient-to-r from-emerald-500/5 to-green-500/5">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-emerald-500/15 flex items-center justify-center">
-                <Shield class="w-4 h-4 text-emerald-400" />
+      <!-- Ecosystem Badges Section - Grid with glow effects -->
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-8">
+        <div class="rounded-2xl border border-emerald-500/25 bg-card/40 backdrop-blur-xl overflow-hidden">
+          <div class="px-6 py-5 border-b border-emerald-500/15 bg-gradient-to-r from-emerald-500/5 via-green-500/5 to-teal-500/5">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/15 flex items-center justify-center">
+                <Star class="w-5 h-5 text-emerald-400" />
               </div>
               <div>
-                <h2 class="text-base font-bold text-emerald-300">Ecosystem Badges</h2>
+                <h2 class="text-lg font-bold text-emerald-300">Ecosystem Badges</h2>
                 <p class="text-xs text-muted-foreground">ERC-721 · Soneium partner achievements</p>
               </div>
-              <span class="ml-auto text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
+              <span class="ml-auto text-sm px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">
                 {ecoOwnedCount}/{ecoTotalCount}
               </span>
             </div>
           </div>
-          <div class="p-4">
+          <div class="p-4 sm:p-6">
             {#if filteredEcosystemBadges.length > 0}
-              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[600px] overflow-y-auto custom-scrollbar pr-1">
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[700px] overflow-y-auto custom-scrollbar pr-1">
                 {#each filteredEcosystemBadges as badge}
                   <a
                     href={getBlockscoutUrl(badge.contract, badge.tokenId)}
@@ -517,32 +685,41 @@
                     rel="noopener noreferrer"
                     class="block group"
                   >
-                    <div class="flex items-start gap-3 p-3 rounded-xl bg-background/50 border {badge.owned ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-border/30'} transition-all duration-200 group-hover:-translate-y-0.5 group-hover:shadow-lg group-hover:shadow-emerald-500/10">
-                      <!-- Badge Image -->
-                      <div class="w-12 h-12 rounded-lg bg-secondary/30 flex items-center justify-center overflow-hidden shrink-0">
-                        {#if badge.image}
-                          <img src={badge.image} alt={badge.name} class="w-full h-full object-cover" loading="lazy" />
-                        {:else}
-                          <Shield class="w-6 h-6 text-emerald-400/40" />
-                        {/if}
-                      </div>
-                      <!-- Info -->
-                      <div class="flex-1 min-w-0">
-                        <p class="text-sm font-semibold truncate">{badge.name}</p>
-                        <p class="text-[10px] text-muted-foreground font-mono truncate">{truncateAddress(badge.contract)}</p>
-                      </div>
-                      <!-- Status -->
-                      <div class="shrink-0 mt-0.5">
+                    <div class="relative">
+                      <!-- Gradient border for owned badges -->
+                      {#if badge.owned}
+                        <div class="absolute -inset-[1px] rounded-xl bg-gradient-to-r from-emerald-500/40 via-purple-500/40 to-violet-500/40 opacity-100 transition-opacity"></div>
+                      {/if}
+                      <div class="relative flex items-start gap-3 p-4 rounded-xl bg-background/80 backdrop-blur-xl border {badge.owned ? 'border-emerald-500/20 shadow-lg shadow-emerald-500/10' : 'border-border/30'} transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl {badge.owned ? 'group-hover:shadow-emerald-500/20' : 'group-hover:shadow-purple-500/10'}">
+                        <!-- Badge Image -->
+                        <div class="w-14 h-14 rounded-lg bg-secondary/30 flex items-center justify-center overflow-hidden shrink-0 {badge.owned ? 'ring-2 ring-emerald-500/30' : ''}">
+                          {#if badge.image}
+                            <img src={badge.image} alt={badge.name} class="w-full h-full object-cover" loading="lazy" />
+                          {:else}
+                            <Star class="w-7 h-7 text-emerald-400/40" />
+                          {/if}
+                        </div>
+                        <!-- Info -->
+                        <div class="flex-1 min-w-0">
+                          <p class="text-sm font-bold truncate mb-1">{badge.name}</p>
+                          <p class="text-[10px] text-muted-foreground font-mono truncate">{truncateAddress(badge.contract)}</p>
+                          <div class="mt-2">
+                            {#if badge.owned}
+                              <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">
+                                <CheckCircle2 class="w-3 h-3" />
+                                <span class="text-[10px] font-bold">Owned</span>
+                              </div>
+                            {:else}
+                              <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20">
+                                <XCircle class="w-3 h-3" />
+                                <span class="text-[10px] font-bold">Missing</span>
+                              </div>
+                            {/if}
+                          </div>
+                        </div>
+                        <!-- Glow for owned -->
                         {#if badge.owned}
-                          <div class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">
-                            <CheckCircle2 class="w-3 h-3" />
-                            <span class="text-[10px] font-semibold">Owned</span>
-                          </div>
-                        {:else}
-                          <div class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20">
-                            <XCircle class="w-3 h-3" />
-                            <span class="text-[10px] font-semibold">Missing</span>
-                          </div>
+                          <div class="absolute -inset-1 rounded-xl bg-emerald-500/5 blur-xl group-hover:bg-emerald-500/10 transition-all pointer-events-none"></div>
                         {/if}
                       </div>
                     </div>
@@ -550,9 +727,9 @@
                 {/each}
               </div>
             {:else}
-              <div class="text-center py-8">
-                <Shield class="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
-                <p class="text-sm text-muted-foreground">No badges match your filters</p>
+              <div class="text-center py-12">
+                <Star class="w-12 h-12 text-muted-foreground/20 mx-auto mb-4" />
+                <p class="text-sm text-muted-foreground font-medium">No badges match your filters</p>
               </div>
             {/if}
           </div>
@@ -560,13 +737,16 @@
       </div>
 
       <!-- Share Section -->
-      <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-6">
-        <div class="p-6 rounded-2xl bg-gradient-to-r from-purple-500/5 via-indigo-500/5 to-violet-500/5 border border-purple-500/20 text-center">
-          <h3 class="text-lg font-bold mb-2">Share Your Badges</h3>
-          <p class="text-sm text-muted-foreground mb-4">Show off your Soneium badge collection</p>
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-8">
+        <div class="p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-purple-500/5 via-violet-500/5 to-fuchsia-500/5 border border-purple-500/20 text-center backdrop-blur-xl">
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-purple-500/10 mb-4">
+            <Share2 class="w-6 h-6 text-purple-400" />
+          </div>
+          <h3 class="text-xl font-bold mb-2">Share Your Collection</h3>
+          <p class="text-sm text-muted-foreground mb-5">Show off your Soneium badge collection and rarity tier</p>
           <button
             onclick={shareOnTwitter}
-            class="h-10 px-6 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold text-sm flex items-center gap-2 hover:shadow-lg hover:shadow-purple-500/25 transition-all mx-auto"
+            class="h-11 px-8 rounded-xl bg-gradient-to-r from-purple-500 to-violet-600 text-white font-bold text-sm flex items-center gap-2 hover:shadow-lg hover:shadow-purple-500/30 transition-all mx-auto"
           >
             <Share2 class="w-4 h-4" />
             Share on Twitter
@@ -574,7 +754,7 @@
         </div>
       </div>
 
-      <!-- Info Section -->
+      <!-- Collapsible Info Section -->
       <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-12">
         <div class="rounded-2xl border border-border/40 bg-card/40 backdrop-blur-xl overflow-hidden">
           <button
@@ -582,38 +762,79 @@
             class="w-full flex items-center justify-between p-5 hover:bg-card/60 transition-colors"
           >
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-indigo-500/15 flex items-center justify-center">
-                <Info class="w-4 h-4 text-indigo-400" />
+              <div class="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
+                <Info class="w-5 h-5 text-purple-400" />
               </div>
-              <h3 class="text-base font-bold">What Are Soneium Ecosystem Badges?</h3>
+              <div class="text-left">
+                <h3 class="text-base font-bold">What Are Soneium Ecosystem Badges?</h3>
+                <p class="text-xs text-muted-foreground mt-0.5">Learn about badge types and rarity tiers</p>
+              </div>
             </div>
-            {#if infoExpanded}
-              <ChevronUp class="w-4 h-4 text-muted-foreground shrink-0" />
-            {:else}
-              <ChevronDown class="w-4 h-4 text-muted-foreground shrink-0" />
-            {/if}
+            <div class="shrink-0 w-8 h-8 rounded-lg bg-secondary/50 flex items-center justify-center">
+              {#if infoExpanded}
+                <ChevronUp class="w-4 h-4 text-muted-foreground" />
+              {:else}
+                <ChevronDown class="w-4 h-4 text-muted-foreground" />
+              {/if}
+            </div>
           </button>
           {#if infoExpanded}
             <div class="px-5 pb-5 pt-0">
-              <div class="prose prose-sm prose-invert max-w-none text-muted-foreground space-y-3">
+              <div class="prose prose-sm prose-invert max-w-none text-muted-foreground space-y-4">
                 <p>
                   Soneium ecosystem badges are NFT-based achievements on the Soneium blockchain (Ethereum L2 by Sony Block Solutions Labs). They represent your participation and engagement across various protocols and platforms in the Soneium ecosystem.
                 </p>
+
+                <!-- Rarity Tier Info -->
+                <div class="not-prose p-4 rounded-xl bg-purple-500/5 border border-purple-500/15">
+                  <h4 class="text-sm font-bold text-purple-300 mb-3 flex items-center gap-2">
+                    <Sparkles class="w-4 h-4" />
+                    Rarity Tiers
+                  </h4>
+                  <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                    {#each RARITY_TIERS as tierInfo}
+                      <div class="flex items-center gap-2 px-3 py-2 rounded-lg bg-background/50 border border-border/20">
+                        {#if tierInfo.tier.name === 'Newcomer'}
+                          <Star class="w-3.5 h-3.5 {tierInfo.tier.textColor}" />
+                        {:else if tierInfo.tier.name === 'Explorer'}
+                          <Flame class="w-3.5 h-3.5 {tierInfo.tier.textColor}" />
+                        {:else if tierInfo.tier.name === 'Collector'}
+                          <Gem class="w-3.5 h-3.5 {tierInfo.tier.textColor}" />
+                        {:else if tierInfo.tier.name === 'Champion'}
+                          <Trophy class="w-3.5 h-3.5 {tierInfo.tier.textColor}" />
+                        {:else}
+                          <Crown class="w-3.5 h-3.5 {tierInfo.tier.textColor}" />
+                        {/if}
+                        <div>
+                          <p class="text-xs font-bold {tierInfo.tier.textColor}">{tierInfo.tier.name}</p>
+                          <p class="text-[10px] text-muted-foreground">{tierInfo.min === 0 && tierInfo.max === 0 ? '0%' : tierInfo.min + '-' + tierInfo.max + '%'}</p>
+                        </div>
+                      </div>
+                    {/each}
+                  </div>
+                </div>
+
                 <div class="grid sm:grid-cols-2 gap-4 not-prose">
-                  <div class="p-4 rounded-xl bg-amber-500/5 border border-amber-500/20">
-                    <h4 class="text-sm font-bold text-amber-300 mb-2">OG Badges (ERC-1155)</h4>
+                  <div class="p-4 rounded-xl bg-amber-500/5 border border-amber-500/15">
+                    <h4 class="text-sm font-bold text-amber-300 mb-2 flex items-center gap-2">
+                      <Crown class="w-4 h-4" />
+                      OG Badges (ERC-1155)
+                    </h4>
                     <p class="text-xs text-muted-foreground">
                       The OG Badge and Premium OG Badge are ERC-1155 tokens from the official Soneium contract. They were awarded to early adopters and active community members during the Soneium launch period.
                     </p>
                   </div>
-                  <div class="p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/20">
-                    <h4 class="text-sm font-bold text-emerald-300 mb-2">Ecosystem Badges (ERC-721)</h4>
+                  <div class="p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/15">
+                    <h4 class="text-sm font-bold text-emerald-300 mb-2 flex items-center gap-2">
+                      <Star class="w-4 h-4" />
+                      Ecosystem Badges (ERC-721)
+                    </h4>
                     <p class="text-xs text-muted-foreground">
                       Each ecosystem badge is an ERC-721 NFT from a different Soneium partner protocol. These include DeFi platforms, NFT marketplaces, bridges, and other dApps. Holding these badges may qualify you for future airdrops or rewards.
                     </p>
                   </div>
                 </div>
-                <p class="text-xs">
+                <p class="text-xs text-muted-foreground/70">
                   Badge data is fetched from the Alchemy NFT API. Results reflect on-chain ownership at the time of checking. This tool is for informational purposes only and is not financial advice.
                 </p>
               </div>
@@ -626,3 +847,12 @@
 
   <Footer />
 </div>
+
+<style>
+  .soneium-hero-gradient {
+    background:
+      radial-gradient(at 20% 20%, rgba(168, 85, 247, 0.12) 0%, transparent 50%),
+      radial-gradient(at 80% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+      radial-gradient(at 50% 80%, rgba(217, 70, 239, 0.1) 0%, transparent 50%);
+  }
+</style>

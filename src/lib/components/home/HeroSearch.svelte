@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { Search, Shield, Globe, ArrowRight, FlaskConical, Sparkles, Radio, TrendingUp } from 'lucide-svelte';
+  import { Search, Shield, Globe, ArrowRight, Zap, Radio, FlaskConical, Sparkles, X, Layers } from 'lucide-svelte';
   import { CHAIN_CONFIGS, tools } from '$lib/utils/constants';
   import { goto } from '$app/navigation';
 
   // ── Types ──
   type SuggestionType = 'chain' | 'tool' | 'trending';
+  type CategoryType = 'Mainnet' | 'Testnet' | 'Dapp' | 'All';
 
   interface Suggestion {
     id: string;
@@ -15,22 +16,20 @@
     gradient: string;
     icon: typeof Shield;
     keywords: string[];
-    category?: string;
+    category?: CategoryType;
     status?: string;
   }
 
   // ── State ──
   let searchQuery = $state('');
   let selectedIndex = $state(-1);
-  let isDropdownOpen = $state(false);
-  let inputFocused = $state(false);
+  let isOpen = $state(false);
 
   // ── Chain data ──
   const chainList = Object.values(CHAIN_CONFIGS);
 
-  // ── Build suggestions list ──
+  // ── Build full suggestions list ──
   const allSuggestions: Suggestion[] = [
-    // Chain/tool suggestions
     ...chainList.map(chain => ({
       id: `chain-${chain.id}`,
       name: chain.name,
@@ -40,22 +39,9 @@
       gradient: getChainGradient(chain.id),
       icon: (chain.apiType === 'relay-dapp' || chain.apiType === 'jumper-dapp') ? Globe : Shield,
       keywords: [chain.id, chain.name.toLowerCase(), chain.nativeCurrency.toLowerCase(), ...(chain.isTestnet ? ['testnet'] : ['mainnet']), 'checker', 'stats', 'analytics', 'guide'],
-      category: chain.isTestnet ? 'Testnet' : (chain.apiType === 'relay-dapp' || chain.apiType === 'jumper-dapp') ? 'DApp' : 'Mainnet',
+      category: (chain.isTestnet ? 'Testnet' : (chain.apiType === 'relay-dapp' || chain.apiType === 'jumper-dapp') ? 'Dapp' : 'Mainnet') as CategoryType,
       status: 'LIVE',
     })),
-    // Coming soon tools
-    ...tools.filter(t => t.status === 'COMING SOON').map(tool => ({
-      id: `tool-${tool.name}`,
-      name: tool.name,
-      description: `Coming soon - ${tool.name.toLowerCase()}`,
-      path: tool.path,
-      type: 'tool' as SuggestionType,
-      gradient: tool.gradient,
-      icon: Globe,
-      keywords: tool.keywords,
-      status: 'COMING SOON',
-    })),
-    // Extra tool pages (not in CHAIN_CONFIGS)
     {
       id: 'tool-layerzero-stats',
       name: 'LayerZero Stats',
@@ -65,7 +51,7 @@
       gradient: 'from-sky-500 to-blue-600',
       icon: Globe,
       keywords: ['layerzero', 'lz', 'bridge', 'cross-chain', 'airdrop', 'stats', 'zro', 'relayer'],
-      category: 'DApp',
+      category: 'Dapp' as CategoryType,
       status: 'LIVE',
     },
     {
@@ -75,9 +61,9 @@
       path: '/binance-wotd-solver',
       type: 'tool' as SuggestionType,
       gradient: 'from-emerald-500 to-green-600',
-      icon: Globe,
+      icon: Zap,
       keywords: ['binance', 'wotd', 'word', 'solver', 'puzzle', 'wordle', 'answer', 'daily'],
-      category: 'DApp',
+      category: 'Dapp' as CategoryType,
       status: 'LIVE',
     },
     {
@@ -87,9 +73,9 @@
       path: '/soneium',
       type: 'tool' as SuggestionType,
       gradient: 'from-purple-500 to-indigo-600',
-      icon: Globe,
+      icon: Shield,
       keywords: ['soneium', 'sony', 'mainnet', 'wallet', 'stats', 'analytics', 'eth'],
-      category: 'Mainnet',
+      category: 'Mainnet' as CategoryType,
       status: 'LIVE',
     },
     {
@@ -99,16 +85,16 @@
       path: '/soneium-badge-checker',
       type: 'tool' as SuggestionType,
       gradient: 'from-violet-500 to-purple-600',
-      icon: Globe,
+      icon: Sparkles,
       keywords: ['soneium', 'badge', 'og', 'ecosystem', 'nft', 'checker', 'soulbound'],
-      category: 'DApp',
+      category: 'Dapp' as CategoryType,
       status: 'LIVE',
     },
   ];
 
   // ── Filtered suggestions ──
   let filteredSuggestions = $derived.by(() => {
-    if (!searchQuery.trim()) return [];
+    if (!searchQuery.trim()) return allSuggestions.filter(s => s.status === 'LIVE');
     const q = searchQuery.toLowerCase().trim();
 
     let results = allSuggestions.filter(s =>
@@ -136,17 +122,13 @@
       return true;
     });
 
-    return results.slice(0, 8);
+    return results;
   });
 
-  // Popular tools shown when focused with no query
-  let defaultSuggestions = $derived.by(() => {
-    return allSuggestions.filter(s => s.type === 'chain' && s.status === 'LIVE').slice(0, 6);
-  });
-
-  let visibleSuggestions = $derived(
-    searchQuery.trim() ? filteredSuggestions : (inputFocused ? defaultSuggestions : [])
-  );
+  // Group by category for display
+  let mainnetTools = $derived(filteredSuggestions.filter(s => s.category === 'Mainnet'));
+  let testnetTools = $derived(filteredSuggestions.filter(s => s.category === 'Testnet'));
+  let dappTools = $derived(filteredSuggestions.filter(s => s.category === 'Dapp'));
 
   // ── Helpers ──
   function getChainGradient(id: string): string {
@@ -163,185 +145,239 @@
       dachain: 'from-red-500 to-rose-600',
       doma: 'from-amber-500 to-yellow-600',
       robinhood: 'from-green-500 to-emerald-600',
-      'layerzero-stats': 'from-sky-500 to-blue-600',
-      'binance-wotd-solver': 'from-emerald-500 to-green-600',
-      soneium: 'from-purple-500 to-indigo-600',
-      'soneium-badge-checker': 'from-violet-500 to-purple-600',
     };
     return map[id] || 'from-cyan-500 to-teal-600';
-  }
-
-  function getChainIcon(id: string) {
-    const config = CHAIN_CONFIGS[id];
-    if (config?.apiType === 'relay-dapp' || config?.apiType === 'jumper-dapp') return Globe;
-    return Shield;
   }
 
   // ── Actions ──
   function handleSelect(suggestion: Suggestion) {
     if (suggestion.path === '#') return;
     goto(suggestion.path);
-    searchQuery = '';
-    isDropdownOpen = false;
-    selectedIndex = -1;
-  }
-
-  function handleSearch() {
-    if (filteredSuggestions.length > 0) {
-      handleSelect(filteredSuggestions[0]);
-    }
+    closeSearch();
   }
 
   function handleKeyDown(e: KeyboardEvent) {
-    const items = visibleSuggestions;
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      if (selectedIndex >= 0 && items[selectedIndex]) {
-        handleSelect(items[selectedIndex]);
-      } else if (searchQuery.trim() && filteredSuggestions.length > 0) {
-        handleSearch();
-      }
+    if (e.key === 'Escape') {
+      closeSearch();
     } else if (e.key === 'ArrowDown') {
       e.preventDefault();
-      selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+      selectedIndex = Math.min(selectedIndex + 1, filteredSuggestions.length - 1);
+      scrollToSelected();
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       selectedIndex = Math.max(selectedIndex - 1, -1);
-    } else if (e.key === 'Escape') {
-      searchQuery = '';
-      isDropdownOpen = false;
-      selectedIndex = -1;
+      scrollToSelected();
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (selectedIndex >= 0 && filteredSuggestions[selectedIndex]) {
+        handleSelect(filteredSuggestions[selectedIndex]);
+      }
     }
   }
 
-  function handleInputFocus() {
-    inputFocused = true;
-    isDropdownOpen = true;
+  function scrollToSelected() {
+    if (selectedIndex < 0) return;
+    const el = document.getElementById(`search-item-${selectedIndex}`);
+    el?.scrollIntoView({ block: 'nearest' });
   }
 
-  function handleInputBlur() {
+  function openSearch() {
+    isOpen = true;
+    searchQuery = '';
+    selectedIndex = -1;
+    // Focus input after DOM update
     setTimeout(() => {
-      inputFocused = false;
-      isDropdownOpen = false;
-      selectedIndex = -1;
-    }, 200);
+      document.getElementById('hero-search-input')?.focus();
+    }, 50);
   }
 
-  // ── Highlight matching text ──
-  function highlightMatch(text: string, query: string): string {
-    if (!query.trim()) return text;
-    const idx = text.toLowerCase().indexOf(query.toLowerCase());
-    if (idx === -1) return text;
-    return text.slice(0, idx) + '<mark class="bg-cyan-500/20 text-foreground rounded px-0.5">' + text.slice(idx, idx + query.length) + '</mark>' + text.slice(idx + query.length);
+  function closeSearch() {
+    isOpen = false;
+    searchQuery = '';
+    selectedIndex = -1;
   }
+
+  // Global keyboard shortcut
+  $effect(() => {
+    function handleGlobalKeydown(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        if (isOpen) closeSearch();
+        else openSearch();
+      }
+    }
+    window.addEventListener('keydown', handleGlobalKeydown);
+    return () => window.removeEventListener('keydown', handleGlobalKeydown);
+  });
 </script>
 
 <div class="w-full max-w-2xl mx-auto">
+  <!-- Search bar trigger -->
   <div class="relative">
-    <!-- Search bar -->
-    <div class="flex items-center bg-card/80 border border-border/50 rounded-2xl shadow-lg shadow-cyan-500/5 backdrop-blur-xl overflow-hidden transition-all duration-200 {inputFocused ? 'border-cyan-500/40 shadow-cyan-500/10' : ''}">
-      <!-- Search icon -->
+    <div
+      class="flex items-center bg-card/80 border border-border/50 rounded-2xl shadow-lg shadow-cyan-500/5 backdrop-blur-xl overflow-hidden cursor-pointer transition-all duration-200 hover:border-cyan-500/30 hover:shadow-cyan-500/10"
+      onclick={openSearch}
+      onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') openSearch(); }}
+      role="button"
+      tabindex="0"
+    >
       <div class="pl-4 shrink-0">
         <Search class="w-5 h-5 text-muted-foreground" />
       </div>
-
-      <!-- Search input -->
-      <div class="flex-1">
-        <input
-          type="text"
-          value={searchQuery}
-          oninput={(e) => { searchQuery = (e.target as HTMLInputElement).value; selectedIndex = -1; isDropdownOpen = true; }}
-          onkeydown={handleKeyDown}
-          onfocus={handleInputFocus}
-          onblur={handleInputBlur}
-          placeholder="Search tools & chains..."
-          class="w-full h-12 sm:h-14 px-3 bg-transparent text-sm sm:text-base focus:outline-none placeholder:text-muted-foreground/60"
-        />
+      <div class="flex-1 h-12 sm:h-14 px-3 flex items-center">
+        <span class="text-sm sm:text-base text-muted-foreground/60">Search tools & chains...</span>
       </div>
-
-      <!-- Search button -->
-      <div class="pr-2 shrink-0">
-        <button
-          onclick={handleSearch}
-          class="bg-gradient-to-r from-cyan-500 to-teal-600 hover:from-cyan-600 hover:to-teal-700 text-white px-4 sm:px-6 h-10 sm:h-12 rounded-xl shadow-md shadow-cyan-500/25 transition-all duration-200 hover:shadow-lg hover:shadow-cyan-500/30 flex items-center gap-2 font-semibold text-sm"
-        >
-          <Search class="w-4 h-4" />
-          <span class="hidden sm:inline">Search</span>
-        </button>
+      <div class="pr-3 shrink-0 hidden sm:flex items-center gap-2">
+        <kbd class="px-2 py-1 rounded-lg bg-secondary/60 border border-border/30 text-[10px] font-mono text-muted-foreground">Ctrl</kbd>
+        <kbd class="px-2 py-1 rounded-lg bg-secondary/60 border border-border/30 text-[10px] font-mono text-muted-foreground">K</kbd>
       </div>
     </div>
-
-    <!-- Auto-suggestions dropdown -->
-    {#if isDropdownOpen && visibleSuggestions.length > 0}
-      <div class="absolute top-full left-0 right-0 mt-2 bg-card border border-border/50 rounded-xl shadow-2xl backdrop-blur-xl overflow-hidden z-50">
-        <!-- Header -->
-        <div class="px-4 py-2 border-b border-border/20">
-          <span class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-            {#if searchQuery.trim()}
-              Suggestions
-            {:else}
-              <TrendingUp class="w-3 h-3" /> Popular Tools
-            {/if}
-          </span>
-        </div>
-
-        <!-- Suggestion items -->
-        {#each visibleSuggestions as suggestion, idx}
-          <button
-            class="w-full text-left px-3 sm:px-4 py-2.5 sm:py-3 flex items-center gap-2.5 sm:gap-3 transition-colors {idx === selectedIndex ? 'bg-cyan-500/8' : 'hover:bg-secondary/30'}"
-            onclick={() => handleSelect(suggestion)}
-            onmouseenter={() => selectedIndex = idx}
-          >
-            <!-- Icon -->
-            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gradient-to-br {suggestion.gradient} flex items-center justify-center shrink-0 shadow-sm">
-              <suggestion.icon class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
-            </div>
-
-            <!-- Text -->
-            <div class="min-w-0 flex-1">
-              <div class="flex items-center gap-1.5 sm:gap-2">
-                <span class="text-sm font-medium truncate">
-                  {@html highlightMatch(suggestion.name, searchQuery)}
-                </span>
-                {#if suggestion.status === 'COMING SOON'}
-                  <span class="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-amber-500/15 text-amber-500 border border-amber-500/30 shrink-0">SOON</span>
-                {:else if suggestion.status === 'LIVE'}
-                  <span class="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-500 border border-emerald-500/30 shrink-0">LIVE</span>
-                {/if}
-              </div>
-              <p class="text-xs text-muted-foreground truncate mt-0.5">{suggestion.description}</p>
-            </div>
-
-            <!-- Category badge (desktop only) -->
-            {#if suggestion.category}
-              <span class="text-[10px] px-2 py-0.5 rounded-full bg-secondary/50 text-muted-foreground border border-border/30 shrink-0 hidden sm:inline">
-                {suggestion.category}
-              </span>
-            {/if}
-
-            <!-- Arrow -->
-            <ArrowRight class="w-3.5 h-3.5 text-muted-foreground/50 shrink-0 hidden sm:block" />
-          </button>
-        {/each}
-
-        <!-- Footer hint -->
-        <div class="px-4 py-2 border-t border-border/20 flex items-center justify-between">
-          <span class="text-[10px] text-muted-foreground">
-            Select a tool to open its checker
-          </span>
-          <div class="hidden sm:flex items-center gap-3">
-            <span class="text-[10px] text-muted-foreground flex items-center gap-1">
-              <kbd class="px-1 py-0.5 rounded bg-secondary/60 border border-border/30 text-[9px]">&#8593;&#8595;</kbd> Navigate
-            </span>
-            <span class="text-[10px] text-muted-foreground flex items-center gap-1">
-              <kbd class="px-1 py-0.5 rounded bg-secondary/60 border border-border/30 text-[9px]">&#8629;</kbd> Select
-            </span>
-            <span class="text-[10px] text-muted-foreground flex items-center gap-1">
-              <kbd class="px-1 py-0.5 rounded bg-secondary/60 border border-border/30 text-[9px]">Esc</kbd> Close
-            </span>
-          </div>
-        </div>
-      </div>
-    {/if}
   </div>
 </div>
+
+<!-- Full-screen Search Overlay -->
+{#if isOpen}
+  <div class="fixed inset-0 z-[100] flex items-start justify-center pt-[8vh] sm:pt-[12vh]">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-background/80 backdrop-blur-xl" onclick={closeSearch}></div>
+
+    <!-- Search Modal -->
+    <div class="relative w-full max-w-2xl mx-4 rounded-2xl border border-border/50 bg-card shadow-2xl overflow-hidden flex flex-col max-h-[80vh]">
+      <!-- Search Input -->
+      <div class="flex items-center gap-3 px-4 sm:px-5 h-14 sm:h-16 border-b border-border/30 shrink-0">
+        <Search class="w-5 h-5 text-cyan-500 shrink-0" />
+        <input
+          id="hero-search-input"
+          type="text"
+          value={searchQuery}
+          oninput={(e) => { searchQuery = (e.target as HTMLInputElement).value; selectedIndex = -1; }}
+          onkeydown={handleKeyDown}
+          placeholder="Search tools, chains, and dapps..."
+          class="flex-1 bg-transparent text-sm sm:text-base focus:outline-none placeholder:text-muted-foreground/60"
+        />
+        <button
+          onclick={closeSearch}
+          class="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors"
+        >
+          <X class="w-4 h-4" />
+        </button>
+      </div>
+
+      <!-- Results (scrollable) -->
+      <div class="flex-1 overflow-y-auto custom-scrollbar">
+        {#if filteredSuggestions.length === 0}
+          <div class="px-5 py-12 text-center">
+            <Search class="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
+            <p class="text-sm text-muted-foreground">No results found for "{searchQuery}"</p>
+            <p class="text-xs text-muted-foreground/60 mt-1">Try a different search term</p>
+          </div>
+        {:else}
+          <!-- Mainnet Chains -->
+          {#if mainnetTools.length > 0}
+            <div class="px-3 pt-3 pb-1">
+              <div class="flex items-center gap-2 px-2 mb-2">
+                <Sparkles class="w-3.5 h-3.5 text-blue-500" />
+                <span class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Mainnet Chains</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">{mainnetTools.length}</span>
+              </div>
+              {#each mainnetTools as suggestion, idx}
+                {@const globalIdx = filteredSuggestions.indexOf(suggestion)}
+                <button
+                  id="search-item-{globalIdx}"
+                  class="w-full text-left px-3 py-2.5 flex items-center gap-3 rounded-xl transition-colors {globalIdx === selectedIndex ? 'bg-cyan-500/10' : 'hover:bg-secondary/30'}"
+                  onclick={() => handleSelect(suggestion)}
+                  onmouseenter={() => selectedIndex = globalIdx}
+                >
+                  <div class="w-9 h-9 rounded-lg bg-gradient-to-br {suggestion.gradient} flex items-center justify-center shrink-0 shadow-sm">
+                    <suggestion.icon class="w-4 h-4 text-white" />
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium truncate">{suggestion.name}</p>
+                    <p class="text-xs text-muted-foreground truncate">{suggestion.description}</p>
+                  </div>
+                  <ArrowRight class="w-3.5 h-3.5 text-muted-foreground/40 shrink-0" />
+                </button>
+              {/each}
+            </div>
+          {/if}
+
+          <!-- DApps & Tools -->
+          {#if dappTools.length > 0}
+            <div class="px-3 pt-3 pb-1">
+              <div class="flex items-center gap-2 px-2 mb-2">
+                <Radio class="w-3.5 h-3.5 text-purple-500" />
+                <span class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">DApps & Tools</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20">{dappTools.length}</span>
+              </div>
+              {#each dappTools as suggestion, idx}
+                {@const globalIdx = filteredSuggestions.indexOf(suggestion)}
+                <button
+                  id="search-item-{globalIdx}"
+                  class="w-full text-left px-3 py-2.5 flex items-center gap-3 rounded-xl transition-colors {globalIdx === selectedIndex ? 'bg-cyan-500/10' : 'hover:bg-secondary/30'}"
+                  onclick={() => handleSelect(suggestion)}
+                  onmouseenter={() => selectedIndex = globalIdx}
+                >
+                  <div class="w-9 h-9 rounded-lg bg-gradient-to-br {suggestion.gradient} flex items-center justify-center shrink-0 shadow-sm">
+                    <suggestion.icon class="w-4 h-4 text-white" />
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium truncate">{suggestion.name}</p>
+                    <p class="text-xs text-muted-foreground truncate">{suggestion.description}</p>
+                  </div>
+                  <ArrowRight class="w-3.5 h-3.5 text-muted-foreground/40 shrink-0" />
+                </button>
+              {/each}
+            </div>
+          {/if}
+
+          <!-- Testnets -->
+          {#if testnetTools.length > 0}
+            <div class="px-3 pt-3 pb-1">
+              <div class="flex items-center gap-2 px-2 mb-2">
+                <FlaskConical class="w-3.5 h-3.5 text-cyan-500" />
+                <span class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Testnets</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">{testnetTools.length}</span>
+              </div>
+              {#each testnetTools as suggestion, idx}
+                {@const globalIdx = filteredSuggestions.indexOf(suggestion)}
+                <button
+                  id="search-item-{globalIdx}"
+                  class="w-full text-left px-3 py-2.5 flex items-center gap-3 rounded-xl transition-colors {globalIdx === selectedIndex ? 'bg-cyan-500/10' : 'hover:bg-secondary/30'}"
+                  onclick={() => handleSelect(suggestion)}
+                  onmouseenter={() => selectedIndex = globalIdx}
+                >
+                  <div class="w-9 h-9 rounded-lg bg-gradient-to-br {suggestion.gradient} flex items-center justify-center shrink-0 shadow-sm">
+                    <suggestion.icon class="w-4 h-4 text-white" />
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium truncate">{suggestion.name}</p>
+                    <p class="text-xs text-muted-foreground truncate">{suggestion.description}</p>
+                  </div>
+                  <ArrowRight class="w-3.5 h-3.5 text-muted-foreground/40 shrink-0" />
+                </button>
+              {/each}
+            </div>
+          {/if}
+        {/if}
+      </div>
+
+      <!-- Footer -->
+      <div class="px-4 sm:px-5 py-3 border-t border-border/30 shrink-0 flex items-center justify-between">
+        <span class="text-[10px] text-muted-foreground">
+          {filteredSuggestions.length} tools available
+        </span>
+        <div class="flex items-center gap-3">
+          <span class="text-[10px] text-muted-foreground flex items-center gap-1">
+            <kbd class="px-1 py-0.5 rounded bg-secondary/60 border border-border/30 text-[9px]">&#8593;&#8595;</kbd> Navigate
+          </span>
+          <span class="text-[10px] text-muted-foreground flex items-center gap-1">
+            <kbd class="px-1 py-0.5 rounded bg-secondary/60 border border-border/30 text-[9px]">&#8629;</kbd> Select
+          </span>
+          <span class="text-[10px] text-muted-foreground flex items-center gap-1">
+            <kbd class="px-1 py-0.5 rounded bg-secondary/60 border border-border/30 text-[9px]">Esc</kbd> Close
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+{/if}

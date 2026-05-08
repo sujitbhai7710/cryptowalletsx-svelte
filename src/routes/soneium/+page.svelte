@@ -1,18 +1,30 @@
 <script lang="ts">
   import {
     Wallet, Search, Activity, Fuel, Clock, Calendar, Hash,
-    Layers, ChevronDown, ChevronUp, ExternalLink, Share2,
+    ChevronDown, ChevronUp, ExternalLink, Share2,
     Flame, Coins, Image, FileCode, Users, ArrowRight,
-    Loader2, AlertCircle, RefreshCw, Copy, Check
+    Loader2, AlertCircle, RefreshCw, Copy, Check, Zap,
+    Trophy, Target, BarChart3,
+    Star, Crown, Award, Rocket, Gem, Sparkles,
+    Globe, Code
   } from 'lucide-svelte';
   import HomeHeader from '$lib/components/home/HomeHeader.svelte';
   import Footer from '$lib/components/home/Footer.svelte';
   import SEO from '$lib/components/SEO.svelte';
 
   const BLOCKSCOUT_BASE = 'https://soneium.blockscout.com/api/v2';
-  const ALCHEMY_RPC = 'https://soneium.g.alchemy.com/v2/FBKOVxVYW0yobV1ntzs7u5qM0E6_xRwO';
 
-  // State
+  // --- Tier Definitions ---
+  const TIERS = [
+    { name: 'NEWBIE', min: 0, max: 15, color: '#6b7280', gradient: 'from-gray-400 to-gray-500' },
+    { name: 'BRONZE', min: 15, max: 35, color: '#cd7f32', gradient: 'from-amber-600 to-amber-700' },
+    { name: 'SILVER', min: 35, max: 55, color: '#c0c0c0', gradient: 'from-gray-300 to-gray-400' },
+    { name: 'GOLD', min: 55, max: 75, color: '#ffd700', gradient: 'from-yellow-400 to-amber-500' },
+    { name: 'MASTER', min: 75, max: 90, color: '#8b5cf6', gradient: 'from-purple-500 to-violet-600' },
+    { name: 'LEGEND', min: 90, max: 100, color: '#10b981', gradient: 'from-emerald-400 to-green-500' },
+  ];
+
+  // --- State ---
   let address = $state('');
   let inputAddress = $state('');
   let isLoading = $state(false);
@@ -21,7 +33,7 @@
   let copiedAddress = $state(false);
   let isLoaded = $state(false);
 
-  // Data
+  // Raw data
   let balance = $state<string>('0');
   let ethPrice = $state<number>(0);
   let totalTransactions = $state(0);
@@ -39,8 +51,34 @@
   let allTransactions = $state<any[]>([]);
   let firstTxDate = $state<Date | null>(null);
 
+  // Streak data
+  let currentStreak = $state(0);
+  let bestStreak = $state(0);
+  let streakConsistency = $state(0);
+
+  // DeFi activity counts
+  let swapCount = $state(0);
+  let stakingCount = $state(0);
+  let liquidityCount = $state(0);
+  let lendingCount = $state(0);
+  let bridgeCount = $state(0);
+  let governanceCount = $state(0);
+  let defiProtocolCount = $state(0);
+  let nftMintCount = $state(0);
+  let recentActivityCount = $state(0);
+
+  // Scoring
+  let ecosystemScore = $state(0);
+  let strategyScore = $state(0);
+  let velocityScore = $state(0);
+  let technicalScore = $state(0);
+  let compoundBonus = $state(0);
+  let totalScore = $state(0);
+  let activeBonuses = $state<{ name: string; value: number }[]>([]);
+
   // Collapsible sections
   let sections = $state<Record<string, boolean>>({
+    categories: true,
     overview: true,
     activity: true,
     contracts: false,
@@ -52,18 +90,224 @@
     sections[key] = !sections[key];
   }
 
-  // Derived
+  // --- Derived ---
+  let tier = $derived(() => {
+    const s = totalScore;
+    for (const t of TIERS) {
+      if (s >= t.min && s < t.max) return t;
+    }
+    return TIERS[TIERS.length - 1];
+  });
+
   let balanceUsd = $derived(() => {
     const bal = parseFloat(balance);
     return (bal * ethPrice).toFixed(2);
   });
 
-  let shareText = $derived(() => {
-    if (!address) return '';
-    return `🟣 Soneium Wallet Stats\n\n💰 Balance: ${parseFloat(balance).toFixed(4)} ETH ($${balanceUsd()})\n📊 Transactions: ${totalTransactions}\n🔥 Gas Used: ${parseFloat(gasUsedEth).toFixed(6)} ETH\n📅 Wallet Age: ${walletAge} days\n🎯 Active Days: ${uniqueDaysActive} | Weeks: ${uniqueWeeksActive} | Months: ${uniqueMonthsActive}\n\nCheck yours at cryptowalletsx.com/soneium`;
+  let gasUsedUsd = $derived(() => {
+    const gas = parseFloat(gasUsedEth);
+    return (gas * ethPrice).toFixed(2);
   });
 
-  // Helpers
+  let shareText = $derived(() => {
+    if (!address) return '';
+    const t = tier();
+    return `🟣 Soneium Wallet Score\n\n🏆 Tier: ${t.name} (${totalScore}/100)\n💰 Balance: ${parseFloat(balance).toFixed(4)} ETH ($${balanceUsd()})\n📊 Transactions: ${totalTransactions}\n🔥 Gas Used: ${parseFloat(gasUsedEth).toFixed(6)} ETH\n📅 Active Days: ${uniqueDaysActive} | Streak: ${currentStreak}🔥\n\nCheck yours at cryptowalletsx.com/soneium`;
+  });
+
+  // SVG gauge
+  let circumference = $derived(() => 2 * Math.PI * 80);
+  let gaugeOffset = $derived(() => circumference() * (1 - totalScore / 100));
+
+  // Category percentages for display
+  let ecoPercent = $derived(() => Math.min(ecosystemScore, 100));
+  let stratPercent = $derived(() => Math.min(strategyScore, 100));
+  let velPercent = $derived(() => Math.min(velocityScore, 100));
+  let techPercent = $derived(() => Math.min(technicalScore, 100));
+
+  // --- Scoring Engine ---
+  function calculateScores() {
+    const txCount = totalTransactions;
+    const uniqueContracts = contractsInteracted.length;
+    const tokenDiversity = tokenHoldings.length;
+    const contractDeploys = contractsCreated.length;
+    const nftCount = nftHoldings.length;
+
+    // Recent activity (last 30 days)
+    const thirtyDaysAgo = Date.now() - 30 * 86400000;
+    recentActivityCount = allTransactions.filter(tx => {
+      const ts = tx?.timestamp || tx?.first_seen;
+      return ts && new Date(ts).getTime() > thirtyDaysAgo;
+    }).length;
+
+    // DeFi classification from method names
+    const swapMethods = ['swap', 'swapexacttokensfortokens', 'swapexactethfortokens', 'swaptokensforexacttokens', 'swaptokensforexacteth', 'swapexacttokensforeth', 'exactinput', 'exactoutput'];
+    const liquidityMethods = ['addliquidity', 'removeliquidity', 'addliquidityeth', 'removeliquidityeth', 'mintposition', 'increaseliquidity', 'decreaseliquidity'];
+    const stakingMethods = ['stake', 'unstake', 'withdraw', 'claim', 'claimrewards', 'enter', 'leave', 'depositstake'];
+    const lendingMethods = ['deposit', 'borrow', 'repay', 'redeem', 'liquidate', 'supply'];
+    const bridgeMethods = ['bridge', 'withdrawandcall', 'requestl2transaction', 'initiatewithdrawal'];
+    const governanceMethods = ['propose', 'vote', 'castvote', 'execute', 'queue'];
+
+    const defiContracts = new Set<string>();
+
+    for (const tx of allTransactions) {
+      const method = (tx?.method || '').toLowerCase();
+      const toAddr = (tx?.to?.hash || '').toLowerCase();
+
+      if (swapMethods.some(m => method.includes(m))) { swapCount++; defiContracts.add(toAddr); }
+      if (liquidityMethods.some(m => method.includes(m))) { liquidityCount++; defiContracts.add(toAddr); }
+      if (stakingMethods.some(m => method.includes(m))) { stakingCount++; defiContracts.add(toAddr); }
+      if (lendingMethods.some(m => method.includes(m))) { lendingCount++; defiContracts.add(toAddr); }
+      if (bridgeMethods.some(m => method.includes(m))) { bridgeCount++; defiContracts.add(toAddr); }
+      if (governanceMethods.some(m => method.includes(m))) { governanceCount++; defiContracts.add(toAddr); }
+    }
+
+    defiProtocolCount = defiContracts.size;
+    nftMintCount = nftHoldings.length;
+
+    // --- ECOSYSTEM (weight: 0.40) ---
+    const interactionScore = Math.min((Math.log10(1 + txCount) / Math.log10(1 + 1000)) * 100, 100);
+    const uniqueContractScore = Math.min((Math.log10(1 + uniqueContracts) / Math.log10(1 + 200)) * 100, 100);
+    const tokenDiversityScore = Math.min((Math.log10(1 + tokenDiversity) / Math.log10(1 + 50)) * 100, 100);
+    const recentActivityScore = Math.min((recentActivityCount / 50) * 100, 100);
+    const tokenInteractionScore = Math.min((Math.log10(1 + tokenTransfersCount) / Math.log10(1 + 500)) * 100, 100);
+
+    ecosystemScore = (
+      interactionScore * 0.30 +
+      uniqueContractScore * 0.25 +
+      tokenDiversityScore * 0.20 +
+      recentActivityScore * 0.15 +
+      tokenInteractionScore * 0.10
+    );
+
+    // --- STRATEGY (weight: 0.25) ---
+    const stakingScore = Math.min((Math.log10(1 + stakingCount) / Math.log10(1 + 50)) * 100, 100);
+    const liquidityScore = Math.min((Math.log10(1 + liquidityCount) / Math.log10(1 + 30)) * 100, 100);
+    const defiDiversityScore = Math.min((defiProtocolCount / 10) * 100, 100);
+    const swapScore = Math.min((Math.log10(1 + swapCount) / Math.log10(1 + 50)) * 100, 100);
+    const lendingScore = Math.min((Math.log10(1 + lendingCount) / Math.log10(1 + 20)) * 100, 100);
+
+    strategyScore = (
+      stakingScore * 0.30 +
+      liquidityScore * 0.25 +
+      defiDiversityScore * 0.20 +
+      swapScore * 0.15 +
+      lendingScore * 0.10
+    );
+
+    // --- VELOCITY (weight: 0.20) ---
+    const activeDaysScore = Math.min((Math.log10(1 + uniqueDaysActive) / Math.log10(1 + 100)) * 100, 100);
+    const currentStreakScore = Math.min((currentStreak / 14) * 100, 100);
+    const bestStreakScore = Math.min((Math.log10(1 + bestStreak) / Math.log10(1 + 30)) * 100, 100);
+    const activeMonthsScore = Math.min((uniqueMonthsActive / 6) * 100, 100);
+    streakConsistency = bestStreak > 0 ? Math.min((currentStreak / bestStreak) * 100, 100) : 0;
+
+    velocityScore = (
+      activeDaysScore * 0.30 +
+      currentStreakScore * 0.25 +
+      bestStreakScore * 0.20 +
+      activeMonthsScore * 0.15 +
+      streakConsistency * 0.10
+    );
+
+    // --- TECHNICAL (weight: 0.15) ---
+    const deployScore = Math.min((Math.log10(1 + contractDeploys) / Math.log10(1 + 20)) * 100, 100);
+    const nftMintScore = Math.min((Math.log10(1 + nftMintCount) / Math.log10(1 + 20)) * 100, 100);
+    const protocolScore = Math.min((uniqueContracts / 30) * 100, 100);
+    const innovationScore = Math.min(((contractDeploys + nftMintCount) / 15) * 100, 100);
+
+    technicalScore = (
+      deployScore * 0.35 +
+      nftMintScore * 0.25 +
+      protocolScore * 0.25 +
+      innovationScore * 0.15
+    );
+
+    // --- Compound Bonuses (max +15) ---
+    const bonuses: { name: string; value: number }[] = [];
+
+    if (ecosystemScore > 30 && strategyScore > 20 && velocityScore > 20) {
+      bonuses.push({ name: 'Triple Threat', value: 8 });
+    }
+    if (ecosystemScore > 25 && strategyScore > 15 && velocityScore > 15 && technicalScore > 15) {
+      bonuses.push({ name: 'Renaissance', value: 5 });
+    }
+    if (txCount > 100) {
+      bonuses.push({ name: 'Power User', value: 4 });
+    }
+    if (uniqueDaysActive > 30) {
+      bonuses.push({ name: 'Engagement Master', value: 4 });
+    }
+    const defiCategories = [swapCount > 0, stakingCount > 0, liquidityCount > 0, lendingCount > 0].filter(Boolean).length;
+    if (defiCategories >= 3) {
+      bonuses.push({ name: 'DeFi Native', value: 3 });
+    }
+    if (nftMintCount >= 5) {
+      bonuses.push({ name: 'NFT Creator', value: 3 });
+    }
+    if (contractDeploys >= 3) {
+      bonuses.push({ name: 'Contract Developer', value: 5 });
+    }
+    if (bestStreak >= 7) {
+      bonuses.push({ name: 'Streak Master', value: 5 });
+    }
+    if (currentStreak >= 3) {
+      bonuses.push({ name: 'Active Streak', value: 3 });
+    }
+
+    activeBonuses = bonuses;
+    compoundBonus = Math.min(bonuses.reduce((sum, b) => sum + b.value, 0), 15);
+
+    // --- Final Score ---
+    const rawScore =
+      ecosystemScore * 0.40 +
+      strategyScore * 0.25 +
+      velocityScore * 0.20 +
+      technicalScore * 0.15 +
+      compoundBonus;
+
+    totalScore = Math.min(Math.round(10 * rawScore) / 10, 100);
+  }
+
+  // --- Streak Calculation ---
+  function calculateStreaks() {
+    const timestamps = allTransactions
+      .map(tx => {
+        const ts = tx?.timestamp || tx?.first_seen;
+        return ts ? new Date(ts).getTime() : 0;
+      })
+      .filter(t => t > 0)
+      .sort((a, b) => b - a);
+
+    if (timestamps.length === 0) return;
+
+    const daySet = new Set(timestamps.map(t => Math.floor(t / 86400000)));
+    const sortedDays = Array.from(daySet).sort((a, b) => b - a);
+
+    const today = Math.floor(Date.now() / 86400000);
+    currentStreak = 0;
+    for (const d of sortedDays) {
+      if (today - d === currentStreak) {
+        currentStreak++;
+      } else {
+        break;
+      }
+    }
+
+    bestStreak = sortedDays.length > 0 ? 1 : 0;
+    let streak = 1;
+    for (let i = 1; i < sortedDays.length; i++) {
+      if (sortedDays[i - 1] - sortedDays[i] === 1) {
+        streak++;
+        bestStreak = Math.max(bestStreak, streak);
+      } else {
+        streak = 1;
+      }
+    }
+    bestStreak = Math.max(bestStreak, currentStreak);
+  }
+
+  // --- Helpers ---
   function formatEth(wei: string): string {
     const val = BigInt(wei || '0');
     const eth = Number(val) / 1e18;
@@ -97,7 +341,7 @@
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
   }
 
-  // Fetch functions
+  // --- Fetch functions ---
   async function fetchEthPrice(): Promise<number> {
     try {
       const res = await fetch(`${BLOCKSCOUT_BASE}/stats`);
@@ -166,12 +410,22 @@
     }
   }
 
-  // Main fetch
+  // --- Main fetch ---
   async function fetchAllData() {
     if (!address) return;
     const refreshFlag = isRefreshing;
     if (!refreshFlag) isLoading = true;
     error = null;
+
+    // Reset DeFi counters
+    swapCount = 0;
+    stakingCount = 0;
+    liquidityCount = 0;
+    lendingCount = 0;
+    bridgeCount = 0;
+    governanceCount = 0;
+    defiProtocolCount = 0;
+    nftMintCount = 0;
 
     try {
       const [addrInfo, counters, price, txns, tokens, nfts] = await Promise.all([
@@ -216,7 +470,6 @@
       let earliestDate: Date | null = null;
 
       for (const tx of txns) {
-        // Date tracking
         const ts = tx?.timestamp || tx?.first_seen;
         if (ts) {
           const date = new Date(ts);
@@ -231,7 +484,6 @@
           }
         }
 
-        // Contract creation (to == null)
         if (!tx?.to?.hash) {
           contractsCreatedList.push({
             hash: tx?.hash || '',
@@ -239,7 +491,6 @@
           });
         }
 
-        // Contract interaction tracking
         const fromAddr = (tx?.from?.hash || '').toLowerCase();
         const toAddr = (tx?.to?.hash || '').toLowerCase();
         const myAddr = address.toLowerCase();
@@ -280,6 +531,10 @@
       tokenHoldings = tokens;
       nftHoldings = nfts;
 
+      // Calculate streaks and scores
+      calculateStreaks();
+      calculateScores();
+
       isLoaded = true;
     } catch (err: any) {
       error = err?.message || 'Failed to fetch wallet data. Please try again.';
@@ -316,14 +571,12 @@
     const text = encodeURIComponent(shareText());
     window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
   }
-
-
 </script>
 
 <SEO
-  title="Soneium Chain Stats"
-  description="Check Soneium wallet stats, balance, transaction history, gas usage, NFT holdings, and token portfolio analytics. Soneium is an Ethereum L2 by Sony Block Solutions Labs."
-  keywords={["soneium", "soneium chain", "soneium wallet", "soneium stats", "sony blockchain", "ethereum l2", "wallet analytics"]}
+  title="Soneium Wallet Score & Stats"
+  description="Check your Soneium wallet score with zkcodex-style scoring, tier system, activity streaks, DeFi analytics, and comprehensive on-chain stats. Soneium is an Ethereum L2 by Sony Block Solutions Labs."
+  keywords={["soneium", "soneium chain", "soneium wallet score", "soneium stats", "sony blockchain", "ethereum l2", "wallet scoring", "on-chain analytics"]}
   canonicalUrl="https://cryptowalletsx.com/soneium"
 />
 
@@ -333,25 +586,26 @@
   <main class="flex-1">
     <!-- Hero Section -->
     <section class="relative overflow-hidden">
-      <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-indigo-500/5 to-violet-500/5"></div>
-      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-r from-purple-500/8 via-indigo-500/5 to-violet-500/8 rounded-full blur-3xl"></div>
+      <div class="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-indigo-500/5 to-violet-500/8"></div>
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[400px] bg-gradient-to-r from-purple-500/10 via-indigo-500/8 to-violet-500/10 rounded-full blur-3xl"></div>
       <div class="absolute inset-0 overflow-hidden pointer-events-none">
         <div class="absolute top-16 left-[10%] w-12 h-12 border border-purple-500/15 rounded-lg float-animation rotate-45"></div>
         <div class="absolute top-28 right-[15%] w-8 h-8 border border-indigo-500/15 rounded-full float-slow-animation"></div>
         <div class="absolute bottom-16 left-[30%] w-5 h-5 bg-violet-500/8 rounded-md float-animation" style="animation-delay:2s"></div>
+        <div class="absolute top-12 right-[40%] w-3 h-3 bg-purple-400/10 rounded-full float-slow-animation" style="animation-delay:1s"></div>
       </div>
 
       <div class="relative max-w-5xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 pb-12 text-center">
         <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 mb-6">
-          <Wallet class="w-4 h-4 text-purple-400" />
-          <span class="text-sm font-medium bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent">Soneium Chain</span>
+          <Sparkles class="w-4 h-4 text-purple-400" />
+          <span class="text-sm font-medium bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent">Soneium Wallet Scoring</span>
         </div>
 
         <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4">
-          <span class="bg-gradient-to-r from-purple-400 via-indigo-400 to-violet-400 bg-clip-text text-transparent">Soneium Wallet Stats</span>
+          <span class="bg-gradient-to-r from-purple-400 via-indigo-400 to-violet-400 bg-clip-text text-transparent">Soneium Score</span>
         </h1>
         <p class="text-muted-foreground text-lg sm:text-xl max-w-2xl mx-auto mb-10">
-          Comprehensive on-chain analytics for Soneium — Ethereum L2 by Sony Block Solutions Labs. Track balance, transactions, gas, NFTs, and more.
+          Comprehensive wallet scoring powered by on-chain analytics. Get your tier, track DeFi activity, and see how you rank on Soneium.
         </p>
 
         <!-- Address Input -->
@@ -374,9 +628,9 @@
             >
               {#if isLoading}
                 <Loader2 class="w-4 h-4 animate-spin" />
-                Loading...
+                Analyzing...
               {:else}
-                <Search class="w-4 h-4" />
+                <Rocket class="w-4 h-4" />
                 Analyze
               {/if}
             </button>
@@ -385,7 +639,7 @@
       </div>
     </section>
 
-    <!-- Results -->
+    <!-- Error -->
     {#if error && !isLoading}
       <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-8">
         <div class="rounded-2xl border border-red-500/30 bg-red-500/5 p-6 text-center">
@@ -401,18 +655,24 @@
       </div>
     {/if}
 
+    <!-- Loading -->
     {#if isLoading && !isRefreshing}
       <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-20">
         <div class="flex flex-col items-center justify-center py-20">
-          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center mb-4 animate-pulse">
-            <Loader2 class="w-8 h-8 text-white animate-spin" />
+          <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center mb-6 animate-pulse">
+            <Loader2 class="w-10 h-10 text-white animate-spin" />
           </div>
           <p class="text-lg font-semibold mb-2">Analyzing Wallet...</p>
-          <p class="text-sm text-muted-foreground">Fetching data from Blockscout & Alchemy APIs</p>
+          <p class="text-sm text-muted-foreground">Fetching on-chain data & computing your score</p>
+          <div class="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
+            <div class="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse"></div>
+            <span>Querying Blockscout API</span>
+          </div>
         </div>
       </div>
     {/if}
 
+    <!-- Results -->
     {#if isLoaded && !isLoading}
       <!-- Wallet Header Bar -->
       <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-6">
@@ -455,7 +715,244 @@
         </div>
       </div>
 
-      <!-- Overview Section -->
+      <!-- Score Gauge + Tier Section -->
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-6">
+        <div class="p-6 sm:p-8 rounded-2xl bg-card/60 border border-border/40 backdrop-blur-xl relative overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-br from-purple-500/3 via-transparent to-indigo-500/3 pointer-events-none"></div>
+
+          <div class="relative flex flex-col lg:flex-row items-center gap-8">
+            <!-- SVG Gauge -->
+            <div class="flex-shrink-0 relative">
+              <svg width="200" height="200" viewBox="0 0 200 200" class="transform -rotate-90">
+                <defs>
+                  <linearGradient id="tierGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color: {tier().color}; stop-opacity: 1" />
+                    <stop offset="100%" style="stop-color: {tier().color}; stop-opacity: 0.6" />
+                  </linearGradient>
+                  <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                      <feMergeNode in="coloredBlur"/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                  </filter>
+                </defs>
+                <!-- Background ring -->
+                <circle
+                  cx="100"
+                  cy="100"
+                  r="80"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="10"
+                  class="text-border/30"
+                />
+                <!-- Progress ring -->
+                <circle
+                  cx="100"
+                  cy="100"
+                  r="80"
+                  fill="none"
+                  stroke="url(#tierGradient)"
+                  stroke-width="10"
+                  stroke-linecap="round"
+                  stroke-dasharray={circumference()}
+                  stroke-dashoffset={gaugeOffset()}
+                  filter="url(#glow)"
+                  class="transition-all duration-1000 ease-out"
+                />
+              </svg>
+              <!-- Score text overlay -->
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span class="text-4xl font-extrabold" style="color: {tier().color}">{totalScore}</span>
+                <span class="text-xs text-muted-foreground font-medium">/ 100</span>
+              </div>
+            </div>
+
+            <!-- Tier Info + Bonuses -->
+            <div class="flex-1 text-center lg:text-left">
+              <div class="flex flex-col sm:flex-row items-center gap-4 mb-4">
+                <!-- Tier Badge -->
+                <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border-2 font-bold text-lg"
+                  style="border-color: {tier().color}; color: {tier().color}; background: {tier().color}15">
+                  {#if tier().name === 'LEGEND'}
+                    <Crown class="w-5 h-5" />
+                  {:else if tier().name === 'MASTER'}
+                    <Gem class="w-5 h-5" />
+                  {:else if tier().name === 'GOLD'}
+                    <Trophy class="w-5 h-5" />
+                  {:else}
+                    <Award class="w-5 h-5" />
+                  {/if}
+                  {tier().name}
+                </div>
+                <div class="text-sm text-muted-foreground">
+                  {#if totalScore >= 90}
+                    🏆 Top tier — Elite on-chain presence
+                  {:else if totalScore >= 75}
+                    ⚡ Advanced user — Impressive activity
+                  {:else if totalScore >= 55}
+                    🌟 Active participant — Growing presence
+                  {:else if totalScore >= 35}
+                    📈 Building momentum — Keep going
+                  {:else if totalScore >= 15}
+                    🔰 Getting started — Room to grow
+                  {:else}
+                    🆕 New explorer — Begin your journey
+                  {/if}
+                </div>
+              </div>
+
+              <!-- Compound Bonuses -->
+              {#if activeBonuses.length > 0}
+                <div class="mb-3">
+                  <p class="text-xs text-muted-foreground font-medium mb-2">COMPOUND BONUSES (+{compoundBonus.toFixed(1)})</p>
+                  <div class="flex flex-wrap gap-2">
+                    {#each activeBonuses as bonus}
+                      <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                        <Star class="w-3 h-3" />
+                        {bonus.name} +{bonus.value}
+                      </span>
+                    {/each}
+                  </div>
+                </div>
+              {/if}
+
+              <!-- Mini stats -->
+              <div class="flex flex-wrap gap-4 text-xs text-muted-foreground">
+                <span class="flex items-center gap-1"><Hash class="w-3 h-3" /> {totalTransactions} txs</span>
+                <span class="flex items-center gap-1"><Flame class="w-3 h-3" /> {currentStreak} day streak</span>
+                <span class="flex items-center gap-1"><Calendar class="w-3 h-3" /> {uniqueDaysActive} active days</span>
+                <span class="flex items-center gap-1"><Users class="w-3 h-3" /> {contractsInteracted.length} contracts</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Score Bars -->
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-6">
+        <button
+          onclick={() => toggleSection('categories')}
+          class="w-full flex items-center justify-between p-4 rounded-t-2xl bg-card/60 border border-border/40 backdrop-blur-xl hover:bg-card/80 transition-colors"
+        >
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-purple-500/15 flex items-center justify-center">
+              <BarChart3 class="w-4 h-4 text-purple-400" />
+            </div>
+            <h2 class="text-lg font-bold">Score Breakdown</h2>
+          </div>
+          {#if sections.categories}
+            <ChevronUp class="w-4 h-4 text-muted-foreground" />
+          {:else}
+            <ChevronDown class="w-4 h-4 text-muted-foreground" />
+          {/if}
+        </button>
+        {#if sections.categories}
+          <div class="p-4 sm:p-6 pt-4 rounded-b-2xl bg-card/40 border border-t-0 border-border/40 backdrop-blur-xl">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- ECOSYSTEM -->
+              <div class="p-4 rounded-xl bg-background/50 border border-border/30">
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-lg bg-blue-500/15 flex items-center justify-center">
+                      <Globe class="w-3.5 h-3.5 text-blue-400" />
+                    </div>
+                    <span class="text-sm font-bold">ECOSYSTEM</span>
+                    <span class="text-xs text-muted-foreground">x0.40</span>
+                  </div>
+                  <span class="text-sm font-bold text-blue-400">{ecoPercent().toFixed(1)}</span>
+                </div>
+                <div class="w-full h-2.5 rounded-full bg-secondary/50 overflow-hidden mb-3">
+                  <div class="h-full rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-all duration-700" style="width: {ecoPercent()}%"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
+                  <span>Interactions: {totalTransactions}</span>
+                  <span>Contracts: {contractsInteracted.length}</span>
+                  <span>Tokens: {tokenHoldings.length}</span>
+                  <span>Recent: {recentActivityCount} (30d)</span>
+                </div>
+              </div>
+
+              <!-- STRATEGY -->
+              <div class="p-4 rounded-xl bg-background/50 border border-border/30">
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-lg bg-amber-500/15 flex items-center justify-center">
+                      <Target class="w-3.5 h-3.5 text-amber-400" />
+                    </div>
+                    <span class="text-sm font-bold">STRATEGY</span>
+                    <span class="text-xs text-muted-foreground">x0.25</span>
+                  </div>
+                  <span class="text-sm font-bold text-amber-400">{stratPercent().toFixed(1)}</span>
+                </div>
+                <div class="w-full h-2.5 rounded-full bg-secondary/50 overflow-hidden mb-3">
+                  <div class="h-full rounded-full bg-gradient-to-r from-amber-500 to-yellow-400 transition-all duration-700" style="width: {stratPercent()}%"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
+                  <span>Staking: {stakingCount}</span>
+                  <span>Liquidity: {liquidityCount}</span>
+                  <span>Swaps: {swapCount}</span>
+                  <span>DeFi Protocols: {defiProtocolCount}</span>
+                </div>
+              </div>
+
+              <!-- VELOCITY -->
+              <div class="p-4 rounded-xl bg-background/50 border border-border/30">
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-lg bg-emerald-500/15 flex items-center justify-center">
+                      <Zap class="w-3.5 h-3.5 text-emerald-400" />
+                    </div>
+                    <span class="text-sm font-bold">VELOCITY</span>
+                    <span class="text-xs text-muted-foreground">x0.20</span>
+                  </div>
+                  <span class="text-sm font-bold text-emerald-400">{velPercent().toFixed(1)}</span>
+                </div>
+                <div class="w-full h-2.5 rounded-full bg-secondary/50 overflow-hidden mb-3">
+                  <div class="h-full rounded-full bg-gradient-to-r from-emerald-500 to-green-400 transition-all duration-700" style="width: {velPercent()}%"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
+                  <span>Active Days: {uniqueDaysActive}</span>
+                  <span>Current Streak: {currentStreak}</span>
+                  <span>Best Streak: {bestStreak}</span>
+                  <span>Active Months: {uniqueMonthsActive}</span>
+                </div>
+              </div>
+
+              <!-- TECHNICAL -->
+              <div class="p-4 rounded-xl bg-background/50 border border-border/30">
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-lg bg-violet-500/15 flex items-center justify-center">
+                      <Code class="w-3.5 h-3.5 text-violet-400" />
+                    </div>
+                    <span class="text-sm font-bold">TECHNICAL</span>
+                    <span class="text-xs text-muted-foreground">x0.15</span>
+                  </div>
+                  <span class="text-sm font-bold text-violet-400">{techPercent().toFixed(1)}</span>
+                </div>
+                <div class="w-full h-2.5 rounded-full bg-secondary/50 overflow-hidden mb-3">
+                  <div class="h-full rounded-full bg-gradient-to-r from-violet-500 to-purple-400 transition-all duration-700" style="width: {techPercent()}%"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
+                  <span>Deploys: {contractsCreated.length}</span>
+                  <span>NFTs: {nftHoldings.length}</span>
+                  <span>Protocols: {contractsInteracted.length}</span>
+                  <span>Innovation: {contractsCreated.length + nftHoldings.length}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Score formula display -->
+            <div class="mt-4 p-3 rounded-lg bg-purple-500/5 border border-purple-500/15 text-xs text-muted-foreground text-center">
+              Score = (Eco x 0.40) + (Strat x 0.25) + (Vel x 0.20) + (Tech x 0.15) + Bonus({compoundBonus.toFixed(1)}) = <span class="font-bold text-foreground">{totalScore}</span>
+            </div>
+          </div>
+        {/if}
+      </div>
+
+      <!-- Overview Stats Section -->
       <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-4">
         <button
           onclick={() => toggleSection('overview')}
@@ -484,7 +981,7 @@
                 </div>
                 <p class="text-lg font-bold">{parseFloat(balance).toFixed(4)} ETH</p>
                 {#if ethPrice > 0}
-                  <p class="text-xs text-muted-foreground">${balanceUsd()}</p>
+                  <p class="text-xs text-emerald-400 font-medium">${balanceUsd()}</p>
                 {/if}
               </div>
               <!-- Wallet Age -->
@@ -522,6 +1019,9 @@
                 </div>
                 <p class="text-lg font-bold">{parseFloat(gasUsedEth).toFixed(4)}</p>
                 <p class="text-xs text-muted-foreground">ETH</p>
+                {#if ethPrice > 0}
+                  <p class="text-xs text-emerald-400 font-medium">${gasUsedUsd()}</p>
+                {/if}
               </div>
               <!-- Gas Used GWEI -->
               <div class="p-4 rounded-xl bg-background/50 border border-border/30">
@@ -555,7 +1055,7 @@
         {/if}
       </div>
 
-      <!-- Activity Section -->
+      <!-- Activity / Streak Section -->
       <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-4">
         <button
           onclick={() => toggleSection('activity')}
@@ -565,7 +1065,7 @@
             <div class="w-8 h-8 rounded-lg bg-indigo-500/15 flex items-center justify-center">
               <Calendar class="w-4 h-4 text-indigo-400" />
             </div>
-            <h2 class="text-lg font-bold">Activity Breakdown</h2>
+            <h2 class="text-lg font-bold">Activity & Streaks</h2>
           </div>
           {#if sections.activity}
             <ChevronUp class="w-4 h-4 text-muted-foreground" />
@@ -575,20 +1075,57 @@
         </button>
         {#if sections.activity}
           <div class="p-4 pt-2 rounded-b-2xl bg-card/40 border border-t-0 border-border/40 backdrop-blur-xl">
-            <div class="grid grid-cols-3 gap-3 mb-4">
+            <!-- Streak cards -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
               <div class="p-4 rounded-xl bg-gradient-to-br from-purple-500/10 to-purple-500/5 border border-purple-500/20 text-center">
                 <p class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-purple-300 bg-clip-text text-transparent">{uniqueDaysActive}</p>
                 <p class="text-xs text-muted-foreground mt-1">Unique Days</p>
               </div>
               <div class="p-4 rounded-xl bg-gradient-to-br from-indigo-500/10 to-indigo-500/5 border border-indigo-500/20 text-center">
-                <p class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-300 bg-clip-text text-transparent">{uniqueWeeksActive}</p>
-                <p class="text-xs text-muted-foreground mt-1">Unique Weeks</p>
+                <p class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-300 bg-clip-text text-transparent">{currentStreak}</p>
+                <p class="text-xs text-muted-foreground mt-1">Current Streak</p>
               </div>
               <div class="p-4 rounded-xl bg-gradient-to-br from-violet-500/10 to-violet-500/5 border border-violet-500/20 text-center">
-                <p class="text-2xl font-bold bg-gradient-to-r from-violet-400 to-violet-300 bg-clip-text text-transparent">{uniqueMonthsActive}</p>
-                <p class="text-xs text-muted-foreground mt-1">Unique Months</p>
+                <p class="text-2xl font-bold bg-gradient-to-r from-violet-400 to-violet-300 bg-clip-text text-transparent">{bestStreak}</p>
+                <p class="text-xs text-muted-foreground mt-1">Best Streak</p>
+              </div>
+              <div class="p-4 rounded-xl bg-gradient-to-br from-fuchsia-500/10 to-fuchsia-500/5 border border-fuchsia-500/20 text-center">
+                <p class="text-2xl font-bold bg-gradient-to-r from-fuchsia-400 to-fuchsia-300 bg-clip-text text-transparent">{uniqueMonthsActive}</p>
+                <p class="text-xs text-muted-foreground mt-1">Active Months</p>
               </div>
             </div>
+
+            <!-- DeFi Activity -->
+            <div class="mb-4">
+              <p class="text-xs text-muted-foreground font-medium mb-2">DEFI ACTIVITY</p>
+              <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                <div class="p-3 rounded-lg bg-background/50 border border-border/30 text-center">
+                  <p class="text-sm font-bold text-blue-400">{swapCount}</p>
+                  <p class="text-[10px] text-muted-foreground">Swaps</p>
+                </div>
+                <div class="p-3 rounded-lg bg-background/50 border border-border/30 text-center">
+                  <p class="text-sm font-bold text-amber-400">{stakingCount}</p>
+                  <p class="text-[10px] text-muted-foreground">Staking</p>
+                </div>
+                <div class="p-3 rounded-lg bg-background/50 border border-border/30 text-center">
+                  <p class="text-sm font-bold text-emerald-400">{liquidityCount}</p>
+                  <p class="text-[10px] text-muted-foreground">Liquidity</p>
+                </div>
+                <div class="p-3 rounded-lg bg-background/50 border border-border/30 text-center">
+                  <p class="text-sm font-bold text-rose-400">{lendingCount}</p>
+                  <p class="text-[10px] text-muted-foreground">Lending</p>
+                </div>
+                <div class="p-3 rounded-lg bg-background/50 border border-border/30 text-center">
+                  <p class="text-sm font-bold text-cyan-400">{bridgeCount}</p>
+                  <p class="text-[10px] text-muted-foreground">Bridge</p>
+                </div>
+                <div class="p-3 rounded-lg bg-background/50 border border-border/30 text-center">
+                  <p class="text-sm font-bold text-violet-400">{governanceCount}</p>
+                  <p class="text-[10px] text-muted-foreground">Governance</p>
+                </div>
+              </div>
+            </div>
+
             {#if firstTxDate}
               <div class="p-3 rounded-xl bg-background/50 border border-border/30 flex items-center gap-3">
                 <Clock class="w-5 h-5 text-purple-400 shrink-0" />
@@ -794,8 +1331,10 @@
       {#if isLoaded}
         <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-12">
           <div class="p-6 rounded-2xl bg-gradient-to-r from-purple-500/5 via-indigo-500/5 to-violet-500/5 border border-purple-500/20 text-center">
-            <h3 class="text-lg font-bold mb-2">Share Your Stats</h3>
-            <p class="text-sm text-muted-foreground mb-4">Let others know about your Soneium activity</p>
+            <h3 class="text-lg font-bold mb-2">Share Your Score</h3>
+            <p class="text-sm text-muted-foreground mb-4">
+              I scored <span class="font-bold" style="color: {tier().color}">{totalScore}</span> on Soneium — {tier().name} tier!
+            </p>
             <button
               onclick={shareOnTwitter}
               class="h-10 px-6 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold text-sm flex items-center gap-2 hover:shadow-lg hover:shadow-purple-500/25 transition-all mx-auto"

@@ -31,3 +31,4 @@ export const jumperWalletStore = new WalletStore();
 export const robinhoodWalletStore = new WalletStore();
 export const dachainWalletStore = new WalletStore();
 export const domaWalletStore = new WalletStore();
+export const layerzeroWalletStore = new WalletStore();

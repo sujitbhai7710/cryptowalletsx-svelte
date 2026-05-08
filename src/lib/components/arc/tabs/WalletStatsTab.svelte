@@ -33,8 +33,17 @@
 
   let { addressDetails, transactions, tokenTransfers, tokenBalances, nfts, allTokens, config }: Props = $props();
 
+  // Extract exchange rate from address details (Blockscout provides this)
+  let exchangeRate = $derived(() => {
+    const rate = addressDetails?.exchange_rate;
+    if (rate && !isNaN(parseFloat(rate)) && parseFloat(rate) > 0) {
+      return parseFloat(rate);
+    }
+    return 0;
+  });
+
   let stats = $derived(
-    calculateWalletStats(addressDetails, transactions, tokenTransfers, tokenBalances, nfts, allTokens, config.nativeCurrency, config.nativeDecimals)
+    calculateWalletStats(addressDetails, transactions, tokenTransfers, tokenBalances, nfts, allTokens, config.nativeCurrency, config.nativeDecimals, exchangeRate())
   );
 
   const statCards = $derived([

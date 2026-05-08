@@ -58,10 +58,19 @@
   let copied = $state(false);
   let mobileMenuOpen = $state(false);
 
+  // Extract exchange rate from address details (Blockscout provides this)
+  let exchangeRate = $derived(() => {
+    const rate = addressDetails?.exchange_rate;
+    if (rate && !isNaN(parseFloat(rate)) && parseFloat(rate) > 0) {
+      return parseFloat(rate);
+    }
+    return 0;
+  });
+
   // Derived wallet stats from props (pure computation, no async)
   let walletStats = $derived(
     addressDetails && transactions.length >= 0
-      ? calculateWalletStats(addressDetails, transactions, tokenTransfers, tokenBalances, nfts, allTokens, config.nativeCurrency, config.nativeDecimals)
+      ? calculateWalletStats(addressDetails, transactions, tokenTransfers, tokenBalances, nfts, allTokens, config.nativeCurrency, config.nativeDecimals, exchangeRate())
       : null
   );
 
