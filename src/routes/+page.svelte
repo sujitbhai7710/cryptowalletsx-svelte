@@ -2,6 +2,11 @@
   import HomeHeader from '$lib/components/home/HomeHeader.svelte';
   import HeroSection from '$lib/components/home/HeroSection.svelte';
   import ToolsGrid from '$lib/components/home/ToolsGrid.svelte';
+  import HowItWorks from '$lib/components/home/HowItWorks.svelte';
+  import SupportedNetworks from '$lib/components/home/SupportedNetworks.svelte';
+  import WhyChooseUs from '$lib/components/home/WhyChooseUs.svelte';
+  import AirdropSection from '$lib/components/home/AirdropSection.svelte';
+  import CTASection from '$lib/components/home/CTASection.svelte';
   import Footer from '$lib/components/home/Footer.svelte';
   import SEO from '$lib/components/SEO.svelte';
 </script>
@@ -18,6 +23,11 @@
   <main class="flex-1">
     <HeroSection />
     <ToolsGrid />
+    <HowItWorks />
+    <SupportedNetworks />
+    <WhyChooseUs />
+    <AirdropSection />
+    <CTASection />
   </main>
   <Footer />
 </div>
