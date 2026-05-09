@@ -30,12 +30,29 @@ jobs:
         run: npm run build
 
       - name: Create Cloudflare Pages project (if not exists)
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages project create ${{ secrets.CLOUDFLARE_PROJECT_NAME }} production --production-branch=main
-        continue-on-error: true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_PROJECT_NAME: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects/$CLOUDFLARE_PROJECT_NAME" \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN")
+          
+          if [ "$STATUS" = "404" ]; then
+            echo "Project does not exist, creating..."
+            curl -s -X POST \
+              "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects" \
+              -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+              -H "Content-Type: application/json" \
+              -d "{\"name\":\"$CLOUDFLARE_PROJECT_NAME\",\"production_branch\":\"main\"}" | python3 -m json.tool
+            echo "Project created!"
+          elif [ "$STATUS" = "200" ]; then
+            echo "Project already exists, skipping creation."
+          else
+            echo "Unexpected status code: $STATUS"
+            exit 1
+          fi
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
