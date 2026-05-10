@@ -26,7 +26,7 @@
   };
 </script>
 
-<section class="relative max-w-7xl mx-auto px-4 sm:px-6 py-20 overflow-hidden">
+<section class="relative max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20 overflow-hidden">
   <!-- Animated bg blobs -->
   <div class="absolute inset-0 pointer-events-none">
     <div class="absolute top-0 right-0 w-96 h-96 bg-purple-500/4 rounded-full blur-3xl"></div>
@@ -40,11 +40,11 @@
         <Radio class="w-3.5 h-3.5 text-indigo-500" />
         <span class="text-xs font-semibold text-indigo-500">Multi-Chain</span>
       </div>
-      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-4">
+      <h2 class="text-2xl sm:text-3xl lg:text-5xl font-extrabold mb-4">
         <span class="text-foreground">Supported </span>
         <span class="gradient-text">Networks</span>
       </h2>
-      <p class="text-muted-foreground text-lg max-w-2xl mx-auto">
+      <p class="text-muted-foreground text-sm sm:text-lg max-w-2xl mx-auto">
         {networks.length} blockchains and growing — from testnets to mainnets, we've got you covered.
       </p>
     </div>

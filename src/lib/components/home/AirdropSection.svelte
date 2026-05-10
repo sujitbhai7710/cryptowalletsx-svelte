@@ -19,7 +19,7 @@
   let concludedAirdrops = $derived(airdrops.filter(a => a.status === 'CONCLUDED'));
 </script>
 
-<section class="relative max-w-7xl mx-auto px-4 sm:px-6 py-20">
+<section class="relative max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20 overflow-hidden">
   <!-- Background -->
   <div class="absolute inset-0 pointer-events-none">
     <div class="absolute top-0 right-1/4 w-80 h-80 bg-rose-500/4 rounded-full blur-3xl"></div>
@@ -33,11 +33,11 @@
         <Droplets class="w-3.5 h-3.5 text-rose-500" />
         <span class="text-xs font-semibold text-rose-500">Airdrops</span>
       </div>
-      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-4">
+      <h2 class="text-2xl sm:text-3xl lg:text-5xl font-extrabold mb-4">
         <span class="gradient-text-rose">Airdrop</span>
         <span class="text-foreground"> Tracker</span>
       </h2>
-      <p class="text-muted-foreground text-lg max-w-2xl mx-auto">
+      <p class="text-muted-foreground text-sm sm:text-lg max-w-2xl mx-auto">
         Stay on top of airdrop opportunities. Track eligibility and claim status across multiple chains.
       </p>
     </div>

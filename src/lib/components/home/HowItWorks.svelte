@@ -33,20 +33,20 @@
   ];
 </script>
 
-<section class="relative max-w-7xl mx-auto px-4 sm:px-6 py-20">
+<section class="relative max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20 overflow-hidden">
   <!-- Background -->
   <div class="absolute inset-0 pointer-events-none">
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/3 rounded-full blur-3xl"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(600px,100vw)] h-[600px] bg-cyan-500/3 rounded-full blur-3xl"></div>
   </div>
 
   <div class="relative">
     <!-- Section Header -->
     <div class="text-center mb-16">
-      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-4">
+      <h2 class="text-2xl sm:text-3xl lg:text-5xl font-extrabold mb-4">
         <span class="text-foreground">How It </span>
         <span class="gradient-text">Works</span>
       </h2>
-      <p class="text-muted-foreground text-lg max-w-xl mx-auto">
+      <p class="text-muted-foreground text-sm sm:text-lg max-w-xl mx-auto">
         Get comprehensive wallet insights in four simple steps — no sign-up required.
       </p>
     </div>

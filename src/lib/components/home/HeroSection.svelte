@@ -6,7 +6,7 @@
 <section class="relative overflow-hidden">
   <!-- Animated gradient background -->
   <div class="absolute inset-0 mesh-gradient animated-gradient-bg"></div>
-  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[700px] bg-gradient-to-r from-cyan-500/8 to-teal-500/8 rounded-full blur-3xl"></div>
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[min(900px,100vw)] h-[700px] bg-gradient-to-r from-cyan-500/8 to-teal-500/8 rounded-full blur-3xl"></div>
 
   <!-- Floating geometric shapes -->
   <div class="absolute inset-0 overflow-hidden pointer-events-none">
@@ -26,13 +26,13 @@
     </div>
 
     <!-- Main heading -->
-    <h1 class="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight mb-6">
+    <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-6">
       <span class="gradient-text">Your Multi-Chain</span>
       <br />
       <span class="text-foreground">Analytics Powerhouse</span>
     </h1>
 
-    <p class="text-muted-foreground text-lg sm:text-xl max-w-2xl mx-auto mb-12">
+    <p class="text-muted-foreground text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-12">
       Deep wallet analytics, airdrop tracking, and cross-chain insights — all in one place.
     </p>
 

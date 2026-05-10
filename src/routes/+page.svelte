@@ -18,7 +18,7 @@
   canonicalUrl="https://cryptowalletsx.com"
 />
 
-<div class="min-h-screen flex flex-col dot-grid">
+<div class="min-h-screen flex flex-col dot-grid overflow-x-hidden">
   <HomeHeader />
   <main class="flex-1">
     <HeroSection />

@@ -30,11 +30,11 @@
         <Sparkles class="w-3.5 h-3.5 text-cyan-500" />
         <span class="text-xs font-semibold gradient-text">Live & Ready</span>
       </div>
-      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-4">
+      <h2 class="text-2xl sm:text-3xl lg:text-5xl font-extrabold mb-4">
         <span class="gradient-text">Powerful Tools</span>
         <span class="text-foreground"> at Your Fingertips</span>
       </h2>
-      <p class="text-muted-foreground text-lg max-w-2xl mx-auto">
+      <p class="text-muted-foreground text-sm sm:text-lg max-w-2xl mx-auto">
         Everything you need to analyze, track, and optimize your on-chain activity across multiple chains.
       </p>
     </div>
