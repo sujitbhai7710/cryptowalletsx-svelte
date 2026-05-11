@@ -9,6 +9,19 @@
   title="Privacy Policy - CryptoWalletsx"
   description="Privacy policy for CryptoWalletsx multi-chain crypto wallet analytics platform."
   canonicalUrl="https://cryptowalletsx.com/privacy"
+  ogImage="https://cryptowalletsx.com/og-image.png"
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: 'Privacy Policy',
+    url: 'https://cryptowalletsx.com/privacy',
+    description: 'Privacy policy for CryptoWalletsx multi-chain crypto wallet analytics platform.',
+    publisher: {
+      '@type': 'Organization',
+      name: 'CryptoWalletsX',
+      url: 'https://cryptowalletsx.com'
+    }
+  }}
 />
 
 <div class="min-h-screen flex flex-col">

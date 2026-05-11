@@ -63,6 +63,17 @@
   description="Check GenLayer Bradbury wallet stats, scores, transaction history, and GEN token analytics. GenLayer features AI-powered consensus with intelligent contracts."
   keywords={["genlayer", "ai blockchain", "intelligent contracts", "genlayer wallet"]}
   canonicalUrl="https://cryptowalletsx.com/genlayer"
+  ogImage="https://cryptowalletsx.com/og-image.png"
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'GenLayer Wallet Checker',
+    url: 'https://cryptowalletsx.com/genlayer',
+    description: 'Check GenLayer Bradbury wallet stats, scores, transaction history, and GEN token analytics.',
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+  }}
 />
 
 {#if genlayerWalletStore.address}

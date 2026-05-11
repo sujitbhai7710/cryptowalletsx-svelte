@@ -87,6 +87,17 @@
   description="Analyze Relay.link cross-chain bridge and swap activity for any wallet. Track bridge transactions, swap volumes, chain usage, and protocol interactions across 80+ networks."
   keywords={["relay link", "relay bridge", "cross-chain bridge", "relay wallet", "bridge analytics"]}
   canonicalUrl="https://cryptowalletsx.com/relay"
+  ogImage="https://cryptowalletsx.com/og-image.png"
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'Relay Bridge Analytics',
+    url: 'https://cryptowalletsx.com/relay',
+    description: 'Analyze Relay.link cross-chain bridge and swap activity for any wallet.',
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+  }}
 />
 
 {#if relayWalletStore.address}

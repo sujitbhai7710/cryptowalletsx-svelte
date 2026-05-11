@@ -578,6 +578,17 @@
   description="Check your Soneium wallet score with zkcodex-style scoring, tier system, activity streaks, DeFi analytics, and comprehensive on-chain stats. Soneium is an Ethereum L2 by Sony Block Solutions Labs."
   keywords={["soneium", "soneium chain", "soneium wallet score", "soneium stats", "sony blockchain", "ethereum l2", "wallet scoring", "on-chain analytics"]}
   canonicalUrl="https://cryptowalletsx.com/soneium"
+  ogImage="https://cryptowalletsx.com/og-image.png"
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'Soneium Wallet Score & Stats',
+    url: 'https://cryptowalletsx.com/soneium',
+    description: 'Check your Soneium wallet score with tier system, activity streaks, DeFi analytics, and comprehensive on-chain stats.',
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+  }}
 />
 
 <div class="min-h-screen flex flex-col bg-background">

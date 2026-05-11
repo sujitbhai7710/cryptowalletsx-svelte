@@ -497,7 +497,7 @@
                 {@const pct = (totalVol / maxChainVol * 100)}
                 <div class="flex items-center gap-3">
                   <div class="flex items-center gap-2 w-24 sm:w-32 shrink-0">
-                    <img src={getChainIconUrl(chain.chainId)} alt="" class="w-5 h-5 rounded-full" onerror={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                    <img src={getChainIconUrl(chain.chainId)} alt={chain.chainName + ' chain icon'} class="w-5 h-5 rounded-full" onerror={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                     <span class="text-xs font-medium truncate">{chain.chainName}</span>
                   </div>
                   <div class="flex-1 h-5 rounded-full bg-secondary/60 overflow-hidden relative">
@@ -529,7 +529,7 @@
                   <tr class="border-b border-border/20 hover:bg-muted/20 transition-colors">
                     <td class="px-4 py-3">
                       <div class="flex items-center gap-2">
-                        <img src={getChainIconUrl(chain.chainId)} alt="" class="w-5 h-5 rounded-full" onerror={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                        <img src={getChainIconUrl(chain.chainId)} alt={chain.chainName + ' chain icon'} class="w-5 h-5 rounded-full" onerror={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                         <span class="font-medium">{chain.chainName}</span>
                       </div>
                     </td>
@@ -614,7 +614,7 @@
                     </td>
                     <td class="px-3 py-3 hidden sm:table-cell">
                       <div class="flex items-center gap-2">
-                        <img src={getChainIconUrl(token.chainId)} alt="" class="w-4 h-4 rounded-full" onerror={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                        <img src={getChainIconUrl(token.chainId)} alt={token.chainName + ' chain icon'} class="w-4 h-4 rounded-full" onerror={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                         <span class="text-xs">{token.chainName}</span>
                       </div>
                     </td>
@@ -671,7 +671,7 @@
                     </td>
                     <td class="px-3 py-2.5 hidden md:table-cell">
                       <div class="flex items-center gap-1.5">
-                        <img src={getChainIconUrl(tx.sourceChain)} alt="" class="w-4 h-4 rounded-full" onerror={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                        <img src={getChainIconUrl(tx.sourceChain)} alt={tx.sourceChainName + ' chain icon'} class="w-4 h-4 rounded-full" onerror={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                         <span class="text-xs">{tx.sourceChainName}</span>
                         <span class="text-xs text-muted-foreground">{tx.sourceToken}</span>
                       </div>
@@ -679,7 +679,7 @@
                     <td class="px-3 py-2.5 hidden md:table-cell">
                       <div class="flex items-center gap-1.5">
                         <ArrowRight class="w-3 h-3 text-muted-foreground" />
-                        <img src={getChainIconUrl(tx.destChain)} alt="" class="w-4 h-4 rounded-full" onerror={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                        <img src={getChainIconUrl(tx.destChain)} alt={tx.destChainName + ' chain icon'} class="w-4 h-4 rounded-full" onerror={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                         <span class="text-xs">{tx.destChainName}</span>
                         <span class="text-xs text-muted-foreground">{tx.destToken}</span>
                       </div>

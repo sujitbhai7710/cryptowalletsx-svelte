@@ -9,6 +9,31 @@
   title="Contact Us - CryptoWalletsx"
   description="Get in touch with the CryptoWalletsx team. Reach us via email, Discord, or Twitter."
   canonicalUrl="https://cryptowalletsx.com/contact"
+  ogImage="https://cryptowalletsx.com/og-image.png"
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    name: 'Contact CryptoWalletsX',
+    url: 'https://cryptowalletsx.com/contact',
+    description: 'Get in touch with the CryptoWalletsx team.',
+    mainEntity: {
+      '@type': 'Organization',
+      name: 'CryptoWalletsX',
+      url: 'https://cryptowalletsx.com',
+      contactPoint: [
+        {
+          '@type': 'ContactPoint',
+          email: 'contact@cryptowalletsx.com',
+          contactType: 'customer support'
+        },
+        {
+          '@type': 'ContactPoint',
+          email: 'bugs@cryptowalletsx.com',
+          contactType: 'technical support'
+        }
+      ]
+    }
+  }}
 />
 
 <div class="min-h-screen flex flex-col">

@@ -63,6 +63,17 @@
   description="Check Ink mainnet wallet stats, scores, transaction history, DeFi activity, and ETH balance analytics. Ink is an Ethereum L2 by Kraken."
   keywords={["ink chain", "ink wallet", "kraken ink", "ink stats", "l2 analytics"]}
   canonicalUrl="https://cryptowalletsx.com/ink"
+  ogImage="https://cryptowalletsx.com/og-image.png"
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'Ink Wallet Checker',
+    url: 'https://cryptowalletsx.com/ink',
+    description: 'Check Ink mainnet wallet stats, scores, transaction history, DeFi activity, and ETH balance analytics.',
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+  }}
 />
 
 {#if inkWalletStore.address}

@@ -63,6 +63,17 @@
   description="Check LitVM testnet wallet stats, scores, transaction history, and zkLTC balance analytics. LitVM is an Arbitrum Nitro L2 on Sepolia."
   keywords={["litvm", "zkltc", "arbitrum l2", "litvm wallet"]}
   canonicalUrl="https://cryptowalletsx.com/litvm"
+  ogImage="https://cryptowalletsx.com/og-image.png"
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'LitVM Wallet Checker',
+    url: 'https://cryptowalletsx.com/litvm',
+    description: 'Check LitVM testnet wallet stats, scores, transaction history, and zkLTC balance analytics.',
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+  }}
 />
 
 {#if litvmWalletStore.address}

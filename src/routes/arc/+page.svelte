@@ -63,6 +63,17 @@
   description="Check Arc Testnet wallet stats, scores, transaction history, DeFi activity, and USDC balance analytics. Arc is a USDC-native testnet powered by Circle."
   keywords={["arc testnet", "arc wallet checker", "arc testnet stats", "usdc testnet", "circle arc"]}
   canonicalUrl="https://cryptowalletsx.com/arc"
+  ogImage="https://cryptowalletsx.com/og-image.png"
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'Arc Testnet Wallet Checker',
+    url: 'https://cryptowalletsx.com/arc',
+    description: 'Check Arc Testnet wallet stats, scores, transaction history, DeFi activity, and USDC balance analytics.',
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+  }}
 />
 
 {#if walletStore.address}

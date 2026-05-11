@@ -63,6 +63,17 @@
   description="Check Seismic testnet wallet stats, scores, transaction history, and ETH balance analytics. Seismic is an encrypted computation chain."
   keywords={["seismic testnet", "encrypted blockchain", "seismic wallet"]}
   canonicalUrl="https://cryptowalletsx.com/seismic"
+  ogImage="https://cryptowalletsx.com/og-image.png"
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'Seismic Wallet Checker',
+    url: 'https://cryptowalletsx.com/seismic',
+    description: 'Check Seismic testnet wallet stats, scores, transaction history, and ETH balance analytics.',
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+  }}
 />
 
 {#if seismicWalletStore.address}

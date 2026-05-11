@@ -16,6 +16,36 @@
   description="Free multi-chain crypto wallet analytics platform. Check wallet scores, transaction history, DeFi activity, and bridge analytics across 10+ blockchains including Arc, Base, Ink, Relay, and Jumper."
   keywords={["crypto wallet analytics", "blockchain stats checker", "wallet score", "multi-chain", "DeFi analytics", "bridge tracker"]}
   canonicalUrl="https://cryptowalletsx.com"
+  ogImage="https://cryptowalletsx.com/og-image.png"
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': 'https://cryptowalletsx.com/#organization',
+        name: 'CryptoWalletsX',
+        url: 'https://cryptowalletsx.com',
+        logo: 'https://cryptowalletsx.com/favicon.png',
+        sameAs: [
+          'https://twitter.com/cryptowalletsx',
+          'https://github.com/Sujhavsingh/cryptowalletsx-svelte'
+        ]
+      },
+      {
+        '@type': 'WebSite',
+        '@id': 'https://cryptowalletsx.com/#website',
+        url: 'https://cryptowalletsx.com',
+        name: 'CryptoWalletsX',
+        description: 'Multi-Chain Blockchain Analytics Platform',
+        publisher: { '@id': 'https://cryptowalletsx.com/#organization' },
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: 'https://cryptowalletsx.com/checker?q={search_term_string}',
+          'query-input': 'required name=search_term_string'
+        }
+      }
+    ]
+  }}
 />
 
 <div class="min-h-screen flex flex-col dot-grid overflow-x-hidden">

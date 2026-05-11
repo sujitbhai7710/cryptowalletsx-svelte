@@ -485,7 +485,7 @@
                 <div class="flex items-center gap-3">
                   <div class="flex items-center gap-2 w-24 sm:w-32 shrink-0">
                     {#if chain.chainIcon}
-                      <img src={chain.chainIcon} alt="" class="w-5 h-5 rounded-full" onerror={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                      <img src={chain.chainIcon} alt={chain.chainName + ' chain icon'} class="w-5 h-5 rounded-full" onerror={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                     {:else}
                       <div class="w-5 h-5 rounded-full bg-indigo-500/20 flex items-center justify-center text-[8px] font-bold text-indigo-500">{chain.chainName.charAt(0)}</div>
                     {/if}
@@ -521,7 +521,7 @@
                     <td class="px-4 py-3">
                       <div class="flex items-center gap-2">
                         {#if chain.chainIcon}
-                          <img src={chain.chainIcon} alt="" class="w-5 h-5 rounded-full" onerror={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                          <img src={chain.chainIcon} alt={chain.chainName + ' chain icon'} class="w-5 h-5 rounded-full" onerror={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                         {:else}
                           <div class="w-5 h-5 rounded-full bg-indigo-500/20 flex items-center justify-center text-[8px] font-bold text-indigo-500">{chain.chainName.charAt(0)}</div>
                         {/if}
@@ -610,7 +610,7 @@
                     <td class="px-4 py-3">
                       <div class="flex items-center gap-2">
                         {#if protocol.logoURI}
-                          <img src={protocol.logoURI} alt="" class="w-5 h-5 rounded-full" onerror={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                          <img src={protocol.logoURI} alt={protocol.name + ' protocol icon'} class="w-5 h-5 rounded-full" onerror={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                         {:else}
                           <div class="w-5 h-5 rounded-full bg-indigo-500/20 flex items-center justify-center text-[8px] font-bold text-indigo-500">{protocol.name.charAt(0)}</div>
                         {/if}
@@ -677,7 +677,7 @@
                     <td class="px-3 py-2.5 hidden md:table-cell">
                       <div class="flex items-center gap-1.5">
                         {#if tx.sourceChainIcon}
-                          <img src={tx.sourceChainIcon} alt="" class="w-4 h-4 rounded-full" onerror={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                          <img src={tx.sourceChainIcon} alt={tx.sourceChainName + ' chain icon'} class="w-4 h-4 rounded-full" onerror={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                         {:else}
                           <div class="w-4 h-4 rounded-full bg-indigo-500/20 flex items-center justify-center text-[7px] font-bold text-indigo-500">{tx.sourceChainName.charAt(0)}</div>
                         {/if}
@@ -689,7 +689,7 @@
                       <div class="flex items-center gap-1.5">
                         <ArrowRight class="w-3 h-3 text-muted-foreground" />
                         {#if tx.destChainIcon}
-                          <img src={tx.destChainIcon} alt="" class="w-4 h-4 rounded-full" onerror={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                          <img src={tx.destChainIcon} alt={tx.destChainName + ' chain icon'} class="w-4 h-4 rounded-full" onerror={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                         {:else}
                           <div class="w-4 h-4 rounded-full bg-purple-500/20 flex items-center justify-center text-[7px] font-bold text-purple-500">{tx.destChainName.charAt(0)}</div>
                         {/if}

@@ -63,6 +63,17 @@
   description="Check Robinhood Chain testnet wallet stats, transaction history, and ETH balance analytics. Robinhood Chain is an Arbitrum Orbit L2."
   keywords={["robinhood chain", "robinhood testnet", "robinhood wallet", "arbitrum orbit"]}
   canonicalUrl="https://cryptowalletsx.com/robinhood"
+  ogImage="https://cryptowalletsx.com/og-image.png"
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'Robinhood Testnet Wallet Checker',
+    url: 'https://cryptowalletsx.com/robinhood',
+    description: 'Check Robinhood Chain testnet wallet stats, transaction history, and ETH balance analytics.',
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+  }}
 />
 
 {#if robinhoodWalletStore.address}

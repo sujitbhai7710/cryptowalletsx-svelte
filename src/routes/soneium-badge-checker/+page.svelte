@@ -287,6 +287,17 @@
   description="Check your Soneium OG badges and ecosystem badges. Verify which Soneium NFT badges you own including OG, Premium OG, and 30+ ecosystem partner badges."
   keywords={["soneium badge", "soneium og badge", "soneium ecosystem", "soneium nft", "badge checker", "soneium airdrop"]}
   canonicalUrl="https://cryptowalletsx.com/soneium-badge-checker"
+  ogImage="https://cryptowalletsx.com/og-image.png"
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'Soneium Badge Checker',
+    url: 'https://cryptowalletsx.com/soneium-badge-checker',
+    description: 'Check your Soneium OG badges and ecosystem badges. Verify which Soneium NFT badges you own.',
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+  }}
 />
 
 <div class="min-h-screen flex flex-col bg-background">

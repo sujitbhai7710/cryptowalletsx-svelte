@@ -30,7 +30,7 @@ const staticPages = [
 ];
 
 const blogSlugs = [
-  'arc-testnet',
+  'arc',
   'simplechain',
   'base',
   'ink',
@@ -67,6 +67,15 @@ export const GET: RequestHandler = async () => {
     '/litvm', '/seismic', '/genlayer', '/jumper', '/dachain', '/doma', '/robinhood',
   ];
   for (const page of chainPages) {
+    urls.push(getUrl(page, 'daily', '0.8'));
+  }
+
+  // Mainnet & dapp tool pages
+  const mainnetDappPages = [
+    '/soneium', '/soneium-badge-checker', '/binance-wotd-solver',
+    '/layerzero-stats',
+  ];
+  for (const page of mainnetDappPages) {
     urls.push(getUrl(page, 'daily', '0.8'));
   }
 

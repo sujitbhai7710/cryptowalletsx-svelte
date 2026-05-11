@@ -235,6 +235,17 @@
   description="Free Binance Word of the Day (WOTD) solver. Get instant word suggestions, filter by letter count, and solve the daily WODL puzzle with smart recommendations."
   keywords={["binance wotd", "binance word of the day", "wodl solver", "binance wodl", "word game solver", "crypto word game"]}
   canonicalUrl="https://cryptowalletsx.com/binance-wotd-solver"
+  ogImage="https://cryptowalletsx.com/og-image.png"
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'Binance WOTD Solver',
+    url: 'https://cryptowalletsx.com/binance-wotd-solver',
+    description: 'Free Binance Word of the Day (WOTD) solver. Get instant word suggestions and solve the daily WODL puzzle.',
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+  }}
 />
 
 <div class="min-h-screen flex flex-col bg-background">

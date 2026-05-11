@@ -9,6 +9,24 @@
   title="About CryptoWalletsx"
   description="Learn about CryptoWalletsx - the free multi-chain crypto wallet analytics platform providing wallet scores, DeFi analysis, and bridge tracking across 10+ blockchains."
   canonicalUrl="https://cryptowalletsx.com/about"
+  ogImage="https://cryptowalletsx.com/og-image.png"
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'CryptoWalletsX',
+    url: 'https://cryptowalletsx.com',
+    logo: 'https://cryptowalletsx.com/favicon.png',
+    description: 'Free multi-chain crypto wallet analytics platform providing wallet scores, DeFi analysis, and bridge tracking across 10+ blockchains.',
+    sameAs: [
+      'https://twitter.com/cryptowalletsx',
+      'https://github.com/Sujhavsingh/cryptowalletsx-svelte'
+    ],
+    contactPoint: {
+      '@type': 'ContactPoint',
+      email: 'contact@cryptowalletsx.com',
+      contactType: 'customer support'
+    }
+  }}
 />
 
 <div class="min-h-screen flex flex-col">

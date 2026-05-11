@@ -311,6 +311,21 @@
   description="Browse all crypto wallet checker tools. Analyze wallet activity, scores, and DeFi interactions across multiple blockchains and bridge protocols."
   keywords={["wallet checker", "crypto tools", "blockchain analytics"]}
   canonicalUrl="https://cryptowalletsx.com/checker"
+  ogImage="https://cryptowalletsx.com/og-image.png"
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'CryptoWalletsX Checker Hub',
+    url: 'https://cryptowalletsx.com/checker',
+    description: 'Browse all crypto wallet checker tools. Analyze wallet activity, scores, and DeFi interactions across multiple blockchains.',
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Web',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD'
+    }
+  }}
 />
 
 <div class="min-h-screen flex flex-col bg-background">

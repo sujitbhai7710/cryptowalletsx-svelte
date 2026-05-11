@@ -63,6 +63,17 @@
   description="Check Doma testnet wallet stats, scores, transaction history, and ETH balance analytics. Doma is an L2 blockchain with cross-chain bridge capabilities."
   keywords={["doma", "doma testnet", "doma wallet checker", "l2 bridge", "testnet"]}
   canonicalUrl="https://cryptowalletsx.com/doma"
+  ogImage="https://cryptowalletsx.com/og-image.png"
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'Doma Wallet Checker',
+    url: 'https://cryptowalletsx.com/doma',
+    description: 'Check Doma testnet wallet stats, scores, transaction history, and ETH balance analytics.',
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+  }}
 />
 
 {#if domaWalletStore.address}

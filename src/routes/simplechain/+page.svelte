@@ -63,6 +63,17 @@
   description="Check SimpleChain testnet wallet stats, scores, transaction history, and SRW token analytics."
   keywords={["simplechain", "srw token", "simplechain wallet"]}
   canonicalUrl="https://cryptowalletsx.com/simplechain"
+  ogImage="https://cryptowalletsx.com/og-image.png"
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'SimpleChain Wallet Checker',
+    url: 'https://cryptowalletsx.com/simplechain',
+    description: 'Check SimpleChain testnet wallet stats, scores, transaction history, and SRW token analytics.',
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+  }}
 />
 
 {#if simplechainWalletStore.address}

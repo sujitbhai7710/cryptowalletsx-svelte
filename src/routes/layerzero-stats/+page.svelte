@@ -288,6 +288,17 @@
   description="Track your LayerZero cross-chain activity for the second airdrop. Check total transactions, source and destination chains, contracts interacted, protocols used, and unique activity metrics from May 1, 2024."
   keywords={["layerzero", "layerzero stats", "layerzero airdrop", "layerzero checker", "cross-chain", "bridge stats", "layerzero v2"]}
   canonicalUrl="https://cryptowalletsx.com/layerzero-stats"
+  ogImage="https://cryptowalletsx.com/og-image.png"
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'LayerZero Stats Checker',
+    url: 'https://cryptowalletsx.com/layerzero-stats',
+    description: 'Track your LayerZero cross-chain activity for the second airdrop. Check total transactions, chains, and protocols used.',
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+  }}
 />
 
 {#if address}

@@ -63,6 +63,17 @@
   description="Check Base mainnet wallet stats, scores, transaction history, DeFi activity, and ETH balance analytics. Base is an Ethereum L2 built by Coinbase."
   keywords={["base chain", "base wallet", "coinbase base", "base stats", "l2 analytics"]}
   canonicalUrl="https://cryptowalletsx.com/base"
+  ogImage="https://cryptowalletsx.com/og-image.png"
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'Base Wallet Checker',
+    url: 'https://cryptowalletsx.com/base',
+    description: 'Check Base mainnet wallet stats, scores, transaction history, DeFi activity, and ETH balance analytics.',
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+  }}
 />
 
 {#if baseWalletStore.address}

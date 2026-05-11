@@ -94,6 +94,17 @@
   description="Analyze Jumper/Li.Fi cross-chain bridge and swap activity for any wallet. Track bridge transfers, token swaps, chain usage, and protocol interactions across multiple networks."
   keywords={["jumper exchange", "li.fi", "lifi bridge", "jumper analytics", "cross-chain swap"]}
   canonicalUrl="https://cryptowalletsx.com/jumper"
+  ogImage="https://cryptowalletsx.com/og-image.png"
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'Jumper Bridge Analytics',
+    url: 'https://cryptowalletsx.com/jumper',
+    description: 'Analyze Jumper/Li.Fi cross-chain bridge and swap activity for any wallet.',
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+  }}
 />
 
 {#if jumperWalletStore.address}

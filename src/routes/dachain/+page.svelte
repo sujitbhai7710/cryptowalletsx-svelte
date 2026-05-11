@@ -63,6 +63,17 @@
   description="Check DAC Quantum Chain testnet wallet stats, scores, transaction history, and DAC balance analytics. DAC is a quantum-resistant blockchain with post-quantum cryptographic resilience."
   keywords={["dachain", "dac quantum chain", "dac wallet checker", "quantum resistant", "testnet"]}
   canonicalUrl="https://cryptowalletsx.com/dachain"
+  ogImage="https://cryptowalletsx.com/og-image.png"
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'DAC Quantum Chain Wallet Checker',
+    url: 'https://cryptowalletsx.com/dachain',
+    description: 'Check DAC Quantum Chain testnet wallet stats, scores, transaction history, and DAC balance analytics.',
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+  }}
 />
 
 {#if dachainWalletStore.address}
