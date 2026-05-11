@@ -110,7 +110,7 @@
   description="Comprehensive guides and tutorials for every CryptoWalletsx tool. Learn how to check wallet scores, analyze DeFi activity, and track bridge transactions across 10+ blockchains."
   keywords={["crypto wallet blog", "blockchain analytics guide", "wallet score tutorial", "DeFi analytics guide", "bridge tracker tutorial", "wallet checker guide"]}
   canonicalUrl="https://cryptowalletsx.com/blog"
-  jsonLd={JSON.stringify({
+  jsonLd={{
     '@context': 'https://schema.org',
     '@type': 'Blog',
     name: 'CryptoWalletsx Blog',
@@ -127,7 +127,7 @@
       description: a.description,
       url: `https://cryptowalletsx.com/blog/${a.tool}`,
     })),
-  })}
+  }}
 />
 
 <div class="min-h-screen flex flex-col bg-background">

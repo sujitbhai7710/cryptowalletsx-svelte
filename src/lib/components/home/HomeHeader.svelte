@@ -15,7 +15,7 @@
   }
 </script>
 
-<header class="sticky top-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-xl">
+<header class="sticky top-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-xl" role="banner">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
     <!-- Logo -->
     <a href="/" class="flex items-center gap-3 group">
@@ -30,7 +30,7 @@
     </a>
 
     <!-- Desktop Nav -->
-    <div class="hidden md:flex items-center gap-2">
+    <nav class="hidden md:flex items-center gap-2" aria-label="Main navigation">
       <a
         href="/"
         class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors px-3 py-1.5 rounded-lg hover:bg-secondary/60"
@@ -62,7 +62,7 @@
           <Moon class="w-4 h-4" />
         {/if}
       </Button>
-    </div>
+    </nav>
 
     <!-- Mobile: Theme toggle + 3-dot menu button -->
     <div class="flex md:hidden items-center gap-1">

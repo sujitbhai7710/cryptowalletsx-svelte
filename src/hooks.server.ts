@@ -1,20 +1,60 @@
 import type { Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
-	const host = event.request.headers.get('host') ?? '';
+        const host = event.request.headers.get('host') ?? '';
 
-	// Redirect cryptowalletsx.pages.dev → cryptowalletsx.com (permanent 301)
-	if (host === 'cryptowalletsx.pages.dev' || host === 'www.cryptowalletsx.pages.dev') {
-		const url = new URL(event.request.url);
-		url.hostname = 'cryptowalletsx.com';
-		url.port = ''; // clear port for HTTPS
-		return new Response(null, {
-			status: 301,
-			headers: {
-				location: url.toString()
-			}
-		});
-	}
+        // Redirect cryptowalletsx.pages.dev → cryptowalletsx.com (permanent 301)
+        if (host === 'cryptowalletsx.pages.dev' || host === 'www.cryptowalletsx.pages.dev') {
+                const url = new URL(event.request.url);
+                url.hostname = 'cryptowalletsx.com';
+                url.port = ''; // clear port for HTTPS
+                return new Response(null, {
+                        status: 301,
+                        headers: {
+                                location: url.toString()
+                        }
+                });
+        }
 
-	return resolve(event);
+        // Redirect www.cryptowalletsx.com → cryptowalletsx.com (permanent 301)
+        if (host === 'www.cryptowalletsx.com') {
+                const url = new URL(event.request.url);
+                url.hostname = 'cryptowalletsx.com';
+                url.port = '';
+                return new Response(null, {
+                        status: 301,
+                        headers: {
+                                location: url.toString()
+                        }
+                });
+        }
+
+        // Strip trailing slashes for SEO consistency
+        if (event.url.pathname !== '/' && event.url.pathname.endsWith('/')) {
+                const url = new URL(event.request.url);
+                url.pathname = url.pathname.slice(0, -1);
+                return new Response(null, {
+                        status: 301,
+                        headers: {
+                                location: url.toString()
+                        }
+                });
+        }
+
+        const response = await resolve(event);
+
+        // Add security and SEO headers
+        const headers = new Headers(response.headers);
+        headers.set('X-Content-Type-Options', 'nosniff');
+        headers.set('X-Frame-Options', 'DENY');
+        headers.set('X-XSS-Protection', '1; mode=block');
+        headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+        headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+        headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+
+        return new Response(response.body, {
+                status: response.status,
+                statusText: response.statusText,
+                headers
+        });
 };

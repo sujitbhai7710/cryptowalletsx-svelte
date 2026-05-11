@@ -298,7 +298,20 @@
     description="Learn how to use the {data.config.name} wallet stats checker on CryptoWalletsx. Understand scoring, track DeFi activity, and improve your on-chain profile."
     keywords={[(data.config.name || '').toLowerCase(), 'wallet checker', 'wallet score', 'blockchain analytics', isDapp ? 'bridge analytics' : 'defi analytics', data.config.nativeCurrency.toLowerCase()]}
     canonicalUrl="https://cryptowalletsx.com/blog/{data.tool}"
+    ogImage="https://cryptowalletsx.com/og-image.png"
     ogType="article"
+    author="CryptoWalletsx Team"
+    publishedTime={articleDate.published}
+    modifiedTime={articleDate.modified}
+    section={isDapp ? 'Cross-Chain Analytics' : isTestnet ? 'Testnet Analytics' : 'Mainnet Analytics'}
+    jsonLd={{
+      '@context': 'https://schema.org',
+      '@graph': [
+        JSON.parse(structuredData),
+        JSON.parse(faqSchemaData),
+        JSON.parse(breadcrumbSchemaData),
+      ]
+    }}
   />
 {:else}
   <SEO

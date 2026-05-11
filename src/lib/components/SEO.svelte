@@ -8,13 +8,14 @@
     canonicalUrl?: string;
     ogImage?: string;
     ogType?: string;
-    jsonLd?: Record<string, unknown>;
+    jsonLd?: Record<string, unknown> | string;
     author?: string;
     publishedTime?: string;
+    modifiedTime?: string;
     section?: string;
   }
 
-  let { title, description, keywords = [], canonicalUrl, ogImage, ogType = 'website', jsonLd, author, publishedTime, section }: Props = $props();
+  let { title, description, keywords = [], canonicalUrl, ogImage, ogType = 'website', jsonLd, author, publishedTime, modifiedTime, section }: Props = $props();
 
   let fullTitle = $derived(title.includes('CryptoWalletsx') ? title : `${title} | ${SITE_SEO.siteName}`);
 </script>
@@ -32,8 +33,11 @@
   <!-- Open Graph -->
   <meta property="og:title" content={fullTitle} />
   <meta property="og:description" content={description} />
+  <meta property="og:locale" content="en_US" />
   {#if ogImage}
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
   {/if}
   <meta property="og:type" content={ogType} />
   {#if canonicalUrl}
@@ -43,12 +47,16 @@
   {#if publishedTime}
     <meta property="article:published_time" content={publishedTime} />
   {/if}
+  {#if modifiedTime}
+    <meta property="article:modified_time" content={modifiedTime} />
+  {/if}
   {#if section}
     <meta property="article:section" content={section} />
   {/if}
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@cryptowalletsx" />
   <meta name="twitter:title" content={fullTitle} />
   <meta name="twitter:description" content={description} />
   {#if ogImage}
@@ -64,6 +72,6 @@
 
   <!-- JSON-LD Structured Data -->
   {#if jsonLd}
-    {@html `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`}
+    {@html `<script type="application/ld+json">${typeof jsonLd === 'string' ? jsonLd : JSON.stringify(jsonLd)}</script>`}
   {/if}
 </svelte:head>

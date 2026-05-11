@@ -1,4 +1,5 @@
 import type { PageLoad } from './$types';
+import { error } from '@sveltejs/kit';
 import { CHAIN_CONFIGS } from '$lib/utils/constants';
 
 export const load: PageLoad = async ({ params }) => {
@@ -6,11 +7,9 @@ export const load: PageLoad = async ({ params }) => {
   const config = CHAIN_CONFIGS[tool];
 
   if (!config) {
-    return {
-      status: 404,
-      tool: null,
-      config: null,
-    };
+    throw error(404, {
+      message: `Blog article for "${tool}" not found`,
+    });
   }
 
   return {
