@@ -209,12 +209,12 @@ export const SEISMIC_CONFIG: ChainConfig = {
     { name: 'Explore', description: 'Browse the Seismic testnet', url: '#' },
   ],
   sampleAddresses: [
-    '0x5739430639B19433Acd98ccb188Ea8582e514768',
-    '0x3eB0e6376A3A4D588D4c8423E94050a6E59288B1',
+    '0xeb036d5fe3f841661c9e5d7bdcabd493fd86d177',
+    '0xAacE19c5Bd54c3d40f4cB172F8F040645f17Ad5D',
   ],
   apiType: 'socialscan',
   isTestnet: true,
-  corsEnabled: true,
+  corsEnabled: false,
   description: 'Seismic Testnet — ETH-based encrypted computation chain',
 };
 
@@ -362,6 +362,38 @@ export const ROBINHOOD_CONFIG: ChainConfig = {
   description: 'Robinhood Chain Testnet — Arbitrum Orbit L2 by Robinhood',
 };
 
+export const SONEIUM_CONFIG: ChainConfig = {
+  id: 'soneium',
+  name: 'Soneium',
+  nativeCurrency: 'ETH',
+  nativeDecimals: 18,
+  chainId: '1868',
+  apiBase: 'https://soneium.blockscout.com/api/v2',
+  blockExplorer: 'https://soneium.blockscout.com',
+  blockExplorerTxUrl: 'https://soneium.blockscout.com/tx/',
+  blockExplorerAddressUrl: 'https://soneium.blockscout.com/address/',
+  rpcEndpoints: [
+    'https://rpc.soneium.org',
+    'https://soneium.drpc.org',
+  ],
+  walletType: 'EVM',
+  features: [
+    { name: 'Transfer', description: 'Send & receive ETH', url: '#' },
+    { name: 'Deploy', description: 'Smart contract deployer', url: '#' },
+    { name: 'Swap', description: 'Token swaps on Soneium', url: '#' },
+    { name: 'Bridge', description: 'Cross-chain bridge', url: '#' },
+  ],
+  sampleAddresses: [
+    '0x5739430639B19433Acd98ccb188Ea8582e514768',
+    '0x3eB0e6376A3A4D588D4c8423E94050a6E59288B1',
+    '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
+  ],
+  apiType: 'blockscout',
+  isTestnet: false,
+  corsEnabled: true,
+  description: 'Soneium — Ethereum L2 by Sony Block Solutions Labs',
+};
+
 export const CHAIN_CONFIGS: Record<string, ChainConfig> = {
   arc: ARC_CONFIG,
   simplechain: SIMPLECHAIN_CONFIG,
@@ -375,6 +407,7 @@ export const CHAIN_CONFIGS: Record<string, ChainConfig> = {
   dachain: DACHAIN_CONFIG,
   doma: DOMA_CONFIG,
   robinhood: ROBINHOOD_CONFIG,
+  soneium: SONEIUM_CONFIG,
 };
 
 export const tools = [
