@@ -68,7 +68,6 @@
   {#if author}
     <meta name="author" content={author} />
   {/if}
-  <meta name="googlebot" content="index, follow" />
 
   <!-- JSON-LD Structured Data -->
   {#if jsonLd}

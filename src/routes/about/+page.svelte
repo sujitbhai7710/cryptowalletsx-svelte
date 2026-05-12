@@ -3,6 +3,7 @@
   import Footer from '$lib/components/home/Footer.svelte';
   import { Info, Shield, Zap, Globe, BarChart3, Coins, Users, Rocket } from 'lucide-svelte';
   import SEO from '$lib/components/SEO.svelte';
+  import AdUnit from '$lib/components/AdUnit.svelte';
 </script>
 
 <SEO
@@ -147,5 +148,9 @@
       </section>
     </div>
   </main>
-  <Footer />
+  <!-- Ad: Before footer -->
+<div class="max-w-7xl mx-auto px-4 py-4">
+  <AdUnit slot="auto" format="horizontal" style="min-height:90px" />
+</div>
+<Footer />
 </div>

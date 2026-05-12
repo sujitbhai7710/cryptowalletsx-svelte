@@ -2,6 +2,7 @@
   import HomeScreen from '$lib/components/layerzero/HomeScreen.svelte';
   import WalletScreen from '$lib/components/layerzero/WalletScreen.svelte';
   import SEO from '$lib/components/SEO.svelte';
+  import AdUnit from '$lib/components/AdUnit.svelte';
 
   // ── Constants ──
   const CUTOFF_TIMESTAMP = 1714521600; // May 1, 2024 00:00:00 UTC
@@ -366,3 +367,8 @@
     </a>
   </div>
 </section>
+
+<!-- Ad: Below content -->
+<div class="max-w-7xl mx-auto px-4 py-4">
+  <AdUnit slot="auto" format="horizontal" style="min-height:90px" />
+</div>

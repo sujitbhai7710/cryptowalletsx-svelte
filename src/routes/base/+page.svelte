@@ -5,6 +5,7 @@
   import WalletScreen from '$lib/components/base/WalletScreen.svelte';
   import { BASE_CONFIG } from '$lib/utils/constants';
   import SEO from '$lib/components/SEO.svelte';
+  import AdUnit from '$lib/components/AdUnit.svelte';
   import type { AddressDetails, Transaction, TokenTransfer, TokenBalance, NFTItem, AllToken } from '$lib/types';
 
   // Data state managed at the route page level
@@ -109,3 +110,8 @@
 {:else}
   <HomeScreen onAddressSubmit={(addr) => baseWalletStore.setAddress(addr)} />
 {/if}
+
+<!-- Ad: Below wallet content -->
+<div class="max-w-7xl mx-auto px-4 py-4">
+  <AdUnit slot="auto" format="horizontal" style="min-height:90px" />
+</div>

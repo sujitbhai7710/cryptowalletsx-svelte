@@ -2,6 +2,8 @@
   import '../app.css';
   import type { Snippet } from 'svelte';
   import SEO from '$lib/components/SEO.svelte';
+  import CookieConsent from '$lib/components/CookieConsent.svelte';
+  import AdSenseRefresh from '$lib/components/AdSenseRefresh.svelte';
 
   interface Props {
     children: Snippet;
@@ -34,3 +36,6 @@
 />
 
 {@render children()}
+
+<CookieConsent />
+<AdSenseRefresh />

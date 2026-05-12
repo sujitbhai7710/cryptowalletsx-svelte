@@ -11,6 +11,7 @@
   import HomeHeader from '$lib/components/home/HomeHeader.svelte';
   import Footer from '$lib/components/home/Footer.svelte';
   import SEO from '$lib/components/SEO.svelte';
+  import AdUnit from '$lib/components/AdUnit.svelte';
 
   const BLOCKSCOUT_BASE = 'https://soneium.blockscout.com/api/v2';
 
@@ -1457,5 +1458,9 @@
     </div>
   </section>
 
-  <Footer />
+  <!-- Ad: Before footer -->
+<div class="max-w-7xl mx-auto px-4 py-4">
+  <AdUnit slot="auto" format="horizontal" style="min-height:90px" />
+</div>
+<Footer />
 </div>
