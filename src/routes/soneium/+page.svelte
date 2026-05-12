@@ -367,24 +367,35 @@
 
   async function fetchAllTransactions(addr: string): Promise<any[]> {
     const allTx: any[] = [];
-    let page = 1;
-    let hasMore = true;
+    let nextParams: Record<string, string> | null = null;
+    let pageCount = 0;
+    const MAX_PAGES = 50; // Fetch up to 2500 transactions
 
-    while (hasMore) {
+    // First request (no cursor)
+    let url = `${BLOCKSCOUT_BASE}/addresses/${addr}/transactions?filter=to%7Cfrom&items_count=50`;
+
+    while (pageCount < MAX_PAGES) {
       try {
-        const res = await fetch(
-          `${BLOCKSCOUT_BASE}/addresses/${addr}/transactions?filter=to%7Cfrom&page=${page}&items_count=50`
-        );
+        const res = await fetch(url);
+        if (!res.ok) break;
         const data = await res.json();
         const items = data?.items || [];
         allTx.push(...items);
-        if (items.length < 50 || !data?.next_page_params) {
-          hasMore = false;
-        } else {
-          page++;
+        nextParams = data?.next_page_params || null;
+        if (!nextParams || items.length === 0) break;
+
+        // Build next URL using cursor-based pagination
+        const params = new URLSearchParams();
+        // Preserve filter param
+        params.set('filter', 'to|from');
+        // Add all next_page_params
+        for (const [k, v] of Object.entries(nextParams)) {
+          params.set(k, String(v));
         }
+        url = `${BLOCKSCOUT_BASE}/addresses/${addr}/transactions?${params.toString()}`;
+        pageCount++;
       } catch {
-        hasMore = false;
+        break;
       }
     }
     return allTx;
