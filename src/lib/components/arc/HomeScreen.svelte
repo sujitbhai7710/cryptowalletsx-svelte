@@ -153,18 +153,20 @@
           {/if}
         </div>
 
-        <!-- Sample Addresses -->
-        <div class="mt-6 flex flex-wrap justify-center gap-2">
-          <span class="text-xs text-muted-foreground mr-1 self-center">Try:</span>
-          {#each config.sampleAddresses as addr}
-            <button
-              class="text-xs px-3 py-1.5 rounded-full bg-secondary/80 hover:bg-secondary text-secondary-foreground transition-colors font-mono"
-              onclick={() => { inputAddress = addr; onAddressSubmit(addr); }}
-            >
-              {addr.slice(0, 8)}...{addr.slice(-4)}
-            </button>
-          {/each}
-        </div>
+        {#if config.sampleAddresses && config.sampleAddresses.length > 0}
+          <!-- Sample Addresses -->
+          <div class="mt-6 flex flex-wrap justify-center gap-2">
+            <span class="text-xs text-muted-foreground mr-1 self-center">Try:</span>
+            {#each config.sampleAddresses as addr}
+              <button
+                class="text-xs px-3 py-1.5 rounded-full bg-secondary/80 hover:bg-secondary text-secondary-foreground transition-colors font-mono"
+                onclick={() => { inputAddress = addr; onAddressSubmit(addr); }}
+              >
+                {addr.slice(0, 8)}...{addr.slice(-4)}
+              </button>
+            {/each}
+          </div>
+        {/if}
       </div>
     </section>
 
