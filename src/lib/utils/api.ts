@@ -1,6 +1,7 @@
 import type { AddressDetails, Transaction, TokenTransfer, TokenBalance, NFTItem, AllToken, ChainConfig } from '$lib/types';
 
 const API_TIMEOUT = 15000;
+const PAGINATED_TIMEOUT = 30000;
 
 /**
  * Fetch with timeout to prevent infinite loading states.
@@ -12,36 +13,50 @@ export function fetchWithTimeout(url: string, timeoutMs = API_TIMEOUT): Promise<
 }
 
 /**
- * Fetch paginated Blockscout API endpoint, following next_page_params.
+ * Fetch ALL pages from a paginated Blockscout API endpoint.
+ * Blockscout v2 uses cursor-based pagination (next_page_params), so pages
+ * must be fetched sequentially. However, we now fetch up to maxPages (default 50)
+ * instead of the old limit of 5, giving us up to 2500 transactions instead of 250.
+ *
+ * @param endpoint - API endpoint path (e.g. '/transactions')
+ * @param config - Chain configuration
+ * @param address - Wallet address
+ * @param maxPages - Maximum pages to fetch (default 50 = 2500 items at 50/page)
  */
 export async function fetchPaginated(
   endpoint: string,
   config: ChainConfig,
   address: string,
-  maxPages = 5
+  maxPages = 50
 ): Promise<any[]> {
-  const allItems: any[] = [];
   const useDirectFetch = config.corsEnabled !== false;
 
-  function apiUrl(ep: string): string {
-    if (useDirectFetch) {
-      return `${config.apiBase}/addresses/${address}${ep}`;
+  function buildUrl(params?: Record<string, string>): string {
+    const base = useDirectFetch
+      ? `${config.apiBase}/addresses/${address}${endpoint}`
+      : `/${config.id}/api/address/${address}${endpoint}`;
+    if (params) {
+      const qs = new URLSearchParams(params).toString();
+      return qs ? `${base}?${qs}` : base;
     }
-    return `/${config.id}/api/address/${address}${ep}`;
+    return base;
   }
 
+  const allItems: any[] = [];
   let pageParams: Record<string, string> | null = null;
   let pageCount = 0;
+
   do {
-    const queryParams = new URLSearchParams();
-    if (pageParams) Object.entries(pageParams).forEach(([k, v]) => queryParams.set(k, v));
-    const url = apiUrl(endpoint) + (queryParams.toString() ? `?${queryParams}` : '');
+    const url = buildUrl(pageParams || undefined);
     try {
-      const res = await fetchWithTimeout(url);
+      const res = await fetchWithTimeout(url, PAGINATED_TIMEOUT);
       if (res.ok) {
         const data = await res.json();
-        allItems.push(...(data.items || []));
+        const items = data.items || [];
+        allItems.push(...items);
         pageParams = data.next_page_params || null;
+        // If we got fewer items than expected, we've reached the end
+        if (items.length === 0) break;
       } else {
         break;
       }
@@ -50,6 +65,7 @@ export async function fetchPaginated(
     }
     pageCount++;
   } while (pageParams && pageCount < maxPages);
+
   return allItems;
 }
 
@@ -64,7 +80,13 @@ export interface BlockscoutFetchResult {
 
 /**
  * Fetch all wallet data from a Blockscout-compatible API.
- * Fires all 6 API calls in parallel for speed.
+ *
+ * Strategy for speed & completeness:
+ * 1. First fetch address details (single fast request)
+ * 2. Then fire ALL other API calls in parallel:
+ *    - token-balances, nft, tokens (single requests each)
+ *    - transactions (up to 50 pages = 2500 items, was 5 pages = 250)
+ *    - token-transfers (up to 30 pages = 1500 items, was 5 pages = 250)
  */
 export async function fetchBlockscoutData(
   address: string,
@@ -83,22 +105,29 @@ export async function fetchBlockscoutData(
     ? `${config.apiBase}/addresses/${address}`
     : `/${config.id}/api/address/${address}`;
 
-  // Fire ALL 6 requests in parallel
-  const [addrRes, tbRes, nftRes, tokRes, txResult, tfResult] = await Promise.all([
-    fetchWithTimeout(addrUrl),
-    fetchWithTimeout(apiUrl('/token-balances')).catch(() => null),
-    fetchWithTimeout(apiUrl('/nft')).catch(() => null),
-    fetchWithTimeout(apiUrl('/tokens')).catch(() => null),
-    fetchPaginated('/transactions', config, address),
-    fetchPaginated('/token-transfers', config, address),
-  ]);
-
-  // Address details is required - throw if it fails
-  if (!addrRes || !addrRes.ok) {
+  // Step 1: Fetch address details first (needed anyway, and helps determine if wallet exists)
+  let addressDetails: AddressDetails | null = null;
+  try {
+    const addrRes = await fetchWithTimeout(addrUrl);
+    if (!addrRes.ok) {
+      throw new Error(`Failed to fetch wallet data from ${config.name}. The API may be temporarily unavailable.`);
+    }
+    addressDetails = await addrRes.json();
+  } catch (err: any) {
+    if (err?.name === 'AbortError') {
+      throw new Error(`Request timed out. The ${config.name} API is taking too long to respond. Please try again.`);
+    }
     throw new Error(`Failed to fetch wallet data from ${config.name}. The API may be temporarily unavailable.`);
   }
 
-  const addressDetails: AddressDetails = await addrRes.json();
+  // Step 2: Fire ALL data requests in parallel
+  const [tbRes, nftRes, tokRes, txResult, tfResult] = await Promise.all([
+    fetchWithTimeout(apiUrl('/token-balances')).catch(() => null),
+    fetchWithTimeout(apiUrl('/nft')).catch(() => null),
+    fetchWithTimeout(apiUrl('/tokens')).catch(() => null),
+    fetchPaginated('/transactions', config, address, 50),
+    fetchPaginated('/token-transfers', config, address, 30),
+  ]);
 
   let tokenBalances: TokenBalance[] = [];
   if (tbRes && tbRes.ok) {
@@ -128,8 +157,8 @@ export async function fetchBlockscoutData(
     addressDetails,
     transactions: txResult,
     tokenTransfers: tfResult,
-    tokenBalances,
     nfts,
+    tokenBalances,
     allTokens,
   };
 }
