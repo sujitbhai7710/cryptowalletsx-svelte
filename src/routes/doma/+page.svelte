@@ -62,7 +62,7 @@
   title="Doma Stats Checker"
   description="Analyze Doma testnet wallet stats, scores, and ETH balance. Check transaction history, bridge activity, and on-chain metrics on the L2 blockchain."
   keywords={["doma", "doma testnet", "doma wallet checker", "l2 bridge", "testnet"]}
-  canonicalUrl="https://cryptowalletsx.com/blog/doma"
+  canonicalUrl="https://cryptowalletsx.com/doma"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',

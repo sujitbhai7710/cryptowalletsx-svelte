@@ -62,7 +62,7 @@
   title="Robinhood Testnet Stats Checker"
   description="Analyze Robinhood Chain testnet wallet stats, transaction history, and ETH balance. Check on-chain metrics on the Arbitrum Orbit L2."
   keywords={["robinhood chain", "robinhood testnet", "robinhood wallet", "arbitrum orbit"]}
-  canonicalUrl="https://cryptowalletsx.com/blog/robinhood"
+  canonicalUrl="https://cryptowalletsx.com/robinhood"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',

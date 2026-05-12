@@ -17,20 +17,10 @@
   keywords={["crypto wallet analytics", "blockchain stats checker", "wallet score", "multi-chain", "DeFi analytics", "bridge tracker"]}
   canonicalUrl="https://cryptowalletsx.com/"
   ogImage="https://cryptowalletsx.com/og-image.png"
+  ogImageAlt="CryptoWalletsx - Multi-Chain Wallet Analytics Platform"
   jsonLd={{
     '@context': 'https://schema.org',
     '@graph': [
-      {
-        '@type': 'Organization',
-        '@id': 'https://cryptowalletsx.com/#organization',
-        name: 'CryptoWalletsX',
-        url: 'https://cryptowalletsx.com',
-        logo: 'https://cryptowalletsx.com/favicon.png',
-        sameAs: [
-          'https://twitter.com/cryptowalletsx',
-          'https://github.com/Sujhavsingh/cryptowalletsx-svelte'
-        ]
-      },
       {
         '@type': 'WebSite',
         '@id': 'https://cryptowalletsx.com/#website',

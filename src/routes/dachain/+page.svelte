@@ -62,7 +62,7 @@
   title="DAC Quantum Stats Checker"
   description="Check DAC Quantum Chain wallet stats, scores, and DAC token activity on the post-quantum cryptographic blockchain."
   keywords={["dachain", "dac quantum chain", "dac wallet checker", "quantum resistant", "testnet"]}
-  canonicalUrl="https://cryptowalletsx.com/blog/dachain"
+  canonicalUrl="https://cryptowalletsx.com/dachain"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',

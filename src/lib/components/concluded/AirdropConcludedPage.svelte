@@ -24,6 +24,7 @@
   description={seoDescription}
   keywords={seoKeywords}
   canonicalUrl={seoCanonical}
+  noindex={true}
 />
 
 <div class="min-h-screen flex flex-col">

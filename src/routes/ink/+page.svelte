@@ -62,7 +62,7 @@
   title="Ink Stats Checker"
   description="Analyze Ink mainnet wallet stats, scores, and ETH balance. Check transaction history, DeFi activity, and on-chain metrics on Kraken's Ethereum L2."
   keywords={["ink chain", "ink wallet", "kraken ink", "ink stats", "l2 analytics"]}
-  canonicalUrl="https://cryptowalletsx.com/blog/ink"
+  canonicalUrl="https://cryptowalletsx.com/ink"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',

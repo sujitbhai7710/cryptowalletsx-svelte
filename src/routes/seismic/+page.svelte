@@ -62,7 +62,7 @@
   title="Seismic Testnet Stats Checker"
   description="Analyze Seismic testnet wallet stats, scores, and ETH balance. Check transaction history and on-chain metrics on the encrypted computation chain."
   keywords={["seismic testnet", "encrypted blockchain", "seismic wallet"]}
-  canonicalUrl="https://cryptowalletsx.com/blog/seismic"
+  canonicalUrl="https://cryptowalletsx.com/seismic"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',

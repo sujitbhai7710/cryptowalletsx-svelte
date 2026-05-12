@@ -62,7 +62,7 @@
   title="Arc Testnet Stats Checker"
   description="Analyze Arc Testnet wallet stats, scores, and USDC balance. Check transaction history, DeFi activity, and on-chain metrics on Circle's USDC-native testnet."
   keywords={["arc testnet", "arc wallet checker", "arc testnet stats", "usdc testnet", "circle arc"]}
-  canonicalUrl="https://cryptowalletsx.com/blog/arc"
+  canonicalUrl="https://cryptowalletsx.com/arc"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',

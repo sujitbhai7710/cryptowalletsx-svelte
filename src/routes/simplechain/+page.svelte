@@ -62,7 +62,7 @@
   title="SimpleChain Stats Checker"
   description="Check SimpleChain testnet wallet stats and SRW token analytics. Track transactions, scores, and DeFi activity."
   keywords={["simplechain", "srw token", "simplechain wallet"]}
-  canonicalUrl="https://cryptowalletsx.com/blog/simplechain"
+  canonicalUrl="https://cryptowalletsx.com/simplechain"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',

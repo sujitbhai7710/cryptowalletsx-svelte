@@ -62,7 +62,7 @@
   title="LitVM Stats Checker"
   description="Analyze LitVM testnet wallet stats, scores, and zkLTC balance. Check transaction history and on-chain metrics on the Arbitrum Nitro L2."
   keywords={["litvm", "zkltc", "arbitrum l2", "litvm wallet"]}
-  canonicalUrl="https://cryptowalletsx.com/blog/litvm"
+  canonicalUrl="https://cryptowalletsx.com/litvm"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',

@@ -93,7 +93,7 @@
   title="Jumper Bridge Stats Checker"
   description="Analyze Jumper/Li.Fi cross-chain activity. Track bridge transfers, token swaps, and multi-chain wallet analytics."
   keywords={["jumper exchange", "li.fi", "lifi bridge", "jumper analytics", "cross-chain swap"]}
-  canonicalUrl="https://cryptowalletsx.com/blog/jumper"
+  canonicalUrl="https://cryptowalletsx.com/jumper"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',

@@ -4,11 +4,13 @@ export interface SEOData {
   keywords?: string[];
   canonicalUrl?: string;
   ogImage?: string;
+  ogImageAlt?: string;
   ogType?: string;
   author?: string;
   publishedTime?: string;
   modifiedTime?: string;
   section?: string;
+  noindex?: boolean;
 }
 
 export const BASE_URL = 'https://cryptowalletsx.com';
@@ -16,7 +18,7 @@ export const BASE_URL = 'https://cryptowalletsx.com';
 export function getSEO(seo: SEOData): SEOData {
   return {
     ...seo,
-    canonicalUrl: seo.canonicalUrl || `${BASE_URL}`,
+    canonicalUrl: seo.canonicalUrl, // No fallback — each page must set its own canonical
     ogImage: seo.ogImage || `${BASE_URL}/og-image.png`,
     ogType: seo.ogType || 'website',
   };

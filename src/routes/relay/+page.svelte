@@ -86,7 +86,7 @@
   title="Relay Bridge Stats Checker"
   description="Check Relay bridge and swap analytics across 80+ networks. Track cross-chain transactions, volumes, and protocol usage."
   keywords={["relay link", "relay bridge", "cross-chain bridge", "relay wallet", "bridge analytics"]}
-  canonicalUrl="https://cryptowalletsx.com/blog/relay"
+  canonicalUrl="https://cryptowalletsx.com/relay"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',

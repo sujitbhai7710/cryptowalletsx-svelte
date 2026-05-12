@@ -220,7 +220,7 @@
       dateModified: articleDate.modified,
       mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
       url: canonicalUrl,
-      image: `https://cryptowalletsx.com/og-blog-${data.tool}.png`,
+      image: 'https://cryptowalletsx.com/og-image.png',
       wordCount: 2500,
       articleSection: isDapp ? 'Cross-Chain Analytics' : isTestnet ? 'Testnet Analytics' : 'Mainnet Analytics',
       keywords: [data.config.name, 'wallet checker', 'blockchain analytics', data.config.nativeCurrency, isDapp ? 'bridge analytics' : 'DeFi analytics'].join(', '),

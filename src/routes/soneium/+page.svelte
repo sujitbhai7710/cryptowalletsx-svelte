@@ -1415,7 +1415,7 @@
 
   <!-- Static SEO Content for Indexing -->
   <section class="max-w-5xl mx-auto px-4 sm:px-6 py-16 bg-card/30">
-    <h2 class="text-2xl sm:text-3xl font-bold mb-6">About Soneium Wallet Scoring</h2>
+    <h2 class="text-2xl sm:text-3xl font-bold mb-6">Understanding Your Soneium Wallet Score</h2>
     <p class="text-muted-foreground mb-4 leading-relaxed">Soneium is Sony Block Solutions Labs' Ethereum Layer 2 blockchain, designed to bring mainstream adoption to on-chain applications. Our Soneium wallet scoring tool analyzes your on-chain activity and generates a comprehensive score based on four key categories: Ecosystem, Strategy, Velocity, and Technical engagement.</p>
 
     <h3 class="text-xl font-bold mb-3 mt-8">How Scoring Works</h3>

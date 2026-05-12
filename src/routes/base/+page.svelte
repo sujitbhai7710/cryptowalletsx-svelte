@@ -62,7 +62,7 @@
   title="Base Stats Checker"
   description="Analyze Base mainnet wallet stats, scores, and ETH balance. Check transaction history, DeFi activity, and on-chain metrics on Coinbase's Ethereum L2."
   keywords={["base chain", "base wallet", "coinbase base", "base stats", "l2 analytics"]}
-  canonicalUrl="https://cryptowalletsx.com/blog/base"
+  canonicalUrl="https://cryptowalletsx.com/base"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',

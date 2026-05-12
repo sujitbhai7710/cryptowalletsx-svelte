@@ -62,7 +62,7 @@
   title="GenLayer Stats Checker"
   description="Analyze GenLayer Bradbury wallet stats, scores, and GEN token activity. Check transaction history and on-chain metrics on the AI-powered consensus chain."
   keywords={["genlayer", "ai blockchain", "intelligent contracts", "genlayer wallet"]}
-  canonicalUrl="https://cryptowalletsx.com/blog/genlayer"
+  canonicalUrl="https://cryptowalletsx.com/genlayer"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',

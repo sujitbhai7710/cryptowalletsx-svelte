@@ -7,15 +7,17 @@
     keywords?: string[];
     canonicalUrl?: string;
     ogImage?: string;
+    ogImageAlt?: string;
     ogType?: string;
     jsonLd?: Record<string, unknown> | string;
     author?: string;
     publishedTime?: string;
     modifiedTime?: string;
     section?: string;
+    noindex?: boolean;
   }
 
-  let { title, description, keywords = [], canonicalUrl, ogImage, ogType = 'website', jsonLd, author, publishedTime, modifiedTime, section }: Props = $props();
+  let { title, description, keywords = [], canonicalUrl, ogImage, ogImageAlt, ogType = 'website', jsonLd, author, publishedTime, modifiedTime, section, noindex = false }: Props = $props();
 
   let fullTitle = $derived(title.includes('CryptoWalletsx') ? title : `${title} | ${SITE_SEO.siteName}`);
 </script>
@@ -38,6 +40,10 @@
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    {#if ogImageAlt}
+      <meta property="og:image:alt" content={ogImageAlt} />
+    {/if}
   {/if}
   <meta property="og:type" content={ogType} />
   {#if canonicalUrl}
@@ -61,10 +67,20 @@
   <meta name="twitter:description" content={description} />
   {#if ogImage}
     <meta name="twitter:image" content={ogImage} />
+    {#if ogImageAlt}
+      <meta name="twitter:image:alt" content={ogImageAlt} />
+    {/if}
+  {/if}
+  {#if author}
+    <meta name="twitter:creator" content={author.startsWith('@') ? author : `@${author}`} />
   {/if}
 
   <!-- E-E-A-T & Crawling -->
-  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+  {#if noindex}
+    <meta name="robots" content="noindex, nofollow" />
+  {:else}
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+  {/if}
   {#if author}
     <meta name="author" content={author} />
   {/if}
