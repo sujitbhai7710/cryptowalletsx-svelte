@@ -68,7 +68,7 @@ export const GET: RequestHandler = async ({ params }) => {
     }
 
     const data = await txRes.value.json();
-    const items = data.items || data.transactions || [];
+    const items = data.data || data.items || data.transactions || [];
     const txCount = data.total ?? items.length;
 
     // Estimate gas_usage from fetched transactions

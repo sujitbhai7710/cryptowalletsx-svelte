@@ -62,7 +62,7 @@ export const GET: RequestHandler = async ({ params, url }) => {
     }
     const data = await res.json();
 
-    const items = (data.items || data.transactions || []).map(transformTransaction);
+    const items = (data.data || data.items || data.transactions || []).map(transformTransaction);
     const total = data.total ?? items.length;
 
     // socialscan uses page/size pagination, not next_page_params
