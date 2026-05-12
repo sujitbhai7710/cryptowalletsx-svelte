@@ -59,20 +59,32 @@
 </script>
 
 <SEO
-  title="Ink Complete Guide"
-  description="Check Ink mainnet wallet stats, scores, transaction history, DeFi activity, and ETH balance analytics. Ink is an Ethereum L2 by Kraken."
+  title="Ink Stats Checker"
+  description="Analyze Ink mainnet wallet stats, scores, and ETH balance. Check transaction history, DeFi activity, and on-chain metrics on Kraken's Ethereum L2."
   keywords={["ink chain", "ink wallet", "kraken ink", "ink stats", "l2 analytics"]}
-  canonicalUrl="https://cryptowalletsx.com/ink"
+  canonicalUrl="https://cryptowalletsx.com/blog/ink"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'Ink Wallet Checker',
-    url: 'https://cryptowalletsx.com/ink',
-    description: 'Check Ink mainnet wallet stats, scores, transaction history, DeFi activity, and ETH balance analytics.',
-    applicationCategory: 'UtilitiesApplication',
-    operatingSystem: 'Web',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+    '@graph': [
+      {
+        '@type': 'SoftwareApplication',
+        name: 'Ink Wallet Checker',
+        url: 'https://cryptowalletsx.com/ink',
+        description: 'Analyze Ink mainnet wallet stats, scores, and ETH balance on Kraken\'s Ethereum L2.',
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'Web',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cryptowalletsx.com' },
+          { '@type': 'ListItem', position: 2, name: 'Checkers', item: 'https://cryptowalletsx.com/checker' },
+          { '@type': 'ListItem', position: 3, name: 'Ink', item: 'https://cryptowalletsx.com/ink' }
+        ]
+      }
+    ]
   }}
 />
 

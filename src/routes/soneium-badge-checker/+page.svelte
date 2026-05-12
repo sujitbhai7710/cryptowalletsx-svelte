@@ -290,18 +290,50 @@
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'Soneium Badge Checker',
-    url: 'https://cryptowalletsx.com/soneium-badge-checker',
-    description: 'Check your Soneium OG badges and ecosystem badges. Verify which Soneium NFT badges you own.',
-    applicationCategory: 'UtilitiesApplication',
-    operatingSystem: 'Web',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+    '@graph': [
+      {
+        '@type': 'SoftwareApplication',
+        name: 'Soneium Badge Checker',
+        url: 'https://cryptowalletsx.com/soneium-badge-checker',
+        description: 'Check your Soneium OG badges and ecosystem badges. Verify which Soneium NFT badges you own.',
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'Web',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cryptowalletsx.com' },
+          { '@type': 'ListItem', position: 2, name: 'Checkers', item: 'https://cryptowalletsx.com/checker' },
+          { '@type': 'ListItem', position: 3, name: 'Soneium Badges', item: 'https://cryptowalletsx.com/soneium-badge-checker' }
+        ]
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: [
+          { '@type': 'Question', name: 'How do I check my Soneium badges?', acceptedAnswer: { '@type': 'Answer', text: 'Enter your Ethereum wallet address and the checker will scan for both OG badges (ERC-1155) and ecosystem partner badges (ERC-721) on the Soneium network.' } },
+          { '@type': 'Question', name: 'What are Soneium OG badges?', acceptedAnswer: { '@type': 'Answer', text: 'OG badges are ERC-1155 tokens that recognize early adopters of the Soneium network. There are two types: the original OG Badge and the Premium OG Badge.' } },
+          { '@type': 'Question', name: 'Do I need to connect my wallet?', acceptedAnswer: { '@type': 'Answer', text: 'No wallet connection is required. Simply paste any Ethereum address and we read public on-chain data from the Alchemy NFT API to verify badge ownership.' } }
+        ]
+      }
+    ]
   }}
 />
 
 <div class="min-h-screen flex flex-col bg-background">
   <HomeHeader />
+
+  <!-- Static SEO Content for Crawlers -->
+  <div class="sr-only" aria-hidden="true">
+    <h2>About Soneium Badge Checker</h2>
+    <p>The Soneium Badge Checker scans your wallet for OG badges and ecosystem partner badges on the Soneium blockchain. Soneium is an Ethereum Layer 2 network developed by Sony Block Solutions Labs. Badges are NFT-based achievements that signal your participation in the Soneium ecosystem, from OG early adopter recognition to partnerships with DeFi protocols, NFT platforms, and bridge services.</p>
+    <h2>Types of Soneium Badges</h2>
+    <p>There are two categories of Soneium badges. OG Badges (ERC-1155) include the original Soneium OG Badge and the Premium OG Badge, which recognize early adopters of the network. Ecosystem Badges (ERC-721) include over 30 partner badges from projects like Velodrome, Quickswap, SoneFi, Layer3, Owlto, and many more. Each badge represents a specific partnership or achievement within the Soneium ecosystem.</p>
+    <h2>How to Check Your Badges</h2>
+    <p>Enter your Ethereum wallet address to instantly see which Soneium badges you own. The checker queries the Alchemy NFT API to verify ownership of both OG and ecosystem badges. Results show your total badge count, ownership percentage, and rarity tier classification. No wallet connection is required — we only read public on-chain data.</p>
+    <h2>Rarity Tier System</h2>
+    <p>Your badge collection is classified into five rarity tiers: Newcomer (0%), Explorer (1-25%), Collector (26-50%), Champion (51-75%), and Legend (76-100%). The percentage is based on how many of the total available badges your wallet holds. Collecting more badges from different ecosystem partners increases your tier and signals broader engagement with the Soneium network.</p>
+  </div>
 
   <main class="flex-1">
     <!-- Premium Hero Section -->
@@ -364,6 +396,7 @@
                     bind:value={inputAddress}
                     onkeydown={(e) => { if (e.key === 'Enter') handleSubmit(); }}
                     placeholder="Enter wallet address (0x...)"
+                    aria-label="Enter wallet address"
                     class="w-full pl-11 pr-4 h-12 bg-card/60 border border-purple-500/20 backdrop-blur-xl rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/40 focus:border-purple-500/40 transition-all"
                   />
                 </div>
@@ -432,7 +465,7 @@
               <p class="text-xs text-muted-foreground font-medium">Soneium Address</p>
               <div class="flex items-center gap-2">
                 <p class="text-sm font-mono font-semibold">{truncateAddress(address)}</p>
-                <button onclick={copyAddr} class="text-muted-foreground hover:text-foreground transition-colors">
+                <button onclick={copyAddr} class="text-muted-foreground hover:text-foreground transition-colors" aria-label="Copy address">
                   {#if copiedAddress}
                     <Check class="w-3.5 h-3.5 text-emerald-500" />
                   {:else}
@@ -445,6 +478,7 @@
           <button
             onclick={shareOnTwitter}
             class="h-10 px-5 rounded-xl bg-gradient-to-r from-purple-500 to-violet-600 text-white text-sm font-semibold flex items-center gap-2 hover:shadow-lg hover:shadow-purple-500/25 transition-all"
+            aria-label="Share on Twitter"
           >
             <Share2 class="w-4 h-4" />
             Share on Twitter
@@ -598,6 +632,7 @@
               type="text"
               bind:value={searchQuery}
               placeholder="Search badges..."
+              aria-label="Search badges"
               class="w-full pl-9 pr-3 h-10 bg-card/60 border border-purple-500/20 backdrop-blur-xl rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/40 focus:border-purple-500/40 transition-all"
             />
           </div>
@@ -758,6 +793,7 @@
           <button
             onclick={shareOnTwitter}
             class="h-11 px-8 rounded-xl bg-gradient-to-r from-purple-500 to-violet-600 text-white font-bold text-sm flex items-center gap-2 hover:shadow-lg hover:shadow-purple-500/30 transition-all mx-auto"
+            aria-label="Share on Twitter"
           >
             <Share2 class="w-4 h-4" />
             Share on Twitter
@@ -855,6 +891,51 @@
       </div>
     {/if}
   </main>
+
+  <!-- Static SEO Content for Indexing -->
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 py-16 bg-card/30">
+    <h2 class="text-2xl sm:text-3xl font-bold mb-6">About Soneium Badge Checker</h2>
+    <p class="text-muted-foreground mb-4 leading-relaxed">The Soneium Badge Checker lets you verify which Soneium OG and ecosystem badges your wallet holds. Soneium badges are on-chain NFT achievements that demonstrate your participation in the Soneium ecosystem, from early adoption badges to partner protocol engagement.</p>
+
+    <h3 class="text-xl font-bold mb-3 mt-8">Badge Types</h3>
+    <p class="text-muted-foreground mb-2 leading-relaxed"><strong class="text-foreground">OG Badges (ERC-1155):</strong> The original Soneium achievement badges, including the standard OG Badge and the Premium OG Badge. These represent early participation in the Soneium network.</p>
+    <p class="text-muted-foreground mb-2 leading-relaxed"><strong class="text-foreground">Ecosystem Badges (ERC-721):</strong> Over 30 partner badges from projects building on Soneium, including SoneFi, Velodrome, Quickswap, Layer3, Owlto, and more. Each represents interaction with a specific dApp or protocol.</p>
+
+    <h3 class="text-xl font-bold mb-3 mt-8">How to Check Badges</h3>
+    <p class="text-muted-foreground mb-4 leading-relaxed">Enter your Soneium wallet address (0x...) in the search field above. The checker queries the Alchemy NFT API to scan all known badge contracts and displays which ones you own. You can filter by owned, not owned, or search for specific badges. Your rarity tier is calculated based on the percentage of total badges you hold.</p>
+
+    <h3 class="text-xl font-bold mb-3 mt-8">Frequently Asked Questions</h3>
+    <div class="space-y-4">
+      <div>
+        <h4 class="font-semibold text-foreground mb-1">How do I get Soneium badges?</h4>
+        <p class="text-sm text-muted-foreground">OG badges were distributed to early Soneium users. Ecosystem badges are earned by interacting with partner protocols like SoneFi, Velodrome, and others on the Soneium network.</p>
+      </div>
+      <div>
+        <h4 class="font-semibold text-foreground mb-1">What is the rarity tier?</h4>
+        <p class="text-sm text-muted-foreground">Your tier (Newcomer, Explorer, Collector, Champion, Legend) is based on the percentage of total available badges you own. Legend tier requires 76-100% ownership.</p>
+      </div>
+      <div>
+        <h4 class="font-semibold text-foreground mb-1">Is my data safe?</h4>
+        <p class="text-sm text-muted-foreground">We only read public on-chain data. No wallet connection or private keys needed — just paste your address and we check the blockchain for badge ownership.</p>
+      </div>
+    </div>
+
+    <h3 class="text-xl font-bold mb-3 mt-8">Related Tools</h3>
+    <div class="grid sm:grid-cols-3 gap-3">
+      <a href="/soneium" class="p-3 rounded-xl bg-card/60 border border-border/40 hover:border-purple-500/30 transition-all">
+        <span class="font-medium text-sm">Soneium Wallet Score</span>
+        <p class="text-xs text-muted-foreground mt-1">Complete wallet analytics</p>
+      </a>
+      <a href="/base" class="p-3 rounded-xl bg-card/60 border border-border/40 hover:border-blue-500/30 transition-all">
+        <span class="font-medium text-sm">Base Stats</span>
+        <p class="text-xs text-muted-foreground mt-1">Coinbase L2 analytics</p>
+      </a>
+      <a href="/checker" class="p-3 rounded-xl bg-card/60 border border-border/40 hover:border-cyan-500/30 transition-all">
+        <span class="font-medium text-sm">All Checkers</span>
+        <p class="text-xs text-muted-foreground mt-1">Browse all tools</p>
+      </a>
+    </div>
+  </section>
 
   <Footer />
 </div>

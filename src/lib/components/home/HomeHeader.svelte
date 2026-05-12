@@ -55,7 +55,7 @@
       >
         About
       </a>
-      <Button variant="ghost" size="icon" onclick={() => themeStore.toggle()} class="rounded-full">
+      <Button variant="ghost" size="icon" onclick={() => themeStore.toggle()} class="rounded-full" aria-label="Toggle theme">
         {#if themeStore.isDark}
           <Sun class="w-4 h-4" />
         {:else}
@@ -66,14 +66,14 @@
 
     <!-- Mobile: Theme toggle + 3-dot menu button -->
     <div class="flex md:hidden items-center gap-1">
-      <Button variant="ghost" size="icon" onclick={() => themeStore.toggle()} class="rounded-full h-9 w-9">
+      <Button variant="ghost" size="icon" onclick={() => themeStore.toggle()} class="rounded-full h-9 w-9" aria-label="Toggle theme">
         {#if themeStore.isDark}
           <Sun class="w-4 h-4" />
         {:else}
           <Moon class="w-4 h-4" />
         {/if}
       </Button>
-      <Button variant="ghost" size="icon" onclick={toggleMobileMenu} class="rounded-full h-9 w-9 relative">
+      <Button variant="ghost" size="icon" onclick={toggleMobileMenu} class="rounded-full h-9 w-9 relative" aria-label="Open menu">
         <!-- 3-dot vertical icon -->
         {#if mobileMenuOpen}
           <X class="w-5 h-5" />

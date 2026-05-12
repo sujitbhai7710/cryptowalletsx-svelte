@@ -12,10 +12,10 @@
 </script>
 
 <SEO
-  title="CryptoWalletsx - Multi-Chain Crypto Wallet Analytics & Stats Checker"
-  description="Free multi-chain crypto wallet analytics platform. Check wallet scores, transaction history, DeFi activity, and bridge analytics across 10+ blockchains including Arc, Base, Ink, Relay, and Jumper."
+  title="CryptoWalletsx - Multi-Chain Wallet Analytics & Stats Checker"
+  description="Free multi-chain crypto wallet analytics. Check wallet scores, DeFi activity, and bridge stats across 10+ blockchains including Arc, Base, and Ink."
   keywords={["crypto wallet analytics", "blockchain stats checker", "wallet score", "multi-chain", "DeFi analytics", "bridge tracker"]}
-  canonicalUrl="https://cryptowalletsx.com"
+  canonicalUrl="https://cryptowalletsx.com/"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',

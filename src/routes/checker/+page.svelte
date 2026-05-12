@@ -314,17 +314,28 @@
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'CryptoWalletsX Checker Hub',
-    url: 'https://cryptowalletsx.com/checker',
-    description: 'Browse all crypto wallet checker tools. Analyze wallet activity, scores, and DeFi interactions across multiple blockchains.',
-    applicationCategory: 'UtilitiesApplication',
-    operatingSystem: 'Web',
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'USD'
-    }
+    '@graph': [
+      {
+        '@type': 'SoftwareApplication',
+        name: 'CryptoWalletsX Checker Hub',
+        url: 'https://cryptowalletsx.com/checker',
+        description: 'Browse all crypto wallet checker tools. Analyze wallet activity, scores, and DeFi interactions across multiple blockchains.',
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'Web',
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'USD'
+        }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cryptowalletsx.com' },
+          { '@type': 'ListItem', position: 2, name: 'Checkers', item: 'https://cryptowalletsx.com/checker' }
+        ]
+      }
+    ]
   }}
 />
 
@@ -367,9 +378,9 @@
           <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4">
             <span class="gradient-text">Wallet Checkers</span>
           </h1>
-          <p class="text-muted-foreground text-lg sm:text-xl max-w-2xl mx-auto mb-8">
+          <h2 class="text-muted-foreground text-lg sm:text-xl max-w-2xl mx-auto mb-8">
             Choose a network to analyze your wallet. Real-time stats, scores, and deep on-chain insights across multiple chains.
-          </p>
+          </h2>
 
           <!-- Stats pills -->
           <div class="flex flex-wrap justify-center gap-3 mb-10">
@@ -404,6 +415,7 @@
                 value={searchQuery}
                 oninput={(e) => { searchQuery = (e.target as HTMLInputElement).value; }}
                 placeholder="Search checkers... (e.g., Arc, Base, DeFi)"
+                aria-label="Search checkers"
                 class="pl-11 pr-4 h-12 bg-card/80 border-border/50 backdrop-blur-xl rounded-2xl text-sm focus-visible:ring-cyan-500/50"
               />
             </div>

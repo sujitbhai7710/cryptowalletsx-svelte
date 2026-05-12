@@ -63,7 +63,7 @@
           <a href="/" class="text-xs text-muted-foreground hover:text-foreground px-2 py-1 rounded-lg hover:bg-secondary/60 transition-colors">Home</a>
           <a href="/checker" class="text-xs text-cyan-500 font-medium px-2 py-1 rounded-lg bg-cyan-500/10">Checkers</a>
         </div>
-        <Button variant="ghost" size="icon" onclick={() => themeStore.toggle()} class="rounded-full h-9 w-9">
+        <Button variant="ghost" size="icon" onclick={() => themeStore.toggle()} class="rounded-full h-9 w-9" aria-label="Toggle theme">
           {#if themeStore.isDark}<Sun class="w-4 h-4" />{:else}<Moon class="w-4 h-4" />{/if}
         </Button>
         <Button variant="ghost" size="icon" onclick={() => mobileMenuOpen = !mobileMenuOpen} class="rounded-full h-9 w-9 md:hidden">
@@ -114,6 +114,7 @@
               oninput={(e) => { inputAddress = (e.target as HTMLInputElement).value; error = ''; }}
               onkeydown={(e) => { if (e.key === 'Enter') handleScan(); }}
               placeholder="Enter Wallet Address (0x...)"
+              aria-label="Enter wallet address"
               class="flex-1 border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 text-sm sm:text-base"
             />
             <Button

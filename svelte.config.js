@@ -12,7 +12,6 @@ const config = {
                                 exclude: ['<all>']
                         }
                 }),
-                trailingSlash: 'never',
                 alias: {
                         $lib: 'src/lib',
                         $components: 'src/lib/components',

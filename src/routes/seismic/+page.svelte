@@ -59,20 +59,32 @@
 </script>
 
 <SEO
-  title="Seismic Testnet Complete Guide"
-  description="Check Seismic testnet wallet stats, scores, transaction history, and ETH balance analytics. Seismic is an encrypted computation chain."
+  title="Seismic Testnet Stats Checker"
+  description="Analyze Seismic testnet wallet stats, scores, and ETH balance. Check transaction history and on-chain metrics on the encrypted computation chain."
   keywords={["seismic testnet", "encrypted blockchain", "seismic wallet"]}
-  canonicalUrl="https://cryptowalletsx.com/seismic"
+  canonicalUrl="https://cryptowalletsx.com/blog/seismic"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'Seismic Wallet Checker',
-    url: 'https://cryptowalletsx.com/seismic',
-    description: 'Check Seismic testnet wallet stats, scores, transaction history, and ETH balance analytics.',
-    applicationCategory: 'UtilitiesApplication',
-    operatingSystem: 'Web',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+    '@graph': [
+      {
+        '@type': 'SoftwareApplication',
+        name: 'Seismic Wallet Checker',
+        url: 'https://cryptowalletsx.com/seismic',
+        description: 'Analyze Seismic testnet wallet stats and on-chain metrics on the encrypted computation chain.',
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'Web',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cryptowalletsx.com' },
+          { '@type': 'ListItem', position: 2, name: 'Checkers', item: 'https://cryptowalletsx.com/checker' },
+          { '@type': 'ListItem', position: 3, name: 'Seismic Testnet', item: 'https://cryptowalletsx.com/seismic' }
+        ]
+      }
+    ]
   }}
 />
 

@@ -575,26 +575,71 @@
 
 <SEO
   title="Soneium Wallet Score & Stats"
-  description="Check your Soneium wallet score with zkcodex-style scoring, tier system, activity streaks, DeFi analytics, and comprehensive on-chain stats. Soneium is an Ethereum L2 by Sony Block Solutions Labs."
+  description="Check your Soneium wallet score with tier system, DeFi analytics, and comprehensive on-chain stats on Sony's Ethereum L2."
   keywords={["soneium", "soneium chain", "soneium wallet score", "soneium stats", "sony blockchain", "ethereum l2", "wallet scoring", "on-chain analytics"]}
   canonicalUrl="https://cryptowalletsx.com/soneium"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'Soneium Wallet Score & Stats',
-    url: 'https://cryptowalletsx.com/soneium',
-    description: 'Check your Soneium wallet score with tier system, activity streaks, DeFi analytics, and comprehensive on-chain stats.',
-    applicationCategory: 'UtilitiesApplication',
-    operatingSystem: 'Web',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+    '@graph': [
+      {
+        '@type': 'SoftwareApplication',
+        name: 'Soneium Wallet Score & Stats',
+        url: 'https://cryptowalletsx.com/soneium',
+        description: 'Check your Soneium wallet score with tier system, activity streaks, DeFi analytics, and comprehensive on-chain stats.',
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'Web',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cryptowalletsx.com' },
+          { '@type': 'ListItem', position: 2, name: 'Checkers', item: 'https://cryptowalletsx.com/checker' },
+          { '@type': 'ListItem', position: 3, name: 'Soneium', item: 'https://cryptowalletsx.com/soneium' }
+        ]
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: [
+          { '@type': 'Question', name: 'Is the Soneium wallet checker free?', acceptedAnswer: { '@type': 'Answer', text: 'Yes, completely free with no account or wallet connection required. Simply paste any Soneium address to view its analytics.' } },
+          { '@type': 'Question', name: 'How accurate is the Soneium scoring?', acceptedAnswer: { '@type': 'Answer', text: 'Our logarithmic algorithm aligns with industry-standard analytics tools, producing scores within 1 point accuracy of comparable platforms.' } },
+          { '@type': 'Question', name: 'What makes Soneium different from other L2s?', acceptedAnswer: { '@type': 'Answer', text: 'Soneium is built by Sony Block Solutions Labs, bringing enterprise-grade infrastructure to Ethereum L2 with fast finality and low transaction costs.' } }
+        ]
+      }
+    ]
   }}
 />
 
 <div class="min-h-screen flex flex-col bg-background">
   <HomeHeader />
 
+  <!-- Static SEO Content for Crawlers -->
+  <div class="sr-only" aria-hidden="true">
+    <h2>About Soneium Wallet Scoring</h2>
+    <p>Soneium is an Ethereum Layer 2 blockchain developed by Sony Block Solutions Labs. Our Soneium wallet score checker analyzes your on-chain activity across six key dimensions: ecosystem engagement, DeFi strategy, activity velocity, technical depth, and compound bonuses. The scoring algorithm uses logarithmic diminishing returns to ensure fair comparisons between wallets of different sizes and activity levels.</p>
+    <h2>How Soneium Scoring Works</h2>
+    <p>Your Soneium wallet score is calculated across four weighted categories. Ecosystem score (40% weight) measures transaction count, unique contract interactions, token diversity, and recent activity. Strategy score (25% weight) evaluates staking, liquidity provision, swap activity, and DeFi protocol diversity. Velocity score (20% weight) tracks active days, current streak, best streak, and monthly consistency. Technical score (15% weight) assesses contract deployments, NFT mints, and protocol interactions. Compound bonuses of up to 15 points reward wallets that excel across multiple categories simultaneously.</p>
+    <h2>What Data We Track on Soneium</h2>
+    <p>We track your complete on-chain footprint on Soneium including: transaction history with timestamps and gas costs, ERC-20 token balances and diversity metrics, NFT holdings including ERC-721 and ERC-1155 tokens, DeFi activity classification across staking, swapping, lending, liquidity provision, bridging, and governance, contract creation and interaction counts, volume and fee metrics, and daily activity streaks with consistency patterns.</p>
+    <h2>Soneium Tier System</h2>
+    <p>Wallets are classified into six tiers based on their score: Newbie (0-15), Bronze (15-35), Silver (35-55), Gold (55-75), Master (75-90), and Legend (90-100). Each tier reflects your level of engagement with the Soneium ecosystem, from basic exploration to advanced DeFi participation and contract development.</p>
+    <h2>Frequently Asked Questions</h2>
+    <p>Is the Soneium wallet checker free? Yes, completely free with no account or wallet connection required. Simply paste any Soneium address to view its analytics. How accurate is the scoring? Our logarithmic algorithm aligns with industry-standard analytics tools, producing scores within 1 point accuracy of comparable platforms. What makes Soneium different from other L2s? Soneium is built by Sony Block Solutions Labs, bringing enterprise-grade infrastructure to Ethereum L2 with fast finality and low transaction costs.</p>
+  </div>
+
   <main class="flex-1">
+    <!-- Breadcrumb Navigation -->
+    <nav class="max-w-5xl mx-auto px-4 sm:px-6 pt-4" aria-label="Breadcrumb">
+      <ol class="flex items-center gap-2 text-sm text-muted-foreground">
+        <li><a href="/" class="hover:text-foreground transition-colors">Home</a></li>
+        <li class="text-muted-foreground/50">/</li>
+        <li><a href="/checker" class="hover:text-foreground transition-colors">Checkers</a></li>
+        <li class="text-muted-foreground/50">/</li>
+        <li class="text-foreground font-medium">Soneium</li>
+      </ol>
+    </nav>
+
     <!-- Hero Section -->
     <section class="relative overflow-hidden">
       <div class="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-indigo-500/5 to-violet-500/8"></div>
@@ -629,6 +674,7 @@
                 bind:value={inputAddress}
                 onkeydown={(e) => { if (e.key === 'Enter') handleSubmit(); }}
                 placeholder="Enter wallet address (0x...)"
+                aria-label="Enter wallet address"
                 class="w-full pl-11 pr-4 h-12 bg-card/60 border border-border/40 backdrop-blur-xl rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all"
               />
             </div>
@@ -696,7 +742,7 @@
               <p class="text-xs text-muted-foreground">Soneium Address</p>
               <div class="flex items-center gap-2">
                 <p class="text-sm font-mono font-medium">{truncateAddress(address)}</p>
-                <button onclick={copyAddr} class="text-muted-foreground hover:text-foreground transition-colors">
+                <button onclick={copyAddr} class="text-muted-foreground hover:text-foreground transition-colors" aria-label="Copy address">
                   {#if copiedAddress}
                     <Check class="w-3.5 h-3.5 text-emerald-500" />
                   {:else}
@@ -1358,6 +1404,50 @@
       {/if}
     {/if}
   </main>
+
+  <!-- Static SEO Content for Indexing -->
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 py-16 bg-card/30">
+    <h2 class="text-2xl sm:text-3xl font-bold mb-6">About Soneium Wallet Scoring</h2>
+    <p class="text-muted-foreground mb-4 leading-relaxed">Soneium is Sony Block Solutions Labs' Ethereum Layer 2 blockchain, designed to bring mainstream adoption to on-chain applications. Our Soneium wallet scoring tool analyzes your on-chain activity and generates a comprehensive score based on four key categories: Ecosystem, Strategy, Velocity, and Technical engagement.</p>
+
+    <h3 class="text-xl font-bold mb-3 mt-8">How Scoring Works</h3>
+    <p class="text-muted-foreground mb-4 leading-relaxed">Your total score (0-100) is calculated using a weighted formula across four dimensions. Ecosystem engagement accounts for 40% of your score, covering transaction count, contract interactions, and token diversity. Strategy makes up 25%, measuring DeFi participation including staking, swaps, and liquidity provision. Velocity at 20% tracks your activity streaks and consistency. Technical engagement at 15% rewards contract deployments, NFT mints, and protocol interactions. You can also earn compound bonuses of up to 15 points for excelling across multiple categories.</p>
+
+    <h3 class="text-xl font-bold mb-3 mt-8">What Data We Track</h3>
+    <p class="text-muted-foreground mb-4 leading-relaxed">We pull real-time data from the Soneium Blockscout API, including your ETH balance, total transactions, token transfers, gas fees paid, contract deployments, NFT holdings, and DeFi activity across categories like swaps, staking, lending, and governance. Activity streaks are calculated based on consecutive days of on-chain interaction.</p>
+
+    <h3 class="text-xl font-bold mb-3 mt-8">Frequently Asked Questions</h3>
+    <div class="space-y-4">
+      <div>
+        <h4 class="font-semibold text-foreground mb-1">Is the Soneium wallet score free?</h4>
+        <p class="text-sm text-muted-foreground">Yes, completely free. No wallet connection required — just paste any Soneium address and get instant results.</p>
+      </div>
+      <div>
+        <h4 class="font-semibold text-foreground mb-1">How often should I check my score?</h4>
+        <p class="text-sm text-muted-foreground">Once a week is ideal. That gives enough time for new transactions to settle and for meaningful changes to show up in your metrics.</p>
+      </div>
+      <div>
+        <h4 class="font-semibold text-foreground mb-1">What's a good Soneium wallet score?</h4>
+        <p class="text-sm text-muted-foreground">Scores above 55 (Gold tier) indicate strong engagement. Legend tier (90+) requires consistent, diverse on-chain activity across multiple DeFi categories.</p>
+      </div>
+    </div>
+
+    <h3 class="text-xl font-bold mb-3 mt-8">Related Tools</h3>
+    <div class="grid sm:grid-cols-3 gap-3">
+      <a href="/soneium-badge-checker" class="p-3 rounded-xl bg-card/60 border border-border/40 hover:border-purple-500/30 transition-all">
+        <span class="font-medium text-sm">Soneium Badge Checker</span>
+        <p class="text-xs text-muted-foreground mt-1">Check OG & ecosystem badges</p>
+      </a>
+      <a href="/base" class="p-3 rounded-xl bg-card/60 border border-border/40 hover:border-blue-500/30 transition-all">
+        <span class="font-medium text-sm">Base Stats</span>
+        <p class="text-xs text-muted-foreground mt-1">Coinbase L2 analytics</p>
+      </a>
+      <a href="/layerzero-stats" class="p-3 rounded-xl bg-card/60 border border-border/40 hover:border-sky-500/30 transition-all">
+        <span class="font-medium text-sm">LayerZero Stats</span>
+        <p class="text-xs text-muted-foreground mt-1">Cross-chain tracking</p>
+      </a>
+    </div>
+  </section>
 
   <Footer />
 </div>

@@ -197,9 +197,9 @@
 
   // Structured data for SEO - Article schema
   const structuredData = $derived.by(() => {
-    if (!data.config) return '';
+    if (!data.config) return null;
     const canonicalUrl = `https://cryptowalletsx.com/blog/${data.tool}`;
-    return JSON.stringify({
+    return {
       '@context': 'https://schema.org',
       '@type': 'Article',
       headline: `${data.config.name} Complete Guide`,
@@ -220,17 +220,17 @@
       dateModified: articleDate.modified,
       mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
       url: canonicalUrl,
-      image: 'https://cryptowalletsx.com/og-blog-{data.tool}.png',
+      image: `https://cryptowalletsx.com/og-blog-${data.tool}.png`,
       wordCount: 2500,
       articleSection: isDapp ? 'Cross-Chain Analytics' : isTestnet ? 'Testnet Analytics' : 'Mainnet Analytics',
       keywords: [data.config.name, 'wallet checker', 'blockchain analytics', data.config.nativeCurrency, isDapp ? 'bridge analytics' : 'DeFi analytics'].join(', '),
-    });
+    };
   });
 
   // FAQPage schema for rich results
   const faqSchemaData = $derived.by(() => {
-    if (!data.config || faqs.length === 0) return '';
-    return JSON.stringify({
+    if (!data.config || faqs.length === 0) return null;
+    return {
       '@context': 'https://schema.org',
       '@type': 'FAQPage',
       mainEntity: faqs.map(faq => ({
@@ -241,13 +241,13 @@
           text: faq.a,
         },
       })),
-    });
+    };
   });
 
   // BreadcrumbList schema
   const breadcrumbSchemaData = $derived.by(() => {
-    if (!data.config) return '';
-    return JSON.stringify({
+    if (!data.config) return null;
+    return {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
       itemListElement: [
@@ -255,7 +255,7 @@
         { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://cryptowalletsx.com/blog' },
         { '@type': 'ListItem', position: 3, name: `${data.config.name} Wallet Guide`, item: `https://cryptowalletsx.com/blog/${data.tool}` },
       ],
-    });
+    };
   });
 
   let activeSection = $state('overview');
@@ -306,11 +306,7 @@
     section={isDapp ? 'Cross-Chain Analytics' : isTestnet ? 'Testnet Analytics' : 'Mainnet Analytics'}
     jsonLd={{
       '@context': 'https://schema.org',
-      '@graph': [
-        JSON.parse(structuredData),
-        JSON.parse(faqSchemaData),
-        JSON.parse(breadcrumbSchemaData),
-      ]
+      '@graph': [structuredData, faqSchemaData, breadcrumbSchemaData].filter((x): x is Record<string, unknown> => x !== null)
     }}
   />
 {:else}
@@ -444,7 +440,7 @@
                   Paste a wallet address and get results immediately. We pull data in real-time from {isDapp ? `the ${data.config.name} API` : 'public Blockscout-compatible APIs'}, so you're seeing current state — not a cached snapshot from three days ago. We don't store your data, and we don't ask for private keys or wallet connections.
                 </p>
                 <div class="p-5 rounded-xl bg-gradient-to-r from-cyan-500/5 to-teal-500/5 border border-cyan-500/20">
-                  <h4 class="font-semibold text-foreground mb-2">Quick Facts</h4>
+                  <h3 class="font-semibold text-foreground mb-2">Quick Facts</h3>
                   <div class="grid sm:grid-cols-2 gap-3 text-sm">
                     <div class="flex items-center gap-2">
                       <CheckCircle2 class="w-4 h-4 text-cyan-500 shrink-0" />
@@ -487,11 +483,11 @@
                 <p>{chainDescription}</p>
                 {#if data.config.features.length > 0}
                   <div class="mt-6">
-                    <h4 class="font-semibold text-foreground mb-3">Key Features & Dapps</h4>
+                    <h3 class="font-semibold text-foreground mb-3">Key Features & Dapps</h3>
                     <div class="grid sm:grid-cols-2 gap-3">
                       {#each data.config.features as feature}
                         <div class="p-4 rounded-xl bg-card/60 border border-border/40">
-                          <h5 class="font-medium text-foreground mb-1">{feature.name}</h5>
+                          <h3 class="font-medium text-foreground mb-1">{feature.name}</h3>
                           <p class="text-sm text-muted-foreground">{feature.description}</p>
                         </div>
                       {/each}
@@ -500,7 +496,7 @@
                 {/if}
                 {#if data.config.rpcEndpoints.length > 0}
                   <div class="mt-6">
-                    <h4 class="font-semibold text-foreground mb-3">RPC Endpoints</h4>
+                    <h3 class="font-semibold text-foreground mb-3">RPC Endpoints</h3>
                     <div class="space-y-2">
                       {#each data.config.rpcEndpoints as rpc}
                         <div class="px-4 py-2.5 rounded-lg bg-card/60 border border-border/40 font-mono text-xs text-muted-foreground break-all">
@@ -533,12 +529,12 @@
               <div class="space-y-4 text-muted-foreground leading-relaxed">
                 <p>{scoringDetails.intro}</p>
                 <div class="p-5 rounded-xl bg-amber-500/5 border border-amber-500/20 mb-6">
-                  <h4 class="font-semibold text-foreground mb-2">The Logarithmic Formula</h4>
+                  <h3 class="font-semibold text-foreground mb-2">The Logarithmic Formula</h3>
                   <p class="text-sm">
                     At the core of our scoring is the formula: <code class="px-1.5 py-0.5 rounded bg-card/80 text-amber-400 text-xs font-mono">score = log₁₀(value + 1) × dimension_weight</code>. This means going from 0 to 10 transactions is worth roughly the same as going from 10 to 100, which is worth roughly the same as going from 100 to 1,000. This creates a natural curve where early activity is rewarded generously while preventing any single dimension from dominating the total score.
                   </p>
                 </div>
-                <h4 class="font-semibold text-foreground mt-6 mb-3">Scoring Dimensions</h4>
+                <h3 class="font-semibold text-foreground mt-6 mb-3">Scoring Dimensions</h3>
                 <div class="space-y-4">
                   {#each scoringDetails.dimensions as dim, i}
                     <div class="p-5 rounded-xl bg-card/60 border border-border/40">
@@ -547,7 +543,7 @@
                           {i + 1}
                         </div>
                         <div>
-                          <h5 class="font-semibold text-foreground mb-1">{dim.name}</h5>
+                          <h3 class="font-semibold text-foreground mb-1">{dim.name}</h3>
                           <p class="text-sm text-muted-foreground">{dim.desc}</p>
                         </div>
                       </div>
@@ -575,7 +571,7 @@
                     <div class="p-5 rounded-xl bg-card/60 border border-border/40">
                       <div class="flex items-center gap-2.5 mb-2">
                         <ItemIcon class="w-4.5 h-4.5 text-cyan-500" />
-                        <h5 class="font-semibold text-foreground">{item.title}</h5>
+                        <h3 class="font-semibold text-foreground">{item.title}</h3>
                       </div>
                       <p class="text-sm text-muted-foreground">{item.desc}</p>
                     </div>
@@ -599,19 +595,19 @@
                   </p>
                   <div class="space-y-4 mt-4">
                     <div class="p-5 rounded-xl bg-card/60 border border-border/40">
-                      <h5 class="font-semibold text-foreground mb-2">Total Transactions</h5>
+                      <h3 class="font-semibold text-foreground mb-2">Total Transactions</h3>
                       <p class="text-sm">Total bridge and swap transactions. This is the baseline metric — it tells you how much cross-chain infrastructure someone is using. A wallet with 200 transactions is more active than one with 5, but raw count doesn't tell you about diversity or consistency.</p>
                     </div>
                     <div class="p-5 rounded-xl bg-card/60 border border-border/40">
-                      <h5 class="font-semibold text-foreground mb-2">Network Coverage</h5>
+                      <h3 class="font-semibold text-foreground mb-2">Network Coverage</h3>
                       <p class="text-sm">How many chains you've touched out of the total supported. 15 out of 80+ chains means broader ecosystem reach than 3 chains — even if the 3-chain wallet has more total transactions. Coverage measures breadth, not depth.</p>
                     </div>
                     <div class="p-5 rounded-xl bg-card/60 border border-border/40">
-                      <h5 class="font-semibold text-foreground mb-2">Volume Metrics</h5>
+                      <h3 class="font-semibold text-foreground mb-2">Volume Metrics</h3>
                       <p class="text-sm">Total USD value of assets you've moved. We split this into bridge volume and swap volume so you can see whether you're mostly moving assets between chains or trading tokens on the same chain. A $10K bridge volume with $500 in swaps tells a different story than the reverse.</p>
                     </div>
                     <div class="p-5 rounded-xl bg-card/60 border border-border/40">
-                      <h5 class="font-semibold text-foreground mb-2">7-Day Change</h5>
+                      <h3 class="font-semibold text-foreground mb-2">7-Day Change</h3>
                       <p class="text-sm">How your last 7 days compare to your baseline. If you did 10 transactions this week and averaged 3 per week before, that's growth. If you did 1 this week and averaged 5 before, that's decline. Green means up, red means down — simple.</p>
                     </div>
                   </div>
@@ -621,23 +617,23 @@
                   </p>
                   <div class="space-y-4 mt-4">
                     <div class="p-5 rounded-xl bg-card/60 border border-border/40">
-                      <h5 class="font-semibold text-foreground mb-2">Wallet Score</h5>
+                      <h3 class="font-semibold text-foreground mb-2">Wallet Score</h3>
                       <p class="text-sm">Your composite score from all six dimensions. Scores typically range from 0 to 1000+. Because of the logarithmic formula, you don't need massive volume to score well — consistent activity across multiple dimensions beats high volume in a single category. A score of 400 with diverse activity is more meaningful than 600 from pure volume.</p>
                     </div>
                     <div class="p-5 rounded-xl bg-card/60 border border-border/40">
-                      <h5 class="font-semibold text-foreground mb-2">Transaction Metrics</h5>
+                      <h3 class="font-semibold text-foreground mb-2">Transaction Metrics</h3>
                       <p class="text-sm">Total transactions, sent vs. received, and patterns over time. We also show daily, weekly, and monthly averages so you can see your rhythm. If your weekly average is 3 transactions and last week you did 12, something changed — and you'll see it here.</p>
                     </div>
                     <div class="p-5 rounded-xl bg-card/60 border border-border/40">
-                      <h5 class="font-semibold text-foreground mb-2">{data.config.nativeCurrency} Balance & Portfolio</h5>
+                      <h3 class="font-semibold text-foreground mb-2">{data.config.nativeCurrency} Balance & Portfolio</h3>
                       <p class="text-sm">Your current {data.config.nativeCurrency} balance plus the total USD value of your portfolio (ERC-20 tokens and NFTs included where pricing is available). We also show token diversity — how many distinct tokens you hold — because holding 8 different tokens is a different profile than holding just the native token.</p>
                     </div>
                     <div class="p-5 rounded-xl bg-card/60 border border-border/40">
-                      <h5 class="font-semibold text-foreground mb-2">DeFi Activity Breakdown</h5>
+                      <h3 class="font-semibold text-foreground mb-2">DeFi Activity Breakdown</h3>
                       <p class="text-sm">Sorted by type: staking, swapping, lending, providing liquidity, and bridging. For each category, you'll see how many interactions you've had and how many distinct protocols you've used. Using 3 lending protocols beats using 1 lending protocol 3 times — breadth counts.</p>
                     </div>
                     <div class="p-5 rounded-xl bg-card/60 border border-border/40">
-                      <h5 class="font-semibold text-foreground mb-2">7-Day Change Indicators</h5>
+                      <h3 class="font-semibold text-foreground mb-2">7-Day Change Indicators</h3>
                       <p class="text-sm">Your last 7 days vs. your historical baseline across all dimensions — interactions, contracts, volume, NFTs, fees, and DeFi. Green arrows mean growth; red means decline. If your contract interactions went from 2 per week to 8, you'll see a green indicator with the exact change.</p>
                     </div>
                   </div>
@@ -665,7 +661,7 @@
                           {i + 1}
                         </div>
                         <div>
-                          <h5 class="font-semibold text-foreground mb-1">{tip.title}</h5>
+                          <h3 class="font-semibold text-foreground mb-1">{tip.title}</h3>
                           <p class="text-sm text-muted-foreground">{tip.desc}</p>
                         </div>
                       </div>
@@ -687,7 +683,7 @@
                 {#each faqs as faq}
                   <details class="group rounded-xl bg-card/60 border border-border/40 overflow-hidden">
                     <summary class="flex items-center justify-between p-5 cursor-pointer list-none select-none">
-                      <h5 class="font-semibold text-foreground pr-4">{faq.q}</h5>
+                      <h3 class="font-semibold text-foreground pr-4">{faq.q}</h3>
                       <ChevronRight class="w-4 h-4 text-muted-foreground shrink-0 transition-transform duration-200 group-open:rotate-90" />
                     </summary>
                     <div class="px-5 pb-5 text-sm text-muted-foreground leading-relaxed">

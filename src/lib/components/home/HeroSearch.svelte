@@ -253,6 +253,7 @@
           oninput={(e) => { searchQuery = (e.target as HTMLInputElement).value; selectedIndex = -1; }}
           onkeydown={handleKeyDown}
           placeholder="Search tools, chains, and dapps..."
+          aria-label="Search tools, chains, and dapps"
           class="flex-1 bg-transparent text-sm sm:text-base focus:outline-none placeholder:text-muted-foreground/60"
         />
         <button

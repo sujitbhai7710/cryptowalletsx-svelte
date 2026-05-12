@@ -107,9 +107,10 @@
 
 <SEO
   title="Blog - CryptoWalletsx Guides & Tutorials"
-  description="Comprehensive guides and tutorials for every CryptoWalletsx tool. Learn how to check wallet scores, analyze DeFi activity, and track bridge transactions across 10+ blockchains."
+  description="In-depth guides for crypto wallet analytics tools. Learn scoring, DeFi tracking, and bridge analysis across 10+ blockchains."
   keywords={["crypto wallet blog", "blockchain analytics guide", "wallet score tutorial", "DeFi analytics guide", "bridge tracker tutorial", "wallet checker guide"]}
   canonicalUrl="https://cryptowalletsx.com/blog"
+  ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',
     '@type': 'Blog',

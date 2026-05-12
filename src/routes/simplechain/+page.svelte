@@ -59,20 +59,32 @@
 </script>
 
 <SEO
-  title="SimpleChain Complete Guide"
-  description="Check SimpleChain testnet wallet stats, scores, transaction history, and SRW token analytics."
+  title="SimpleChain Stats Checker"
+  description="Check SimpleChain testnet wallet stats and SRW token analytics. Track transactions, scores, and DeFi activity."
   keywords={["simplechain", "srw token", "simplechain wallet"]}
-  canonicalUrl="https://cryptowalletsx.com/simplechain"
+  canonicalUrl="https://cryptowalletsx.com/blog/simplechain"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'SimpleChain Wallet Checker',
-    url: 'https://cryptowalletsx.com/simplechain',
-    description: 'Check SimpleChain testnet wallet stats, scores, transaction history, and SRW token analytics.',
-    applicationCategory: 'UtilitiesApplication',
-    operatingSystem: 'Web',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+    '@graph': [
+      {
+        '@type': 'SoftwareApplication',
+        name: 'SimpleChain Wallet Checker',
+        url: 'https://cryptowalletsx.com/simplechain',
+        description: 'Check SimpleChain testnet wallet stats and SRW token analytics.',
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'Web',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cryptowalletsx.com' },
+          { '@type': 'ListItem', position: 2, name: 'Checkers', item: 'https://cryptowalletsx.com/checker' },
+          { '@type': 'ListItem', position: 3, name: 'SimpleChain', item: 'https://cryptowalletsx.com/simplechain' }
+        ]
+      }
+    ]
   }}
 />
 

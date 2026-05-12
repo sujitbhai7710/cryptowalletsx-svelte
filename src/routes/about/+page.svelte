@@ -6,26 +6,37 @@
 </script>
 
 <SEO
-  title="About CryptoWalletsx"
-  description="Learn about CryptoWalletsx - the free multi-chain crypto wallet analytics platform providing wallet scores, DeFi analysis, and bridge tracking across 10+ blockchains."
+  title="About CryptoWalletsx - Multi-Chain Analytics"
+  description="CryptoWalletsx provides free multi-chain wallet scores, DeFi analysis, and bridge tracking across 10+ blockchains."
   canonicalUrl="https://cryptowalletsx.com/about"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'CryptoWalletsX',
-    url: 'https://cryptowalletsx.com',
-    logo: 'https://cryptowalletsx.com/favicon.png',
-    description: 'Free multi-chain crypto wallet analytics platform providing wallet scores, DeFi analysis, and bridge tracking across 10+ blockchains.',
-    sameAs: [
-      'https://twitter.com/cryptowalletsx',
-      'https://github.com/Sujhavsingh/cryptowalletsx-svelte'
-    ],
-    contactPoint: {
-      '@type': 'ContactPoint',
-      email: 'contact@cryptowalletsx.com',
-      contactType: 'customer support'
-    }
+    '@graph': [
+      {
+        '@type': 'Organization',
+        name: 'CryptoWalletsX',
+        url: 'https://cryptowalletsx.com',
+        logo: 'https://cryptowalletsx.com/favicon.png',
+        description: 'Free multi-chain crypto wallet analytics platform providing wallet scores, DeFi analysis, and bridge tracking across 10+ blockchains.',
+        sameAs: [
+          'https://twitter.com/cryptowalletsx',
+          'https://github.com/Sujhavsingh/cryptowalletsx-svelte'
+        ],
+        contactPoint: {
+          '@type': 'ContactPoint',
+          email: 'contact@cryptowalletsx.com',
+          contactType: 'customer support'
+        }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cryptowalletsx.com' },
+          { '@type': 'ListItem', position: 2, name: 'About', item: 'https://cryptowalletsx.com/about' }
+        ]
+      }
+    ]
   }}
 />
 

@@ -231,20 +231,32 @@
 </script>
 
 <SEO
-  title="Binance WOTD Solver - Solve Binance Word of the Day Instantly"
+  title="Binance WOTD Solver"
   description="Free Binance Word of the Day (WOTD) solver. Get instant word suggestions, filter by letter count, and solve the daily WODL puzzle with smart recommendations."
   keywords={["binance wotd", "binance word of the day", "wodl solver", "binance wodl", "word game solver", "crypto word game"]}
   canonicalUrl="https://cryptowalletsx.com/binance-wotd-solver"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'Binance WOTD Solver',
-    url: 'https://cryptowalletsx.com/binance-wotd-solver',
-    description: 'Free Binance Word of the Day (WOTD) solver. Get instant word suggestions and solve the daily WODL puzzle.',
-    applicationCategory: 'UtilitiesApplication',
-    operatingSystem: 'Web',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+    '@graph': [
+      {
+        '@type': 'SoftwareApplication',
+        name: 'Binance WOTD Solver',
+        url: 'https://cryptowalletsx.com/binance-wotd-solver',
+        description: 'Free Binance Word of the Day (WOTD) solver. Get instant word suggestions and solve the daily WODL puzzle.',
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'Web',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cryptowalletsx.com' },
+          { '@type': 'ListItem', position: 2, name: 'Checkers', item: 'https://cryptowalletsx.com/checker' },
+          { '@type': 'ListItem', position: 3, name: 'Binance WOTD Solver', item: 'https://cryptowalletsx.com/binance-wotd-solver' }
+        ]
+      }
+    ]
   }}
 />
 
@@ -413,6 +425,7 @@
                     onclick={resetCurrent}
                     class="shrink-0 flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium bg-card/80 border border-border/40 text-muted-foreground hover:text-foreground hover:border-yellow-500/30 transition-all"
                     title="Reset current input"
+                    aria-label="Reset current input"
                   >
                     <RotateCcw class="w-4 h-4" />
                   </button>
@@ -427,6 +440,7 @@
                       onkeydown={handleInputKeydown}
                       placeholder={`Enter a ${wordLength}-letter word...`}
                       maxlength={wordLength}
+                      aria-label="Enter a word guess"
                       class="w-full px-4 py-2.5 rounded-xl bg-card/80 border border-yellow-500/20 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-yellow-500/50 focus:ring-1 focus:ring-yellow-500/25 transition-all text-sm sm:text-base font-mono uppercase tracking-wider"
                     />
                     <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
@@ -437,6 +451,7 @@
                     onclick={clearAll}
                     class="shrink-0 px-3 py-2.5 rounded-xl text-sm font-medium bg-card/80 border border-border/40 text-muted-foreground hover:text-foreground hover:border-destructive/30 transition-all"
                     title="Clear all guesses"
+                    aria-label="Clear all guesses"
                   >
                     <XCircle class="w-4 h-4" />
                   </button>

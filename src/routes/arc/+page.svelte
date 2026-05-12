@@ -59,20 +59,32 @@
 </script>
 
 <SEO
-  title="Arc Testnet Complete Guide"
-  description="Check Arc Testnet wallet stats, scores, transaction history, DeFi activity, and USDC balance analytics. Arc is a USDC-native testnet powered by Circle."
+  title="Arc Testnet Stats Checker"
+  description="Analyze Arc Testnet wallet stats, scores, and USDC balance. Check transaction history, DeFi activity, and on-chain metrics on Circle's USDC-native testnet."
   keywords={["arc testnet", "arc wallet checker", "arc testnet stats", "usdc testnet", "circle arc"]}
-  canonicalUrl="https://cryptowalletsx.com/arc"
+  canonicalUrl="https://cryptowalletsx.com/blog/arc"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'Arc Testnet Wallet Checker',
-    url: 'https://cryptowalletsx.com/arc',
-    description: 'Check Arc Testnet wallet stats, scores, transaction history, DeFi activity, and USDC balance analytics.',
-    applicationCategory: 'UtilitiesApplication',
-    operatingSystem: 'Web',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+    '@graph': [
+      {
+        '@type': 'SoftwareApplication',
+        name: 'Arc Testnet Wallet Checker',
+        url: 'https://cryptowalletsx.com/arc',
+        description: 'Analyze Arc Testnet wallet stats, scores, and USDC balance on Circle\'s USDC-native testnet.',
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'Web',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cryptowalletsx.com' },
+          { '@type': 'ListItem', position: 2, name: 'Checkers', item: 'https://cryptowalletsx.com/checker' },
+          { '@type': 'ListItem', position: 3, name: 'Arc Testnet', item: 'https://cryptowalletsx.com/arc' }
+        ]
+      }
+    ]
   }}
 />
 

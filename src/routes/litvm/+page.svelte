@@ -59,20 +59,32 @@
 </script>
 
 <SEO
-  title="LitVM Complete Guide"
-  description="Check LitVM testnet wallet stats, scores, transaction history, and zkLTC balance analytics. LitVM is an Arbitrum Nitro L2 on Sepolia."
+  title="LitVM Stats Checker"
+  description="Analyze LitVM testnet wallet stats, scores, and zkLTC balance. Check transaction history and on-chain metrics on the Arbitrum Nitro L2."
   keywords={["litvm", "zkltc", "arbitrum l2", "litvm wallet"]}
-  canonicalUrl="https://cryptowalletsx.com/litvm"
+  canonicalUrl="https://cryptowalletsx.com/blog/litvm"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'LitVM Wallet Checker',
-    url: 'https://cryptowalletsx.com/litvm',
-    description: 'Check LitVM testnet wallet stats, scores, transaction history, and zkLTC balance analytics.',
-    applicationCategory: 'UtilitiesApplication',
-    operatingSystem: 'Web',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+    '@graph': [
+      {
+        '@type': 'SoftwareApplication',
+        name: 'LitVM Wallet Checker',
+        url: 'https://cryptowalletsx.com/litvm',
+        description: 'Analyze LitVM testnet wallet stats, scores, and zkLTC balance on the Arbitrum Nitro L2.',
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'Web',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cryptowalletsx.com' },
+          { '@type': 'ListItem', position: 2, name: 'Checkers', item: 'https://cryptowalletsx.com/checker' },
+          { '@type': 'ListItem', position: 3, name: 'LitVM', item: 'https://cryptowalletsx.com/litvm' }
+        ]
+      }
+    ]
   }}
 />
 

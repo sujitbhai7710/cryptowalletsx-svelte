@@ -59,20 +59,32 @@
 </script>
 
 <SEO
-  title="GenLayer Bradbury Complete Guide"
-  description="Check GenLayer Bradbury wallet stats, scores, transaction history, and GEN token analytics. GenLayer features AI-powered consensus with intelligent contracts."
+  title="GenLayer Stats Checker"
+  description="Analyze GenLayer Bradbury wallet stats, scores, and GEN token activity. Check transaction history and on-chain metrics on the AI-powered consensus chain."
   keywords={["genlayer", "ai blockchain", "intelligent contracts", "genlayer wallet"]}
-  canonicalUrl="https://cryptowalletsx.com/genlayer"
+  canonicalUrl="https://cryptowalletsx.com/blog/genlayer"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'GenLayer Wallet Checker',
-    url: 'https://cryptowalletsx.com/genlayer',
-    description: 'Check GenLayer Bradbury wallet stats, scores, transaction history, and GEN token analytics.',
-    applicationCategory: 'UtilitiesApplication',
-    operatingSystem: 'Web',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+    '@graph': [
+      {
+        '@type': 'SoftwareApplication',
+        name: 'GenLayer Wallet Checker',
+        url: 'https://cryptowalletsx.com/genlayer',
+        description: 'Analyze GenLayer Bradbury wallet stats and GEN token activity on the AI-powered consensus chain.',
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'Web',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cryptowalletsx.com' },
+          { '@type': 'ListItem', position: 2, name: 'Checkers', item: 'https://cryptowalletsx.com/checker' },
+          { '@type': 'ListItem', position: 3, name: 'GenLayer', item: 'https://cryptowalletsx.com/genlayer' }
+        ]
+      }
+    ]
   }}
 />
 

@@ -90,20 +90,32 @@
 </script>
 
 <SEO
-  title="Jumper Bridge Analytics Complete Guide"
-  description="Analyze Jumper/Li.Fi cross-chain bridge and swap activity for any wallet. Track bridge transfers, token swaps, chain usage, and protocol interactions across multiple networks."
+  title="Jumper Bridge Stats Checker"
+  description="Analyze Jumper/Li.Fi cross-chain activity. Track bridge transfers, token swaps, and multi-chain wallet analytics."
   keywords={["jumper exchange", "li.fi", "lifi bridge", "jumper analytics", "cross-chain swap"]}
-  canonicalUrl="https://cryptowalletsx.com/jumper"
+  canonicalUrl="https://cryptowalletsx.com/blog/jumper"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'Jumper Bridge Analytics',
-    url: 'https://cryptowalletsx.com/jumper',
-    description: 'Analyze Jumper/Li.Fi cross-chain bridge and swap activity for any wallet.',
-    applicationCategory: 'UtilitiesApplication',
-    operatingSystem: 'Web',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+    '@graph': [
+      {
+        '@type': 'SoftwareApplication',
+        name: 'Jumper Bridge Analytics',
+        url: 'https://cryptowalletsx.com/jumper',
+        description: 'Analyze Jumper/Li.Fi cross-chain bridge and swap activity.',
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'Web',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cryptowalletsx.com' },
+          { '@type': 'ListItem', position: 2, name: 'Checkers', item: 'https://cryptowalletsx.com/checker' },
+          { '@type': 'ListItem', position: 3, name: 'Jumper Bridge', item: 'https://cryptowalletsx.com/jumper' }
+        ]
+      }
+    ]
   }}
 />
 

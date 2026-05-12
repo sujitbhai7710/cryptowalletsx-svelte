@@ -61,7 +61,7 @@
           <a href="/" class="text-xs text-muted-foreground hover:text-foreground px-2 py-1 rounded-lg hover:bg-secondary/60 transition-colors">Home</a>
           <a href="/checker" class="text-xs text-cyan-500 font-medium px-2 py-1 rounded-lg bg-cyan-500/10">Checkers</a>
         </div>
-        <Button variant="ghost" size="icon" onclick={() => themeStore.toggle()} class="rounded-full h-9 w-9">
+        <Button variant="ghost" size="icon" onclick={() => themeStore.toggle()} class="rounded-full h-9 w-9" aria-label="Toggle theme">
           {#if themeStore.isDark}<Sun class="w-4 h-4" />{:else}<Moon class="w-4 h-4" />{/if}
         </Button>
         <Button variant="ghost" size="icon" onclick={() => mobileMenuOpen = !mobileMenuOpen} class="rounded-full h-9 w-9 md:hidden">
@@ -112,6 +112,7 @@
               oninput={(e) => { inputAddress = (e.target as HTMLInputElement).value; error = ''; }}
               onkeydown={(e) => { if (e.key === 'Enter') handleScan(); }}
               placeholder="Enter Wallet Address (0x...)"
+              aria-label="Enter wallet address"
               class="flex-1 border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 text-sm sm:text-base"
             />
             <Button
@@ -183,6 +184,57 @@
             <p class="text-sm text-muted-foreground">{feat.desc}</p>
           </Card>
         {/each}
+      </div>
+    </section>
+
+    <!-- Static SEO Content -->
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 py-12 bg-card/30">
+      <h2 class="text-2xl sm:text-3xl font-bold mb-6">About LayerZero Cross-Chain Stats</h2>
+      <p class="text-muted-foreground mb-4 leading-relaxed">LayerZero is an omnichain interoperability protocol that enables cross-chain messaging and asset transfers across 100+ blockchains. Our LayerZero stats checker tracks your cross-chain activity to help you assess eligibility for the LayerZero airdrop by analyzing transactions made since the May 1, 2024 cutoff date.</p>
+
+      <h3 class="text-xl font-bold mb-3 mt-8">What Stats We Track</h3>
+      <div class="grid sm:grid-cols-2 gap-3 text-sm text-muted-foreground">
+        <div class="p-3 rounded-xl bg-card/60 border border-border/40"><strong class="text-foreground">Total Transactions:</strong> Count of all LayerZero messages after the airdrop cutoff date</div>
+        <div class="p-3 rounded-xl bg-card/60 border border-border/40"><strong class="text-foreground">Chain Coverage:</strong> Unique source and destination chains you've used</div>
+        <div class="p-3 rounded-xl bg-card/60 border border-border/40"><strong class="text-foreground">Contract Interactions:</strong> All unique contract addresses interacted with</div>
+        <div class="p-3 rounded-xl bg-card/60 border border-border/40"><strong class="text-foreground">Protocol Breakdown:</strong> Which protocols (Stargate, OFT, etc.) you've used</div>
+        <div class="p-3 rounded-xl bg-card/60 border border-border/40"><strong class="text-foreground">Activity Streaks:</strong> Unique days, weeks, and months active</div>
+        <div class="p-3 rounded-xl bg-card/60 border border-border/40"><strong class="text-foreground">Expandable Details:</strong> Drill down into each chain for contract details</div>
+      </div>
+
+      <h3 class="text-xl font-bold mb-3 mt-8">Airdrop Eligibility</h3>
+      <p class="text-muted-foreground mb-4 leading-relaxed">LayerZero's second airdrop considers activity from May 1, 2024 onwards. Key factors include the number of cross-chain transactions, unique chains used, and protocol diversity. While no official formula has been published, wallets with more diverse chain usage and consistent activity tend to score higher. Our checker helps you understand where you stand.</p>
+
+      <h3 class="text-xl font-bold mb-3 mt-8">Frequently Asked Questions</h3>
+      <div class="space-y-4">
+        <div>
+          <h4 class="font-semibold text-foreground mb-1">Is this free to use?</h4>
+          <p class="text-sm text-muted-foreground">Yes, entirely free. Just enter any wallet address to see your LayerZero cross-chain stats. No wallet connection needed.</p>
+        </div>
+        <div>
+          <h4 class="font-semibold text-foreground mb-1">What's the cutoff date?</h4>
+          <p class="text-sm text-muted-foreground">We track activity from May 1, 2024 (timestamp 1714521600) onwards, which aligns with the second airdrop eligibility window.</p>
+        </div>
+        <div>
+          <h4 class="font-semibold text-foreground mb-1">How accurate is the data?</h4>
+          <p class="text-sm text-muted-foreground">We fetch data directly from the LayerZero scan API in real-time. Recent transactions (last 30-60 seconds) may not appear immediately due to indexer lag.</p>
+        </div>
+      </div>
+
+      <h3 class="text-xl font-bold mb-3 mt-8">Related Tools</h3>
+      <div class="grid sm:grid-cols-3 gap-3">
+        <a href="/relay" class="p-3 rounded-xl bg-card/60 border border-border/40 hover:border-orange-500/30 transition-all">
+          <span class="font-medium text-sm">Relay Bridge Stats</span>
+          <p class="text-xs text-muted-foreground mt-1">Cross-chain bridge analytics</p>
+        </a>
+        <a href="/jumper" class="p-3 rounded-xl bg-card/60 border border-border/40 hover:border-indigo-500/30 transition-all">
+          <span class="font-medium text-sm">Jumper Analytics</span>
+          <p class="text-xs text-muted-foreground mt-1">Multi-chain swap tracker</p>
+        </a>
+        <a href="/checker" class="p-3 rounded-xl bg-card/60 border border-border/40 hover:border-cyan-500/30 transition-all">
+          <span class="font-medium text-sm">All Checkers</span>
+          <p class="text-xs text-muted-foreground mt-1">Browse all tools</p>
+        </a>
       </div>
     </section>
   </main>

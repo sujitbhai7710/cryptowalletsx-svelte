@@ -59,20 +59,32 @@
 </script>
 
 <SEO
-  title="Base Complete Guide"
-  description="Check Base mainnet wallet stats, scores, transaction history, DeFi activity, and ETH balance analytics. Base is an Ethereum L2 built by Coinbase."
+  title="Base Stats Checker"
+  description="Analyze Base mainnet wallet stats, scores, and ETH balance. Check transaction history, DeFi activity, and on-chain metrics on Coinbase's Ethereum L2."
   keywords={["base chain", "base wallet", "coinbase base", "base stats", "l2 analytics"]}
-  canonicalUrl="https://cryptowalletsx.com/base"
+  canonicalUrl="https://cryptowalletsx.com/blog/base"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'Base Wallet Checker',
-    url: 'https://cryptowalletsx.com/base',
-    description: 'Check Base mainnet wallet stats, scores, transaction history, DeFi activity, and ETH balance analytics.',
-    applicationCategory: 'UtilitiesApplication',
-    operatingSystem: 'Web',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+    '@graph': [
+      {
+        '@type': 'SoftwareApplication',
+        name: 'Base Wallet Checker',
+        url: 'https://cryptowalletsx.com/base',
+        description: 'Analyze Base mainnet wallet stats, scores, and ETH balance on Coinbase\'s Ethereum L2.',
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'Web',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cryptowalletsx.com' },
+          { '@type': 'ListItem', position: 2, name: 'Checkers', item: 'https://cryptowalletsx.com/checker' },
+          { '@type': 'ListItem', position: 3, name: 'Base', item: 'https://cryptowalletsx.com/base' }
+        ]
+      }
+    ]
   }}
 />
 

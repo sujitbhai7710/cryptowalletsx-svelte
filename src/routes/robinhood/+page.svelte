@@ -59,20 +59,32 @@
 </script>
 
 <SEO
-  title="Robinhood Testnet Complete Guide"
-  description="Check Robinhood Chain testnet wallet stats, transaction history, and ETH balance analytics. Robinhood Chain is an Arbitrum Orbit L2."
+  title="Robinhood Testnet Stats Checker"
+  description="Analyze Robinhood Chain testnet wallet stats, transaction history, and ETH balance. Check on-chain metrics on the Arbitrum Orbit L2."
   keywords={["robinhood chain", "robinhood testnet", "robinhood wallet", "arbitrum orbit"]}
-  canonicalUrl="https://cryptowalletsx.com/robinhood"
+  canonicalUrl="https://cryptowalletsx.com/blog/robinhood"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'Robinhood Testnet Wallet Checker',
-    url: 'https://cryptowalletsx.com/robinhood',
-    description: 'Check Robinhood Chain testnet wallet stats, transaction history, and ETH balance analytics.',
-    applicationCategory: 'UtilitiesApplication',
-    operatingSystem: 'Web',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+    '@graph': [
+      {
+        '@type': 'SoftwareApplication',
+        name: 'Robinhood Testnet Wallet Checker',
+        url: 'https://cryptowalletsx.com/robinhood',
+        description: 'Analyze Robinhood Chain testnet wallet stats and ETH balance on the Arbitrum Orbit L2.',
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'Web',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cryptowalletsx.com' },
+          { '@type': 'ListItem', position: 2, name: 'Checkers', item: 'https://cryptowalletsx.com/checker' },
+          { '@type': 'ListItem', position: 3, name: 'Robinhood Testnet', item: 'https://cryptowalletsx.com/robinhood' }
+        ]
+      }
+    ]
   }}
 />
 

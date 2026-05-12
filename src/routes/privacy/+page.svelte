@@ -7,20 +7,31 @@
 
 <SEO
   title="Privacy Policy - CryptoWalletsx"
-  description="Privacy policy for CryptoWalletsx multi-chain crypto wallet analytics platform."
+  description="Privacy policy for CryptoWalletsx. Learn how we handle data, cookies, and your rights. We collect minimal personal information."
   canonicalUrl="https://cryptowalletsx.com/privacy"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    name: 'Privacy Policy',
-    url: 'https://cryptowalletsx.com/privacy',
-    description: 'Privacy policy for CryptoWalletsx multi-chain crypto wallet analytics platform.',
-    publisher: {
-      '@type': 'Organization',
-      name: 'CryptoWalletsX',
-      url: 'https://cryptowalletsx.com'
-    }
+    '@graph': [
+      {
+        '@type': 'WebPage',
+        name: 'Privacy Policy',
+        url: 'https://cryptowalletsx.com/privacy',
+        description: 'Privacy policy for CryptoWalletsx multi-chain crypto wallet analytics platform.',
+        publisher: {
+          '@type': 'Organization',
+          name: 'CryptoWalletsX',
+          url: 'https://cryptowalletsx.com'
+        }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cryptowalletsx.com' },
+          { '@type': 'ListItem', position: 2, name: 'Privacy Policy', item: 'https://cryptowalletsx.com/privacy' }
+        ]
+      }
+    ]
   }}
 />
 

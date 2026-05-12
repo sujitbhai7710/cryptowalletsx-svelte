@@ -413,6 +413,37 @@
 
 </section>
 
+<!-- Related Tools Section -->
+<section class="max-w-4xl mx-auto px-4 sm:px-6 py-12">
+  <h2 class="text-2xl sm:text-3xl font-bold mb-6">Related Tools</h2>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <a href="/arc" class="p-4 rounded-xl bg-card/60 border border-border/40 hover:border-cyan-500/30 transition-all group">
+      <h3 class="font-semibold mb-1 group-hover:text-cyan-500 transition-colors">Arc Testnet</h3>
+      <p class="text-sm text-muted-foreground">USDC-native testnet wallet analytics</p>
+    </a>
+    <a href="/base" class="p-4 rounded-xl bg-card/60 border border-border/40 hover:border-blue-500/30 transition-all group">
+      <h3 class="font-semibold mb-1 group-hover:text-blue-500 transition-colors">Base</h3>
+      <p class="text-sm text-muted-foreground">Coinbase L2 wallet scoring & stats</p>
+    </a>
+    <a href="/ink" class="p-4 rounded-xl bg-card/60 border border-border/40 hover:border-purple-500/30 transition-all group">
+      <h3 class="font-semibold mb-1 group-hover:text-purple-500 transition-colors">Ink</h3>
+      <p class="text-sm text-muted-foreground">Kraken L2 wallet analytics</p>
+    </a>
+    <a href="/relay" class="p-4 rounded-xl bg-card/60 border border-border/40 hover:border-orange-500/30 transition-all group">
+      <h3 class="font-semibold mb-1 group-hover:text-orange-500 transition-colors">Relay Bridge</h3>
+      <p class="text-sm text-muted-foreground">Cross-chain bridge analytics</p>
+    </a>
+    <a href="/jumper" class="p-4 rounded-xl bg-card/60 border border-border/40 hover:border-indigo-500/30 transition-all group">
+      <h3 class="font-semibold mb-1 group-hover:text-indigo-500 transition-colors">Jumper/Li.Fi</h3>
+      <p class="text-sm text-muted-foreground">Multi-chain swap aggregator</p>
+    </a>
+    <a href="/layerzero-stats" class="p-4 rounded-xl bg-card/60 border border-border/40 hover:border-sky-500/30 transition-all group">
+      <h3 class="font-semibold mb-1 group-hover:text-sky-500 transition-colors">LayerZero Stats</h3>
+      <p class="text-sm text-muted-foreground">Cross-chain airdrop eligibility</p>
+    </a>
+  </div>
+</section>
+
 <!-- Schema Markup -->
 <svelte:head>
   {@html `<script type="application/ld+json">${JSON.stringify(howToSchema)}</script>`}

@@ -59,20 +59,32 @@
 </script>
 
 <SEO
-  title="Doma Testnet Complete Guide"
-  description="Check Doma testnet wallet stats, scores, transaction history, and ETH balance analytics. Doma is an L2 blockchain with cross-chain bridge capabilities."
+  title="Doma Stats Checker"
+  description="Analyze Doma testnet wallet stats, scores, and ETH balance. Check transaction history, bridge activity, and on-chain metrics on the L2 blockchain."
   keywords={["doma", "doma testnet", "doma wallet checker", "l2 bridge", "testnet"]}
-  canonicalUrl="https://cryptowalletsx.com/doma"
+  canonicalUrl="https://cryptowalletsx.com/blog/doma"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'Doma Wallet Checker',
-    url: 'https://cryptowalletsx.com/doma',
-    description: 'Check Doma testnet wallet stats, scores, transaction history, and ETH balance analytics.',
-    applicationCategory: 'UtilitiesApplication',
-    operatingSystem: 'Web',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+    '@graph': [
+      {
+        '@type': 'SoftwareApplication',
+        name: 'Doma Wallet Checker',
+        url: 'https://cryptowalletsx.com/doma',
+        description: 'Analyze Doma testnet wallet stats, bridge activity, and on-chain metrics on the L2 blockchain.',
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'Web',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cryptowalletsx.com' },
+          { '@type': 'ListItem', position: 2, name: 'Checkers', item: 'https://cryptowalletsx.com/checker' },
+          { '@type': 'ListItem', position: 3, name: 'Doma', item: 'https://cryptowalletsx.com/doma' }
+        ]
+      }
+    ]
   }}
 />
 

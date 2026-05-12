@@ -284,20 +284,40 @@
 </script>
 
 <SEO
-  title="LayerZero Stats Checker - CryptoWalletsX"
-  description="Track your LayerZero cross-chain activity for the second airdrop. Check total transactions, source and destination chains, contracts interacted, protocols used, and unique activity metrics from May 1, 2024."
+  title="LayerZero Stats Checker"
+  description="Track LayerZero cross-chain activity for airdrop eligibility. Check transactions, chains, and protocols since May 2024."
   keywords={["layerzero", "layerzero stats", "layerzero airdrop", "layerzero checker", "cross-chain", "bridge stats", "layerzero v2"]}
   canonicalUrl="https://cryptowalletsx.com/layerzero-stats"
   ogImage="https://cryptowalletsx.com/og-image.png"
   jsonLd={{
     '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'LayerZero Stats Checker',
-    url: 'https://cryptowalletsx.com/layerzero-stats',
-    description: 'Track your LayerZero cross-chain activity for the second airdrop. Check total transactions, chains, and protocols used.',
-    applicationCategory: 'UtilitiesApplication',
-    operatingSystem: 'Web',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+    '@graph': [
+      {
+        '@type': 'SoftwareApplication',
+        name: 'LayerZero Stats Checker',
+        url: 'https://cryptowalletsx.com/layerzero-stats',
+        description: 'Track LayerZero cross-chain activity for airdrop eligibility. Check transactions, chains, and protocols used.',
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'Web',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cryptowalletsx.com' },
+          { '@type': 'ListItem', position: 2, name: 'Checkers', item: 'https://cryptowalletsx.com/checker' },
+          { '@type': 'ListItem', position: 3, name: 'LayerZero Stats', item: 'https://cryptowalletsx.com/layerzero-stats' }
+        ]
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: [
+          { '@type': 'Question', name: 'Is the LayerZero stats checker free?', acceptedAnswer: { '@type': 'Answer', text: 'Yes, completely free with no account required. Simply enter any wallet address to view its LayerZero cross-chain activity.' } },
+          { '@type': 'Question', name: 'What chains does LayerZero support?', acceptedAnswer: { '@type': 'Answer', text: 'LayerZero supports over 80 blockchains including Ethereum, Arbitrum, Optimism, Polygon, Base, BNB Chain, Avalanche, and many more.' } },
+          { '@type': 'Question', name: 'How current is the data?', acceptedAnswer: { '@type': 'Answer', text: 'We fetch data directly from the LayerZero API in real-time, so results reflect your latest on-chain activity with a 30-60 second delay for indexer processing.' } }
+        ]
+      }
+    ]
   }}
 />
 
@@ -315,3 +335,34 @@
 {:else}
   <HomeScreen onAddressSubmit={handleAddressSubmit} />
 {/if}
+
+<!-- Static SEO Content for Crawlers -->
+<div class="sr-only" aria-hidden="true">
+  <h2>About LayerZero Stats Checker</h2>
+  <p>The LayerZero Stats Checker tracks your cross-chain messaging activity across the LayerZero protocol. LayerZero is an omnichain interoperability protocol that enables secure cross-chain communication and asset transfers between over 80 blockchain networks. Our checker analyzes your wallet's bridge transactions, source and destination chains, contract interactions, and protocol usage patterns.</p>
+  <h2>LayerZero Airdrop Eligibility</h2>
+  <p>Our stats checker filters transactions from May 1, 2024 onwards, which is the cutoff date relevant for LayerZero's second airdrop eligibility. We track total transaction count, unique source and destination chains, contracts interacted with, protocols used (including Stargate, Core, and other LayerZero-connected protocols), and unique days, weeks, and months of activity. These metrics help you understand your cross-chain footprint and potential airdrop qualification.</p>
+  <h2>What Metrics We Track</h2>
+  <p>The LayerZero stats checker provides comprehensive analytics including: total cross-chain message count, source chain distribution showing which networks you bridge from most frequently, destination chain distribution showing where your assets flow, unique contract interactions across all chains, protocol diversity measuring how many different LayerZero-connected bridges and protocols you use, and activity consistency tracking your engagement over days, weeks, and months. All data is fetched in real-time from the LayerZero scan API.</p>
+  <h2>Frequently Asked Questions</h2>
+  <p>Is this tool free? Yes, completely free with no account required. Simply enter any wallet address to view its LayerZero cross-chain activity. What chains does LayerZero support? LayerZero supports over 80 blockchains including Ethereum, Arbitrum, Optimism, Polygon, Base, BNB Chain, Avalanche, and many more. How current is the data? We fetch data directly from the LayerZero API in real-time, so results reflect your latest on-chain activity with a 30-60 second delay for indexer processing.</p>
+</div>
+
+<!-- Related Tools Internal Links -->
+<section class="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+  <h3 class="text-lg font-bold mb-4">Related Tools</h3>
+  <div class="grid sm:grid-cols-3 gap-3">
+    <a href="/relay" class="p-3 rounded-xl bg-card/60 border border-border/40 hover:border-orange-500/30 transition-all">
+      <span class="font-medium text-sm">Relay Bridge Analytics</span>
+      <p class="text-xs text-muted-foreground mt-1">Cross-chain bridge & swap stats</p>
+    </a>
+    <a href="/jumper" class="p-3 rounded-xl bg-card/60 border border-border/40 hover:border-indigo-500/30 transition-all">
+      <span class="font-medium text-sm">Jumper Analytics</span>
+      <p class="text-xs text-muted-foreground mt-1">Li.Fi bridge aggregator stats</p>
+    </a>
+    <a href="/soneium" class="p-3 rounded-xl bg-card/60 border border-border/40 hover:border-purple-500/30 transition-all">
+      <span class="font-medium text-sm">Soneium Wallet Score</span>
+      <p class="text-xs text-muted-foreground mt-1">Sony L2 on-chain analytics</p>
+    </a>
+  </div>
+</section>
