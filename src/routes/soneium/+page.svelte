@@ -371,8 +371,8 @@
     let pageCount = 0;
     const MAX_PAGES = 50; // Fetch up to 2500 transactions
 
-    // First request (no cursor)
-    let url = `${BLOCKSCOUT_BASE}/addresses/${addr}/transactions?filter=to%7Cfrom&items_count=50`;
+    // First request (no cursor) - don't use filter param as it's not supported by all Blockscout versions
+    let url = `${BLOCKSCOUT_BASE}/addresses/${addr}/transactions?items_count=50`;
 
     while (pageCount < MAX_PAGES) {
       try {
@@ -384,11 +384,8 @@
         nextParams = data?.next_page_params || null;
         if (!nextParams || items.length === 0) break;
 
-        // Build next URL using cursor-based pagination
+        // Build next URL using cursor-based pagination (next_page_params contains all needed params)
         const params = new URLSearchParams();
-        // Preserve filter param
-        params.set('filter', 'to|from');
-        // Add all next_page_params
         for (const [k, v] of Object.entries(nextParams)) {
           params.set(k, String(v));
         }
