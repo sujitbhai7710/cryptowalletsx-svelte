@@ -5,7 +5,6 @@
   import WalletScreen from '$lib/components/relay/WalletScreen.svelte';
   import { processRelayData } from '$lib/utils/relay-stats';
   import SEO from '$lib/components/SEO.svelte';
-  import AdUnit from '$lib/components/AdUnit.svelte';
   import type { RelayTx, RelayChain, RelayStats } from '$lib/types';
 
   // Data state managed at the route page level
@@ -128,7 +127,3 @@
   <HomeScreen onAddressSubmit={(addr) => relayWalletStore.setAddress(addr)} />
 {/if}
 
-<!-- Ad: Below wallet content -->
-<div class="max-w-7xl mx-auto px-4 py-4">
-  <AdUnit slot="auto" format="horizontal" style="min-height:90px" />
-</div>

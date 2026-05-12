@@ -5,7 +5,6 @@
   import WalletScreen from '$lib/components/jumper/WalletScreen.svelte';
   import { processJumperData } from '$lib/utils/jumper-stats';
   import SEO from '$lib/components/SEO.svelte';
-  import AdUnit from '$lib/components/AdUnit.svelte';
   import type { JumperTransfer, JumperStats } from '$lib/types';
 
   // Data state managed at the route page level
@@ -135,7 +134,3 @@
   <HomeScreen onAddressSubmit={(addr) => jumperWalletStore.setAddress(addr)} />
 {/if}
 
-<!-- Ad: Below wallet content -->
-<div class="max-w-7xl mx-auto px-4 py-4">
-  <AdUnit slot="auto" format="horizontal" style="min-height:90px" />
-</div>

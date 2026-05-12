@@ -3,7 +3,6 @@
   import HomeHeader from '$lib/components/home/HomeHeader.svelte';
   import Footer from '$lib/components/home/Footer.svelte';
   import SEO from '$lib/components/SEO.svelte';
-  import AdUnit from '$lib/components/AdUnit.svelte';
   import { BinanceWotdSolver } from '$lib/utils/binance-wotd/solver';
   import { STARTERS } from '$lib/utils/binance-wotd/starters';
   import type { WordLength, WordData, GuessResult } from '$lib/utils/binance-wotd/types';
@@ -680,12 +679,7 @@
       </div>
     </section>
   </main>
-
-  <!-- Ad: Before footer -->
-<div class="max-w-7xl mx-auto px-4 py-4">
-  <AdUnit slot="auto" format="horizontal" style="min-height:90px" />
-</div>
-<Footer />
+  <Footer />
 </div>
 
 <style>

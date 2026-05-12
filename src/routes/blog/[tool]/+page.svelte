@@ -2,7 +2,6 @@
   import HomeHeader from '$lib/components/home/HomeHeader.svelte';
   import Footer from '$lib/components/home/Footer.svelte';
   import SEO from '$lib/components/SEO.svelte';
-  import AdUnit from '$lib/components/AdUnit.svelte';
   import type { ChainConfig } from '$lib/types';
   import {
     Shield, ArrowRight, BarChart3, Zap, Coins, Globe, Layers,
@@ -334,11 +333,7 @@
         </a>
       </div>
     </main>
-    <!-- Ad: Before footer -->
-<div class="max-w-7xl mx-auto px-4 py-4">
-  <AdUnit slot="auto" format="horizontal" style="min-height:90px" />
-</div>
-<Footer />
+    <Footer />
   </div>
 {:else}
   <div class="min-h-screen flex flex-col bg-background">
@@ -717,12 +712,7 @@
         </div>
       </div>
     </main>
-
-    <!-- Ad: Before footer -->
-<div class="max-w-7xl mx-auto px-4 py-4">
-  <AdUnit slot="auto" format="horizontal" style="min-height:90px" />
-</div>
-<Footer />
+    <Footer />
   </div>
 {/if}
 

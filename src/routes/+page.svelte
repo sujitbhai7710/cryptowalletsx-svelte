@@ -9,7 +9,6 @@
   import CTASection from '$lib/components/home/CTASection.svelte';
   import Footer from '$lib/components/home/Footer.svelte';
   import SEO from '$lib/components/SEO.svelte';
-  import AdUnit from '$lib/components/AdUnit.svelte';
 </script>
 
 <SEO
@@ -53,23 +52,11 @@
   <HomeHeader />
   <main class="flex-1">
     <HeroSection />
-    <!-- Ad: Below Hero / Above Tools -->
-    <div class="max-w-7xl mx-auto px-4">
-      <AdUnit slot="auto" format="horizontal" style="min-height:90px" />
-    </div>
     <ToolsGrid />
     <HowItWorks />
-    <!-- Ad: Middle of Page -->
-    <div class="max-w-7xl mx-auto px-4">
-      <AdUnit slot="auto" format="horizontal" style="min-height:90px" />
-    </div>
     <SupportedNetworks />
     <WhyChooseUs />
     <AirdropSection />
-    <!-- Ad: Above CTA / Before Footer -->
-    <div class="max-w-7xl mx-auto px-4">
-      <AdUnit slot="auto" format="horizontal" style="min-height:90px" />
-    </div>
     <CTASection />
   </main>
   <Footer />
